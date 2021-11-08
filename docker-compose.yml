@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  web:
+    build: ./web
+    ports:
+      - 80:80
+  server:
+    build: ./server
+    environment:
+      FLASK_APP: app.py
+      FLASK_ENV: development
+      FLASK_DEBUG: 0
+    expose:
+      - 80
+  postgreSQL:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: account
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: cmpt353
+    expose:
+      - 5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    
+volumes:
+  postgres-data:
