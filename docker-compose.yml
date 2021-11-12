@@ -2,16 +2,18 @@ version: "3.9"
 services:
   web:
     build: ./web
+    depends_on:
+      - server
     ports:
-      - 80:80
+      - 80:8080
   server:
     build: ./server
     environment:
       FLASK_APP: app.py
       FLASK_ENV: development
       FLASK_DEBUG: 0
-    expose:
-      - 80
+    ports:
+      - 5000:5000
   postgreSQL:
     image: postgres:14
     environment:
