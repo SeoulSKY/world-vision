@@ -4,7 +4,7 @@ import './App.css';
 
 function App() {
 
-  let [flaskMessage, setFlaskMessage] = useState("Failed to connect to flask.")
+  let [flaskMessage, setFlaskMessage] = useState("Failed to connect to the server.")
 
   useEffect(() => {
     fetch("http://localhost:5000/api/hello")

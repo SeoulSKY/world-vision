@@ -1,13 +1,15 @@
-FROM python:3.10
+FROM node:14
 
-COPY ./requirements.txt /app/requirements.txt
+COPY ./package.json /app/package.json
+
+COPY ./package-lock.json /app/package-lock.json
 
 WORKDIR /app
 
-RUN pip install -r requirements.txt
+RUN npm install
 
 COPY . /app
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+CMD ["npm", "start"]
