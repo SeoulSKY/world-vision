@@ -5,10 +5,12 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mySql = require("mysql");
 
-const server = express();
+const { apiRouter } = require("./routes/api");
 
-server.use(cors({ origin: "*" }));
-server.use(bodyParser.urlencoded({ extended : true }));
+const app = express();
+
+app.use(cors({ origin: "*" }));
+app.use(bodyParser.urlencoded({ extended : true }));
 
 const PORT = 5000;
 const HOST = "0.0.0.0";
@@ -20,8 +22,6 @@ let con = mySql.createConnection({
     password: "cmpt353"
 });
 
-server.get("/api/hello", (request, response) => {
-    response.send("Hello from the server");
-});
+app.use("/api", apiRouter);
 
-server.listen(PORT, HOST, () => {console.log("Started listening " + HOST + ":" + PORT)});
+app.listen(PORT, HOST, () => {console.log("Started listening " + HOST + ":" + PORT)});
