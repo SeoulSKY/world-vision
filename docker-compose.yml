@@ -15,6 +15,7 @@ services:
       - mySQL
     ports:
       - 5000:5000
+    command: ["./wait-for-it.sh", "mySQL:3306", "--", "sh", "-c", "npm", "start"]
       
   mySQL:
     image: mysql:5.7.31
@@ -29,3 +30,4 @@ services:
     
 volumes:
   mysql-data:
+

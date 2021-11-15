@@ -7,15 +7,31 @@ const pool = mysql.createPool({
     password: process.env.MYSQL_PASSWORD
 });
 
+
 /**
- * Initialize the database if not already initialized
+ * Get the connection to the database
+ * @param callback The function to be called when connected to the database
  */
-exports.init = () => {
+function getConnection(callback) {
     pool.getConnection((err, con) => {
         if (err) {
             console.error("Failed to connect to the database");
             throw err;
         }
+
+        try {
+            callback(con);
+        } finally {
+            con.release();
+        }
+    });
+}
+
+/**
+ * Initialize the database if not already initialized
+ */
+exports.init = () => {
+    getConnection(con => {
 
         con.query("CREATE TABLE IF NOT EXISTS Staff (" +
             "userId VARCHAR(255) NOT NULL PRIMARY KEY, " +
@@ -112,15 +128,4 @@ exports.init = () => {
     });
 }
 
-/**
- * Get the connection to the database
- * @param callback The function to be called when connected to the database
- */
-exports.getConnection = (callback) => {
-    pool.getConnection((err, con) => {
-        if (err) {
-            return callback(err);
-        }
-        callback(err, con);
-    });
-};
+exports.getConnection = getConnection;
