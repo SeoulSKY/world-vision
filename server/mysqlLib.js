@@ -117,10 +117,10 @@ exports.init = () => {
  * @param callback The function to be called when connected to the database
  */
 exports.getConnection = (callback) => {
-    pool.getConnection((err, conn) => {
+    pool.getConnection((err, con) => {
         if (err) {
             return callback(err);
         }
-        callback(err, conn);
+        callback(err, con);
     });
 };
