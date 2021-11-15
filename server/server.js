@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 // initialize the database
-require("./mySqlLib").init();
+require("./mysqlLib").init();
 
 const { apiRouter } = require("./routes/api");
 
