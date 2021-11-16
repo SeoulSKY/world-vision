@@ -101,27 +101,40 @@ staffRouter.post("/", (request, response) => {
             return;
         }
 
-        let sql = "INSERT INTO Staff (userId, firstName, lastName";
-        if (middleName === undefined) {
-            sql += ") VALUES (" + escape(userId) + ", " + escape(firstName) + ", " + escape(lastName) + ")";
-        } else {
-            sql += ", middleName) VALUES (" + escape(userId) + ", " + escape(firstName) + ", " +
-                escape(lastName) + ", " + escape(middleName) + ")";
-        }
-
-        sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" + escape(userId) +
-            ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " + escape( postalCode) + ", " +
-            escape(country) + ")";
-
-        sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Staff\")";
-
-        con.query(sql, err => {
+        con.query("SELECT * FROM Staff WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
 
-            response.status(201);
-            response.send("Created");
+            // check if the userId is already in use
+            if (result.length !== 0) {
+                response.status(409);
+                response.send("userId \"" + userId + "\" already in use");
+                return;
+            }
+
+            let sql = "INSERT INTO Staff (userId, firstName, lastName";
+            if (middleName === undefined) {
+                sql += ") VALUES (" + escape(userId) + ", " + escape(firstName) + ", " + escape(lastName) + ")";
+            } else {
+                sql += ", middleName) VALUES (" + escape(userId) + ", " + escape(firstName) + ", " +
+                    escape(lastName) + ", " + escape(middleName) + ")";
+            }
+
+            sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
+                escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
+                escape( postalCode) + ", " + escape(country) + ")";
+
+            sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Staff\")";
+
+            con.query(sql, err => {
+                if (err) {
+                    throw err;
+                }
+
+                response.status(201);
+                response.send("Created");
+            });
         });
     });
 });
