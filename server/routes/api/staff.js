@@ -189,7 +189,32 @@ staffRouter.put("/", (request, response) => {
 });
 
 staffRouter.delete("/", (request, response) => {
-    response.send("Hello from staff DELETE");
+    let userId = request.query.userId;
+    if (userId === undefined) {
+        response.status(400);
+        response.send("Parameter userId is missing");
+        return;
+    }
+
+    getConnection((err, con) => {
+        if (err) {
+            response.status(500);
+            response.send("Server couldn't connect to the database");
+            return;
+        }
+
+        let sql = "DELETE FROM Staff WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
+
+        con.query(sql, (err) => {
+            if (err) {
+                throw err;
+            }
+            response.status(200);
+            response.send("OK");
+        });
+    });
 });
 
 module.exports = {
