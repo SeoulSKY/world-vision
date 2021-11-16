@@ -212,7 +212,7 @@ staffRouter.delete("/", (request, response) => {
                 throw err;
             }
             response.status(200);
-            response.send("OK");
+            response.send("Deleted");
         });
     });
 });
