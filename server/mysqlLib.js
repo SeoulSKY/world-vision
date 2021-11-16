@@ -7,7 +7,6 @@ const pool = mysql.createPool({
     password: process.env.MYSQL_PASSWORD
 });
 
-
 /**
  * Get the connection to the database
  * @param callback The function to be called when connected to the database
@@ -15,12 +14,12 @@ const pool = mysql.createPool({
 function getConnection(callback) {
     pool.getConnection((err, con) => {
         if (err) {
-            console.error("Failed to connect to the database");
-            throw err;
+            callback(err, con);
+            return;
         }
 
         try {
-            callback(con);
+            callback(null, con);
         } finally {
             con.release();
         }
@@ -28,10 +27,15 @@ function getConnection(callback) {
 }
 
 /**
- * Initialize the database if not already initialized
+ * Create tables in the database if not exist
+ * @param callback function to be called after the initialization
  */
-exports.init = () => {
-    getConnection(con => {
+exports.init = (callback) => {
+    getConnection((err, con) => {
+        if (err) {
+            callback(err);
+            return;
+        }
 
         con.query("CREATE TABLE IF NOT EXISTS Staff (" +
             "userId VARCHAR(255) NOT NULL PRIMARY KEY, " +
@@ -62,7 +66,6 @@ exports.init = () => {
             "middleName VARCHAR(255), " +
             "lastName VARCHAR(255) NOT NULL, " +
             "birthDate DATE NOT NULL, " +
-            "profilePicture BLOB, " +
             "gender VARCHAR(10) NOT NULL)", err => {
             if (err) {
                 console.error("Failed to create table Recipient");
@@ -125,6 +128,8 @@ exports.init = () => {
                 throw err;
             }
         });
+
+        callback(null);
     });
 }
 

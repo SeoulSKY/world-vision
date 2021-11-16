@@ -7,9 +7,6 @@ const bodyParser = require("body-parser");
 // read .env file
 require("dotenv").config();
 
-// initialize the database
-require("./mysqlLib").init();
-
 const { apiRouter } = require("./routes/api");
 
 const app = express();
@@ -22,4 +19,12 @@ const HOST = process.env.HOST;
 
 app.use("/api", apiRouter);
 
-app.listen(PORT, HOST, () => {console.log("Started listening " + HOST + ":" + PORT)});
+// initialize the database
+require("./mysqlLib").init(err => {
+    if (err) {
+        console.log("Database is not yet ready to be used. Please try running the server later");
+        process.exit(0);
+    }
+
+    app.listen(PORT, HOST, () => {console.log("Started listening " + HOST + ":" + PORT)});
+});
