@@ -49,7 +49,7 @@ exports.init = (callback) => {
         });
 
         con.query("CREATE TABLE IF NOT EXISTS Customer (" +
-            "UserId VARCHAR(255) NOT NULL PRIMARY KEY, " +
+            "userId VARCHAR(255) NOT NULL PRIMARY KEY, " +
             "firstName VARCHAR(255) NOT NULL, " +
             "lastName VARCHAR(255) NOT NULL, " +
             "middleName VARCHAR(255))", err => {
@@ -75,6 +75,7 @@ exports.init = (callback) => {
 
         con.query("CREATE TABLE IF NOT EXISTS Address (" +
             "userId VARCHAR(255) NOT NULL PRIMARY KEY, " +
+            "street VARCHAR(255) NOT NULL, " +
             "city VARCHAR(255) NOT NULL, " +
             "province VARCHAR(255) NOT NULL, " +
             "postalCode VARCHAR(255) NOT NULL, " +
@@ -134,3 +135,4 @@ exports.init = (callback) => {
 }
 
 exports.getConnection = getConnection;
+exports.escape = mysql.escape;
