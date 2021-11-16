@@ -203,16 +203,29 @@ staffRouter.delete("/", (request, response) => {
             return;
         }
 
-        let sql = "DELETE FROM Staff WHERE userId=" + escape(userId);
-        sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
-        sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
-
-        con.query(sql, (err) => {
+        con.query("SELECT * FROM Staff WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
-            response.status(200);
-            response.send("Deleted");
+
+            // check if the given userId exists
+            if (result.length === 0) {
+                response.status(404);
+                response.send("Staff not found with the given userId \"" + userId + "\"");
+                return;
+            }
+
+            let sql = "DELETE FROM Staff WHERE userId=" + escape(userId);
+            sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
+            sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
+
+            con.query(sql, (err) => {
+                if (err) {
+                    throw err;
+                }
+                response.status(200);
+                response.send("Deleted");
+            });
         });
     });
 });
