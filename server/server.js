@@ -13,6 +13,7 @@ const app = express();
 
 app.use(cors({ origin: "*" }));
 app.use(bodyParser.urlencoded({ extended : true }));
+app.use(bodyParser.json());
 
 const PORT = process.env.PORT;
 const HOST = process.env.HOST;
