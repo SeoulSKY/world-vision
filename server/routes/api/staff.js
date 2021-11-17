@@ -42,7 +42,7 @@ staffRouter.get("/", (request, response) => {
             // convert the result to json format
             let newResult = JSON.parse(JSON.stringify(result));
 
-            if (newResult.length === 0) {
+            if (userId !== undefined && newResult.length === 0) {
                 response.status(404);
                 response.send("Staff not found with the given userId \"" + userId + "\"");
                 return;
@@ -123,7 +123,7 @@ staffRouter.post("/", (request, response) => {
 
             sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
                 escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
-                escape( postalCode) + ", " + escape(country) + ")";
+                escape(postalCode) + ", " + escape(country) + ")";
 
             sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Staff\")";
 
