@@ -122,6 +122,12 @@ donationRouter.post("/", (request, response) => {
                 // convert the result to json format
                 let newResult = JSON.parse(JSON.stringify(result));
 
+                const card = {
+                    number: newResult[0].number,
+                    expirationDate: newResult[0].expirationDate,
+                    cvv: newResult[0].cvv
+                };
+
                 // check if the recipientUserId is valid
                 con.query("SELECT * FROM Recipient WHERE userId=?", [recipientUserId], (err, result) => {
                     if (err) {
@@ -133,6 +139,9 @@ donationRouter.post("/", (request, response) => {
                         response.send("Given recipientUserId \"" + recipientUserId + "\" not found in the database");
                         return;
                     }
+
+                    // convert the result to json format
+                    newResult = JSON.parse(JSON.stringify(result));
 
                     // check if the donation between both users already exists
                     con.query("SELECT * FROM Donation WHERE customerUserId=? AND recipientUserId=?",
@@ -160,8 +169,8 @@ donationRouter.post("/", (request, response) => {
                             response.send("Created");
                         });
 
-                        sendTransaction(newResult[0].number, newResult[0].expirationDate, newResult[0].cvv,
-                            monthlyTransactionAmount, (err) => {
+                        sendTransaction(customerUserId, recipientUserId, card, monthlyTransactionAmount,
+                            (err) => {
                                 if (err) {
                                     throw err;
                                 }
