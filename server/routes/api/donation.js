@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const {escape, getConnection} = require("../../mysqlLib");
 const {sendTransaction} = require("./transaction");
+const {isValidCustomer} = require("./customer");
+const {isValidRecipient} = require("./recipient");
 
 const donationRouter = Router();
 
@@ -13,6 +15,30 @@ function isValidBody(body) {
     return body.customerUserId !== undefined &&
         body.recipientUserId !== undefined &&
         body.monthlyTransactionAmount !== undefined;
+}
+
+/**
+ * Check if there is a donation for given customer user id and recipient user id
+ * @param customerUserId The customer user id to check
+ * @param recipientUserId The recipient user id to check
+ * @param callback A callback function to check the result
+ */
+function isValidDonation(customerUserId, recipientUserId, callback) {
+    getConnection((err, con) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        con.query("SELECT * FROM Donation WHERE customerUserId=? AND recipientUserId=?",
+            [customerUserId, recipientUserId], (err, result) => {
+                if (err) {
+                    throw err;
+                }
+
+                callback(null, result.length !== 0);
+            });
+    });
 }
 
 donationRouter.get("/", (request, response) => {
@@ -32,21 +58,27 @@ donationRouter.get("/", (request, response) => {
             return;
         }
 
-        // check if the given customerUserId is valid
-        con.query("SELECT * FROM Customer WHERE userId=?", [customerUserId], (err, result) => {
+        isValidCustomer(customerUserId, (err, valid) => {
             if (err) {
-                throw err;
-            } else if (result.length === 0) {
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
+            }
+
+            if (!valid) {
                 response.status(404);
                 response.send("Customer not found with the given customerUserId \"" + customerUserId + "\"");
                 return;
             }
 
-            // check if the given recipientUserId is valid
-            con.query("SELECT * FROM Recipient WHERE userId=?", [recipientUserId], (err, result) => {
+            isValidRecipient(recipientUserId, (err, valid) => {
                 if (err) {
-                    throw err
-                } else if (recipientUserId !== undefined && result.length === 0) {
+                    response.status(500);
+                    response.send("Server couldn't connect to the database");
+                    return;
+                }
+
+                if (!valid) {
                     response.status(404);
                     response.send("Recipient not found with the given recipientUserId \"" + recipientUserId + "\"");
                     return;
@@ -128,29 +160,27 @@ donationRouter.post("/", (request, response) => {
                     cvv: newResult[0].cvv
                 };
 
-                // check if the recipientUserId is valid
-                con.query("SELECT * FROM Recipient WHERE userId=?", [recipientUserId], (err, result) => {
+                isValidRecipient(recipientUserId, (err, valid) => {
                     if (err) {
-                        throw err;
+                        response.status(500);
+                        response.send("Server couldn't connect to the database");
+                        return;
                     }
 
-                    if (result.length === 0) {
+                    if (!valid) {
                         response.status(404);
                         response.send("Given recipientUserId \"" + recipientUserId + "\" not found in the database");
                         return;
                     }
 
-                    // convert the result to json format
-                    newResult = JSON.parse(JSON.stringify(result));
-
-                    // check if the donation between both users already exists
-                    con.query("SELECT * FROM Donation WHERE customerUserId=? AND recipientUserId=?",
-                        [customerUserId, recipientUserId], (err, result) => {
+                    isValidDonation(customerUserId, recipientUserId, (err, valid) => {
                         if (err) {
-                            throw err;
+                            response.status(500);
+                            response.send("Server couldn't connect to the database");
+                            return;
                         }
 
-                        if (result.length !== 0) {
+                        if (valid) {
                             response.status(409);
                             response.send("Donation between given customer and recipient already exists");
                             return;
@@ -175,7 +205,9 @@ donationRouter.post("/", (request, response) => {
                                     throw err;
                                 }
                             });
+
                     });
+
                 });
         });
     });
@@ -199,14 +231,14 @@ donationRouter.put("/", (request, response) => {
             return;
         }
 
-        // check if the donation exists
-        con.query("SELECT * FROM Donation WHERE customerUserId=? AND recipientUserId=?",
-            [customerUserId, recipientUserId], (err, result) => {
+        isValidDonation(customerUserId, recipientUserId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            if (result.length === 0) {
+            if (!valid) {
                 response.status(404);
                 response.send("Donation not found with given customerUserId and recipientUserId");
                 return;
@@ -248,38 +280,35 @@ donationRouter.delete("/", (request, response) => {
         }
 
         // check if customerUserId is valid
-        con.query("SELECT * FROM Customer WHERE userId=?", [customerUserId], (err, result) => {
+        isValidCustomer(customerUserId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            if (result.length === 0) {
+            if (!valid) {
                 response.status(404);
                 response.send("customerUserId \"" + customerUserId + "\" not found in the database");
                 return;
             }
 
             if (recipientUserId !== undefined) {
-                // check if recipientUserId exists
-                con.query("SELECT * FROM Recipient WHERE userId=?", [recipientUserId], (err, result) => {
+                isValidRecipient(recipientUserId, (err, valid) => {
                     if (err) {
-                        throw err;
+                        response.status(500);
+                        response.send("Server couldn't connect to the database");
+                        return;
                     }
 
-                    if (result.length === 0) {
+                    if (!valid) {
                         response.status(404);
                         response.send("recipientUserId \"" + recipientUserId + "\" not found in the database");
                         return;
                     }
 
-                    // check if the donation exists
-                    con.query("SELECT * FROM Donation WHERE customerUserId=? AND recipientUserId=?",
-                        [customerUserId, recipientUserId], (err, result) => {
-                        if (err) {
-                            throw err;
-                        }
-
-                        if (result.length === 0) {
+                    isValidDonation(customerUserId, recipientUserId, (err, valid) => {
+                        if (!valid) {
                             response.status(404);
                             response.send("Donation with customerUserId \"" + customerUserId +
                                 "\" and recipientUserId \"" + recipientUserId + "\" not found in the database");
@@ -296,16 +325,11 @@ donationRouter.delete("/", (request, response) => {
                     });
                 });
             } else {
-                // check if the donation exists
-                con.query("SELECT * FROM Donation WHERE customerUserId=?", [customerUserId], (err, result) => {
-                    if (err) {
-                        throw err;
-                    }
-
-                    if (result.length === 0) {
+                isValidDonation(customerUserId, recipientUserId, (err, valid) => {
+                    if (!valid) {
                         response.status(404);
                         response.send("Donation with customerUserId \"" + customerUserId +
-                            "\" not found in the database");
+                            "\" and recipientUserId \"" + recipientUserId + "\" not found in the database");
                         return;
                     }
 
@@ -324,4 +348,5 @@ donationRouter.delete("/", (request, response) => {
 
 module.exports = {
     donationRouter,
+    isValidDonation
 };

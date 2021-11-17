@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { getConnection, escape } = require("../../mysqlLib");
+const {use} = require("express/lib/router");
 
 const staffRouter = Router();
 
@@ -18,6 +19,28 @@ function isValidBody(body) {
         body.homeAddress.province !== undefined &&
         body.homeAddress.postalCode !== undefined &&
         body.homeAddress.country !== undefined
+}
+
+/**
+ * Check if the given staff id is valid
+ * @param staffUserId The user id to check
+ * @param callback A callback function to check the result
+ */
+function isValidStaff(staffUserId, callback) {
+    getConnection((err, con) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        con.query("SELECT * FROM Staff WHERE userId=?", [staffUserId], (err, result) => {
+            if (err) {
+                throw err;
+            }
+
+            callback(null, result.length !== 0);
+        });
+    });
 }
 
 staffRouter.get("/", (request, response) => {
@@ -101,13 +124,14 @@ staffRouter.post("/", (request, response) => {
             return;
         }
 
-        // check if the userId is already in use
-        con.query("SELECT * FROM Staff WHERE userId=?", [userId], (err, result) => {
+        isValidStaff(userId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            if (result.length !== 0) {
+            if (valid) {
                 response.status(409);
                 response.send("userId \"" + userId + "\" already in use");
                 return;
@@ -166,12 +190,14 @@ staffRouter.put("/", (request, response) => {
         }
 
         // check if the given userId exists
-        con.query("SELECT * FROM Staff WHERE userId=?", [userId], (err, result) => {
+        isValidStaff(userId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            if (result.length === 0) {
+            if (!valid) {
                 response.status(404);
                 response.send("Staff not found with the given userId \"" + userId + "\"");
                 return;
@@ -217,14 +243,10 @@ staffRouter.delete("/", (request, response) => {
         }
 
         // check if the given userId exists
-        con.query("SELECT * FROM Staff WHERE userId=?", [userId], (err, result) => {
+        isValidStaff(userId, (err, value) => {
             if (err) {
-                throw err;
-            }
-
-            if (result.length === 0) {
-                response.status(404);
-                response.send("Staff not found with the given userId \"" + userId + "\"");
+                response.status(500);
+                response.send("Server couldn't connect to the database");
                 return;
             }
 
@@ -245,4 +267,5 @@ staffRouter.delete("/", (request, response) => {
 
 module.exports = {
     staffRouter,
+    isValidStaff
 };
