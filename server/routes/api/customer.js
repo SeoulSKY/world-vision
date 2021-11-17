@@ -24,6 +24,28 @@ function isValidBody(body) {
         body.card.cvv !== undefined
 }
 
+/**
+ * Check if the given customer id is valid
+ * @param customerUserId The user id to check
+ * @param callback A callback function to check the result
+ */
+function isValidCustomer(customerUserId, callback) {
+    getConnection((err, con) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        con.query("SELECT * FROM Customer WHERE userId=?", [customerUserId], (err, result) => {
+            if (err) {
+                throw err;
+            }
+
+            callback(null, result.length !== 0);
+        });
+    });
+}
+
 customerRouter.get("/", (request, response) => {
     let sql = "SELECT * FROM Customer INNER JOIN Address ON Customer.userId=Address.userId INNER JOIN Card ON Customer.userId=Card.userId";
 
@@ -121,13 +143,14 @@ customerRouter.post("/", (request, response) => {
             return;
         }
 
-        // check if the userId is already in use
-        con.query("SELECT * FROM Customer WHERE userId=?", [userId], (err, result) => {
+        isValidCustomer(userId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            if (result.length !== 0) {
+            if (valid) {
                 response.status(409);
                 response.send("userId \"" + userId + "\" already in use");
                 return;
@@ -199,13 +222,14 @@ customerRouter.put("/", (request, response) => {
             return;
         }
 
-        // check if the given userId exists
-        con.query("SELECT * FROM Customer WHERE userId=?", [userId], (err, result) => {
+        isValidCustomer(userId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            if (result.length === 0) {
+            if (!valid) {
                 response.status(404);
                 response.send("Customer not found with the given userId \"" + userId + "\"");
                 return;
@@ -254,12 +278,14 @@ customerRouter.delete("/", (request, response) => {
         }
 
         // check if the given userId exists
-        con.query("SELECT * FROM Customer WHERE userId=?", [userId], (err, result) => {
+        isValidCustomer(userId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            if (result.length === 0) {
+            if (!valid) {
                 response.status(404);
                 response.send("Customer not found with the given userId \"" + userId + "\"");
                 return;
@@ -285,4 +311,5 @@ customerRouter.delete("/", (request, response) => {
 
 module.exports = {
     customerRouter,
+    isValidCustomer
 };

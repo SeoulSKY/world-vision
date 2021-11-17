@@ -23,6 +23,28 @@ function isValidBody(body) {
         body.description !== undefined;
 }
 
+/**
+ * Check if the given recipient user id is valid
+ * @param recipientUserId The user id to check
+ * @param callback A callback function to check the result
+ */
+function isValidRecipient(recipientUserId, callback) {
+    getConnection((err, con) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        con.query("SELECT * FROM Recipient WHERE userId=?", [recipientUserId], (err, result) => {
+            if (err) {
+                throw err;
+            }
+
+            callback(null, result.length !== 0);
+        });
+    });
+}
+
 recipientRouter.get("/", (request, response) => {
     let customerUserId = request.body.customerUserId;
     let recipientUserId = request.body.recipientUserId;
@@ -121,13 +143,14 @@ recipientRouter.post("/", (request, response) => {
             return;
         }
 
-        con.query("SELECT * FROM Recipient WHERE userId=?", [userId], (err, result) => {
+        isValidRecipient(userId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            // check if the userId is already in use
-            if (result.length !== 0) {
+            if (valid) {
                 response.status(409);
                 response.send("userId \"" + userId + "\" already in use");
                 return;
@@ -198,12 +221,14 @@ recipientRouter.put("/", (request, response) => {
         }
 
         // check if the given userId exists
-        con.query("SELECT * FROM Recipient WHERE userId=?", [userId], (err, result) => {
+        isValidRecipient(userId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            if (result.length === 0) {
+            if (!valid) {
                 response.status(404);
                 response.send("Recipient not found with the given userId \"" + userId + "\"");
                 return;
@@ -249,13 +274,14 @@ recipientRouter.delete("/", (request, response) => {
             return;
         }
 
-        // check if the given userId exists
-        con.query("SELECT * FROM Recipient WHERE userId=?", [userId], (err, result) => {
+        isValidRecipient(userId, (err, valid) => {
             if (err) {
-                throw err;
+                response.status(500);
+                response.send("Server couldn't connect to the database");
+                return;
             }
 
-            if (result.length === 0) {
+            if (!valid) {
                 response.status(404);
                 response.send("Recipient not found with the given userId \"" + userId + "\"");
                 return;
@@ -274,10 +300,11 @@ recipientRouter.delete("/", (request, response) => {
                 response.status(200);
                 response.send("Deleted");
             });
-        });
+        })
     });
 });
 
 module.exports = {
     recipientRouter,
+    isValidRecipient
 };
