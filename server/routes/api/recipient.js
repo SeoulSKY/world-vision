@@ -24,11 +24,15 @@ function isValidBody(body) {
 }
 
 recipientRouter.get("/", (request, response) => {
-    let sql = "SELECT * FROM Recipient INNER JOIN Address ON Recipient.userId=Address.userId";
+    let customerUserId = request.body.customerUserId;
+    let recipientUserId = request.body.recipientUserId;
 
-    let userId = request.query.userId;
-    if (userId !== undefined) {
-        sql += " WHERE Recipient.userId=" + escape(userId);
+    let sql = "SELECT * FROM Recipient INNER JOIN Address ON Recipient.userId=Address.userId ";
+    if (customerUserId !== undefined) {
+        sql += "INNER JOIN Donation ON Donation.recipientUserId=Recipient.userId WHERE Donation.customerUserId=" +
+            escape(customerUserId) + " AND " + "Donation.recipientUserId=" + escape(recipientUserId);
+    } else if (recipientUserId !== undefined) {
+        sql = "WHERE userId=" + escape(recipientUserId);
     }
 
     getConnection((err, con) => {
@@ -45,9 +49,9 @@ recipientRouter.get("/", (request, response) => {
             // convert the result to json format
             let newResult = JSON.parse(JSON.stringify(result));
 
-            if (userId !== undefined && newResult.length === 0) {
+            if (recipientUserId !== undefined && customerUserId === undefined && newResult.length === 0) {
                 response.status(404);
-                response.send("Recipient not found with the given userId \"" + userId + "\"");
+                response.send("Recipient not found with the given recipientUserId \"" + recipientUserId + "\"");
                 return;
             }
 
@@ -193,12 +197,12 @@ recipientRouter.put("/", (request, response) => {
             return;
         }
 
+        // check if the given userId exists
         con.query("SELECT * FROM Recipient WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
 
-            // check if the given userId exists
             if (result.length === 0) {
                 response.status(404);
                 response.send("Recipient not found with the given userId \"" + userId + "\"");
@@ -245,12 +249,12 @@ recipientRouter.delete("/", (request, response) => {
             return;
         }
 
+        // check if the given userId exists
         con.query("SELECT * FROM Recipient WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
 
-            // check if the given userId exists
             if (result.length === 0) {
                 response.status(404);
                 response.send("Recipient not found with the given userId \"" + userId + "\"");
@@ -260,6 +264,8 @@ recipientRouter.delete("/", (request, response) => {
             let sql = "DELETE FROM Recipient WHERE userId=" + escape(userId);
             sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
             sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
+            sql += ";DELETE FROM Donation WHERE recipientUserId=" + escape(userId);
+            sql += ";DELETE FROM Transaction WHERE recipientUserId=" + escape(userId);
 
             con.query(sql, (err) => {
                 if (err) {

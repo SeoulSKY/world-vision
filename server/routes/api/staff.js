@@ -101,12 +101,12 @@ staffRouter.post("/", (request, response) => {
             return;
         }
 
+        // check if the userId is already in use
         con.query("SELECT * FROM Staff WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
 
-            // check if the userId is already in use
             if (result.length !== 0) {
                 response.status(409);
                 response.send("userId \"" + userId + "\" already in use");
@@ -165,12 +165,12 @@ staffRouter.put("/", (request, response) => {
             return;
         }
 
+        // check if the given userId exists
         con.query("SELECT * FROM Staff WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
 
-            // check if the given userId exists
             if (result.length === 0) {
                 response.status(404);
                 response.send("Staff not found with the given userId \"" + userId + "\"");
@@ -216,12 +216,12 @@ staffRouter.delete("/", (request, response) => {
             return;
         }
 
+        // check if the given userId exists
         con.query("SELECT * FROM Staff WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
 
-            // check if the given userId exists
             if (result.length === 0) {
                 response.status(404);
                 response.send("Staff not found with the given userId \"" + userId + "\"");
