@@ -121,12 +121,12 @@ customerRouter.post("/", (request, response) => {
             return;
         }
 
+        // check if the userId is already in use
         con.query("SELECT * FROM Customer WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
 
-            // check if the userId is already in use
             if (result.length !== 0) {
                 response.status(409);
                 response.send("userId \"" + userId + "\" already in use");
@@ -199,12 +199,12 @@ customerRouter.put("/", (request, response) => {
             return;
         }
 
+        // check if the given userId exists
         con.query("SELECT * FROM Customer WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
 
-            // check if the given userId exists
             if (result.length === 0) {
                 response.status(404);
                 response.send("Customer not found with the given userId \"" + userId + "\"");
@@ -253,12 +253,12 @@ customerRouter.delete("/", (request, response) => {
             return;
         }
 
+        // check if the given userId exists
         con.query("SELECT * FROM Customer WHERE userId=?", [userId], (err, result) => {
             if (err) {
                 throw err;
             }
 
-            // check if the given userId exists
             if (result.length === 0) {
                 response.status(404);
                 response.send("Customer not found with the given userId \"" + userId + "\"");
@@ -269,6 +269,8 @@ customerRouter.delete("/", (request, response) => {
             sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
             sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
             sql += ";DELETE FROM Card WHERE userId=" + escape(userId);
+            sql += ";DELETE FROM Donation WHERE customerUserId=" + escape(userId);
+            sql += ";DELETE FROM Transaction WHERE customerUserId=" + escape(userId);
 
             con.query(sql, (err) => {
                 if (err) {
