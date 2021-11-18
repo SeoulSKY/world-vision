@@ -1,6 +1,5 @@
 const { Router } = require("express");
-const { getConnection, escape } = require("../../mysqlLib");
-const {use} = require("express/lib/router");
+const { getPool, escape } = require("../../mysqlLib");
 
 const staffRouter = Router();
 
@@ -24,24 +23,14 @@ function isValidBody(body) {
 /**
  * Check if the given staff id is valid
  * @param staffUserId The user id to check
- * @param callback A callback function to check the result
+ * @return true if the staff exists, false otherwise
  */
-function isValidStaff(staffUserId, callback) {
-    getConnection((err, con) => {
-        if (err) {
-            callback(err);
-            return;
-        }
-
-        con.query("SELECT * FROM Staff WHERE userId=?", [staffUserId], (err, result) => {
-            if (err) {
-                throw err;
-            }
-
-            callback(null, result.length !== 0);
-        });
-    });
+async function checkIfStaffExists(staffUserId) {
+    let pool = await getPool;
+    let result = await pool.query("SELECT * FROM Staff WHERE userId=?", [staffUserId]);
+    return result.length !== 0;
 }
+
 
 staffRouter.get("/", (request, response) => {
     let sql = "SELECT * FROM Staff INNER JOIN Address ON Staff.userId=Address.userId";
@@ -51,57 +40,50 @@ staffRouter.get("/", (request, response) => {
         sql += " WHERE Staff.userId=" + escape(userId);
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfStaffExists(userId).then(exist => {
+        if (userId !== undefined && !exist) {
+            response.status(404).send("Staff not found with the given userId \"" + userId + "\"");
             return;
         }
 
-        con.query(sql, (err, result) => {
-            if (err) {
-                throw err;
-            }
-            // convert the result to json format
-            let newResult = JSON.parse(JSON.stringify(result));
+        getPool.then(pool => {
+            pool.query(sql).then(result => {
+                // convert the result to json format
+                let newResult = JSON.parse(JSON.stringify(result));
 
-            if (userId !== undefined && newResult.length === 0) {
-                response.status(404);
-                response.send("Staff not found with the given userId \"" + userId + "\"");
-                return;
-            }
+                let array = [];
+                for (let i = 0; i < newResult.length; i++) {
+                    let json = {
+                        userId: newResult[i].userId,
+                        firstName: newResult[i].firstName,
+                        lastName: newResult[i].lastName,
+                        homeAddress: {
+                            street: newResult[i].street,
+                            city: newResult[i].city,
+                            province: newResult[i].province,
+                            postalCode: newResult[i].postalCode,
+                            country: newResult[i].country
+                        }
+                    };
 
-            let array = [];
-            for (let i = 0; i < newResult.length; i++) {
-                let json = {
-                    userId: newResult[i].userId,
-                    firstName: newResult[i].firstName,
-                    lastName: newResult[i].lastName,
-                    homeAddress: {
-                        street: newResult[i].street,
-                        city: newResult[i].city,
-                        province: newResult[i].province,
-                        postalCode: newResult[i].postalCode,
-                        country: newResult[i].country
+                    if (newResult.middleName !== undefined) {
+                        json.middleName = newResult[i].middleName;
                     }
-                };
 
-                if (newResult.middleName !== undefined) {
-                    json.middleName = newResult[i].middleName;
+                    array.push(json);
                 }
 
-                array.push(json);
-            }
-
-            response.json(array);
+                response.json(array);
+            });
         });
+    }).catch(() => {
+        response.status(500).send("Server couldn't connect to the database");
     });
 });
 
 staffRouter.post("/", (request, response) => {
     if (!isValidBody(request.body)) {
-        response.status(400);
-        response.send("Request body doesn't contain required parameters");
+        response.status(400).send("Request body doesn't contain required parameters");
         return;
     }
 
@@ -117,49 +99,31 @@ staffRouter.post("/", (request, response) => {
     let postalCode = homeAddress.postalCode;
     let country = homeAddress.country;
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfStaffExists(userId).then(exist => {
+        if (exist) {
+            response.status(409).send("userId \"" + userId + "\" already in use");
             return;
         }
 
-        isValidStaff(userId, (err, valid) => {
-            if (err) {
-                response.status(500);
-                response.send("Server couldn't connect to the database");
-                return;
-            }
+        let sql = "INSERT INTO Staff (userId, firstName, lastName";
+        if (middleName === undefined) {
+            sql += ") VALUES (" + escape(userId) + ", " + escape(firstName) + ", " + escape(lastName) + ")";
+        } else {
+            sql += ", middleName) VALUES (" + escape(userId) + ", " + escape(firstName) + ", " +
+                escape(lastName) + ", " + escape(middleName) + ")";
+        }
 
-            if (valid) {
-                response.status(409);
-                response.send("userId \"" + userId + "\" already in use");
-                return;
-            }
+        sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
+            escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
+            escape(postalCode) + ", " + escape(country) + ")";
 
-            let sql = "INSERT INTO Staff (userId, firstName, lastName";
-            if (middleName === undefined) {
-                sql += ") VALUES (" + escape(userId) + ", " + escape(firstName) + ", " + escape(lastName) + ")";
-            } else {
-                sql += ", middleName) VALUES (" + escape(userId) + ", " + escape(firstName) + ", " +
-                    escape(lastName) + ", " + escape(middleName) + ")";
-            }
+        sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Staff\")";
 
-            sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
-                escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
-                escape(postalCode) + ", " + escape(country) + ")";
-
-            sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Staff\")";
-
-            con.query(sql, err => {
-                if (err) {
-                    throw err;
-                }
-
-                response.status(201);
-                response.send("Created");
-            });
+        getPool.then(pool => {
+            pool.query(sql).then(() => response.status(201).send("Created"));
         });
+    }).catch(() => {
+        response.status(500).send("Server couldn't connect to the database");
     });
 });
 
@@ -182,48 +146,29 @@ staffRouter.put("/", (request, response) => {
     let postalCode = homeAddress.postalCode;
     let country = homeAddress.country;
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfStaffExists(userId).then(exist => {
+        if (!exist) {
+            response.status(404).send("Staff not found with the given userId \"" + userId + "\"");
             return;
         }
 
-        // check if the given userId exists
-        isValidStaff(userId, (err, valid) => {
-            if (err) {
-                response.status(500);
-                response.send("Server couldn't connect to the database");
-                return;
-            }
+        let sql = "UPDATE Staff SET firstName=" + escape(firstName) + ", lastName=" + escape(lastName);
 
-            if (!valid) {
-                response.status(404);
-                response.send("Staff not found with the given userId \"" + userId + "\"");
-                return;
-            }
+        if (middleName !== undefined) {
+            sql += ", middleName=" + escape(middleName);
+        }
 
-            let sql = "UPDATE Staff SET firstName=" + escape(firstName) + ", lastName=" + escape(lastName);
+        sql += " WHERE userId=" + escape(userId);
 
-            if (middleName !== undefined) {
-                sql += ", middleName=" + escape(middleName);
-            }
+        sql += ";UPDATE Address SET street=" + escape(street) + ", city=" + escape(city) + ", province=" +
+            escape(province) + ", postalCode=" + escape(postalCode) + ", country=" + escape(country) +
+            "WHERE userId=" + escape(userId);
 
-            sql += " WHERE userId=" + escape(userId);
-
-            sql += ";UPDATE Address SET street=" + escape(street) + ", city=" + escape(city) + ", province=" +
-                escape(province) + ", postalCode=" + escape(postalCode) + ", country=" + escape(country) +
-                "WHERE userId=" + escape(userId);
-
-            con.query(sql, err => {
-                if (err) {
-                    throw err;
-                }
-
-                response.status(200);
-                response.send("Updated");
-            });
+        getPool.then(pool => {
+            pool.query(sql).then(() => response.status(200).send("Updated"));
         });
+    }).catch(() => {
+        response.status(500).send("Server couldn't connect to the database\"");
     });
 });
 
@@ -235,37 +180,25 @@ staffRouter.delete("/", (request, response) => {
         return;
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfStaffExists(userId).then(exist => {
+        if (!exist) {
+            response.status(404).send("Staff not found with the given userId \"" + userId + "\"");
             return;
         }
 
-        // check if the given userId exists
-        isValidStaff(userId, (err, value) => {
-            if (err) {
-                response.status(500);
-                response.send("Server couldn't connect to the database");
-                return;
-            }
+        let sql = "DELETE FROM Staff WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
 
-            let sql = "DELETE FROM Staff WHERE userId=" + escape(userId);
-            sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
-            sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
-
-            con.query(sql, (err) => {
-                if (err) {
-                    throw err;
-                }
-                response.status(200);
-                response.send("Deleted");
-            });
+        getPool.then(pool => {
+            pool.query(sql).then(() => response.status(200).send("Deleted"));
         });
+    }).catch(() => {
+        response.status(500).send("Server couldn't connect to the database\"");
     });
 });
 
 module.exports = {
     staffRouter,
-    isValidStaff
+    checkIfStaffExists: checkIfStaffExists
 };

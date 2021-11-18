@@ -20,12 +20,9 @@ const HOST = process.env.HOST;
 
 app.use("/api", apiRouter);
 
-// initialize the database
-require("./mysqlLib").init(err => {
-    if (err) {
-        console.log("Database is not yet ready to be used. Please try running the server later");
-        process.exit(0);
-    }
-
+require("./mysqlLib").init().then(() => {
     app.listen(PORT, HOST, () => {console.log("Started listening " + HOST + ":" + PORT)});
+}).catch(() => {
+    console.log("Database is not yet ready to be used. Please try running the server later");
+    process.exit(0);
 });
