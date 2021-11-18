@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const {escape, getConnection} = require("../../mysqlLib");
+const {escape, getPool} = require("../../mysqlLib");
 
 const customerRouter = Router();
 
@@ -27,23 +27,12 @@ function isValidBody(body) {
 /**
  * Check if the given customer id is valid
  * @param customerUserId The user id to check
- * @param callback A callback function to check the result
+ * @return true if the given id exists, false otherwise
  */
-function isValidCustomer(customerUserId, callback) {
-    getConnection((err, con) => {
-        if (err) {
-            callback(err);
-            return;
-        }
-
-        con.query("SELECT * FROM Customer WHERE userId=?", [customerUserId], (err, result) => {
-            if (err) {
-                throw err;
-            }
-
-            callback(null, result.length !== 0);
-        });
-    });
+async function checkIfCustomerExists(customerUserId) {
+    let pool = await getPool;
+    let result = await pool.query("SELECT * FROM Customer WHERE userId=?", [customerUserId]);
+    return result.length !== 0;
 }
 
 customerRouter.get("/", (request, response) => {
@@ -54,23 +43,13 @@ customerRouter.get("/", (request, response) => {
         sql += " WHERE Customer.userId=" + escape(userId);
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
-            return;
-        }
-
-        con.query(sql, (err, result) => {
-            if (err) {
-                throw err;
-            }
+    getPool.then(pool => {
+        pool.query(sql).then(result => {
             // convert the result to json format
             let newResult = JSON.parse(JSON.stringify(result));
 
             if (userId !== undefined && newResult.length === 0) {
-                response.status(404);
-                response.send("Customer not found with the given userId \"" + userId + "\"");
+                response.status(404).send("Customer not found with the given userId \"" + userId + "\"");
                 return;
             }
 
@@ -102,14 +81,13 @@ customerRouter.get("/", (request, response) => {
             }
 
             response.json(array);
-        });
-    });
+        })
+    }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
 
 customerRouter.post("/", (request, response) => {
     if (!isValidBody(request.body)) {
-        response.status(400);
-        response.send("Request body doesn't contain required parameters");
+        response.status(400).send("Request body doesn't contain required parameters");
         return;
     }
 
@@ -131,64 +109,42 @@ customerRouter.post("/", (request, response) => {
     let cvv = card.cvv;
 
     if (new Date(expirationDate).toString() === "Invalid Date") {
-        response.status(400);
-        response.send("The format of the given expirationDate is invalid");
+        response.status(400).send("The format of the given expirationDate is invalid");
         return;
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfCustomerExists(userId).then(exist => {
+        if (exist) {
+            response.status(409).send("userId \"" + userId + "\" already in use");
             return;
         }
 
-        isValidCustomer(userId, (err, valid) => {
-            if (err) {
-                response.status(500);
-                response.send("Server couldn't connect to the database");
-                return;
-            }
+        let sql = "INSERT INTO Customer (userId, firstName, lastName";
+        if (middleName === undefined) {
+            sql += ") VALUES (" + escape(userId) + ", " + escape(firstName) + ", " + escape(lastName) + ")";
+        } else {
+            sql += ", middleName) VALUES (" + escape(userId) + ", " + escape(firstName) + ", " +
+                escape(lastName) + ", " + escape(middleName) + ")";
+        }
 
-            if (valid) {
-                response.status(409);
-                response.send("userId \"" + userId + "\" already in use");
-                return;
-            }
+        sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
+            escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
+            escape(postalCode) + ", " + escape(country) + ")";
 
-            let sql = "INSERT INTO Customer (userId, firstName, lastName";
-            if (middleName === undefined) {
-                sql += ") VALUES (" + escape(userId) + ", " + escape(firstName) + ", " + escape(lastName) + ")";
-            } else {
-                sql += ", middleName) VALUES (" + escape(userId) + ", " + escape(firstName) + ", " +
-                    escape(lastName) + ", " + escape(middleName) + ")";
-            }
+        sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Customer\")";
 
-            sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
-                escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
-                escape(postalCode) + ", " + escape(country) + ")";
+        sql += ";INSERT INTO Card (userId, number, expirationDate, cvv) VALUES (" + escape(userId) + ", " +
+            escape(number) + ", " + escape(expirationDate) + ", " + escape(cvv) + ")";
 
-            sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Customer\")";
-
-            sql += ";INSERT INTO Card (userId, number, expirationDate, cvv) VALUES (" + escape(userId) + ", " +
-                escape(number) + ", " + escape(expirationDate) + ", " + escape(cvv) + ")";
-
-            con.query(sql, err => {
-                if (err) {
-                    throw err;
-                }
-
-                response.status(201);
-                response.send("Created");
-            });
+        getPool.then(pool => {
+            pool.query(sql).then(() => response.status(200).send("created"));
         });
-    });
+    }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
 
 customerRouter.put("/", (request, response) => {
     if (!isValidBody(request.body)) {
-        response.status(400);
-        response.send("Request body doesn't contain required parameters");
+        response.status(400).send("Request body doesn't contain required parameters");
         return;
     }
 
@@ -210,56 +166,36 @@ customerRouter.put("/", (request, response) => {
     let cvv = card.cvv;
 
     if (new Date(expirationDate).toString() === "Invalid Date") {
-        response.status(400);
-        response.send("The format of the given expirationDate is invalid");
+        response.status(400).send("The format of the given expirationDate is invalid");
         return;
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfCustomerExists(userId).then(exist => {
+        if (!exist) {
+            response.status(404);
+            response.send("Customer not found with the given userId \"" + userId + "\"");
             return;
         }
 
-        isValidCustomer(userId, (err, valid) => {
-            if (err) {
-                response.status(500);
-                response.send("Server couldn't connect to the database");
-                return;
-            }
+        let sql = "UPDATE Customer SET firstName=" + escape(firstName) + ", lastName=" + escape(lastName);
 
-            if (!valid) {
-                response.status(404);
-                response.send("Customer not found with the given userId \"" + userId + "\"");
-                return;
-            }
+        if (middleName !== undefined) {
+            sql += ", middleName=" + escape(middleName);
+        }
 
-            let sql = "UPDATE Customer SET firstName=" + escape(firstName) + ", lastName=" + escape(lastName);
+        sql += " WHERE userId=" + escape(userId);
 
-            if (middleName !== undefined) {
-                sql += ", middleName=" + escape(middleName);
-            }
+        sql += ";UPDATE Address SET street=" + escape(street) + ", city=" + escape(city) + ", province=" +
+            escape(province) + ", postalCode=" + escape(postalCode) + ", country=" + escape(country) +
+            "WHERE userId=" + escape(userId);
 
-            sql += " WHERE userId=" + escape(userId);
+        sql += ";UPDATE Card SET number=" + escape(number) + ", expirationDate=" +
+            escape(expirationDate) + ", cvv=" + escape(cvv);
 
-            sql += ";UPDATE Address SET street=" + escape(street) + ", city=" + escape(city) + ", province=" +
-                escape(province) + ", postalCode=" + escape(postalCode) + ", country=" + escape(country) +
-                "WHERE userId=" + escape(userId);
-
-            sql += ";UPDATE Card SET number=" + escape(number) + ", expirationDate=" +
-                escape(expirationDate) + ", cvv=" + escape(cvv);
-
-            con.query(sql, err => {
-                if (err) {
-                    throw err;
-                }
-
-                response.status(200);
-                response.send("Updated");
-            });
+        getPool.then(pool => {
+            pool.query(sql).then(() => response.status(200).send("Updated"));
         });
-    });
+    }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
 
 customerRouter.delete("/", (request, response) => {
@@ -270,46 +206,26 @@ customerRouter.delete("/", (request, response) => {
         return;
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfCustomerExists(userId).then(exist => {
+        if (!exist) {
+            response.status(404).send("Customer not found with the given userId \"" + userId + "\"");
             return;
         }
 
-        // check if the given userId exists
-        isValidCustomer(userId, (err, valid) => {
-            if (err) {
-                response.status(500);
-                response.send("Server couldn't connect to the database");
-                return;
-            }
+        let sql = "DELETE FROM Customer WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM Card WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM Donation WHERE customerUserId=" + escape(userId);
+        sql += ";DELETE FROM Transaction WHERE customerUserId=" + escape(userId);
 
-            if (!valid) {
-                response.status(404);
-                response.send("Customer not found with the given userId \"" + userId + "\"");
-                return;
-            }
-
-            let sql = "DELETE FROM Customer WHERE userId=" + escape(userId);
-            sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
-            sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
-            sql += ";DELETE FROM Card WHERE userId=" + escape(userId);
-            sql += ";DELETE FROM Donation WHERE customerUserId=" + escape(userId);
-            sql += ";DELETE FROM Transaction WHERE customerUserId=" + escape(userId);
-
-            con.query(sql, (err) => {
-                if (err) {
-                    throw err;
-                }
-                response.status(200);
-                response.send("Deleted");
-            });
+        getPool.then(pool => {
+           pool.query(sql).then(() => response.status(200).send("Deleted"));
         });
-    });
+    }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
 
 module.exports = {
     customerRouter,
-    isValidCustomer
+    checkIfCustomerExists: checkIfCustomerExists
 };

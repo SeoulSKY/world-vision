@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const {escape, getConnection} = require("../../mysqlLib");
+const {escape, getPool} = require("../../mysqlLib");
 
 const recipientRouter = Router();
 
@@ -24,25 +24,14 @@ function isValidBody(body) {
 }
 
 /**
- * Check if the given recipient user id is valid
+ * Check if the given recipient user exists
  * @param recipientUserId The user id to check
- * @param callback A callback function to check the result
+ * @return true if the recipient exists, false otherwise
  */
-function isValidRecipient(recipientUserId, callback) {
-    getConnection((err, con) => {
-        if (err) {
-            callback(err);
-            return;
-        }
-
-        con.query("SELECT * FROM Recipient WHERE userId=?", [recipientUserId], (err, result) => {
-            if (err) {
-                throw err;
-            }
-
-            callback(null, result.length !== 0);
-        });
-    });
+async function checkIfRecipientExists(recipientUserId) {
+    let pool = await getPool;
+    let result = await pool.query("SELECT * FROM Recipient WHERE userId=?", [recipientUserId]);
+    return result.length !== 0;
 }
 
 recipientRouter.get("/", (request, response) => {
@@ -50,6 +39,7 @@ recipientRouter.get("/", (request, response) => {
     let recipientUserId = request.body.recipientUserId;
 
     let sql = "SELECT * FROM Recipient INNER JOIN Address ON Recipient.userId=Address.userId ";
+
     if (customerUserId !== undefined) {
         sql += "INNER JOIN Donation ON Donation.recipientUserId=Recipient.userId WHERE Donation.customerUserId=" +
             escape(customerUserId) + " AND " + "Donation.recipientUserId=" + escape(recipientUserId);
@@ -57,25 +47,17 @@ recipientRouter.get("/", (request, response) => {
         sql = "WHERE userId=" + escape(recipientUserId);
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
-            return;
-        }
-
-        con.query(sql, (err, result) => {
-            if (err) {
-                throw err;
-            }
-            // convert the result to json format
-            let newResult = JSON.parse(JSON.stringify(result));
-
-            if (recipientUserId !== undefined && customerUserId === undefined && newResult.length === 0) {
-                response.status(404);
-                response.send("Recipient not found with the given recipientUserId \"" + recipientUserId + "\"");
+    getPool.then(pool => {
+        pool.query(sql).then(result => {
+            if (recipientUserId !== undefined && customerUserId === undefined && result.length === 0) {
+                response
+                    .status(404)
+                    .send("Recipient not found with the given recipientUserId \"" + recipientUserId + "\"");
                 return;
             }
+
+            // convert the result to json format
+            let newResult = JSON.parse(JSON.stringify(result));
 
             let array = [];
             for (let i = 0; i < newResult.length; i++) {
@@ -104,13 +86,12 @@ recipientRouter.get("/", (request, response) => {
 
             response.json(array);
         });
-    });
+    }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
 
 recipientRouter.post("/", (request, response) => {
     if (!isValidBody(request.body)) {
-        response.status(400);
-        response.send("Request body doesn't contain required parameters");
+        response.status(400).send("Request body doesn't contain required parameters");
         return;
     }
 
@@ -131,57 +112,36 @@ recipientRouter.post("/", (request, response) => {
     let description = request.body.description;
 
     if (new Date(birthDate).toString() === "Invalid Date") {
-        response.status(400);
-        response.send("The format of the given birthDate is invalid");
+        response.status(400).send("The format of the given birthDate is invalid");
         return;
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfRecipientExists(userId).then(exist => {
+        if (exist) {
+            response.status(409).send("userId \"" + userId + "\" already in use");
             return;
         }
 
-        isValidRecipient(userId, (err, valid) => {
-            if (err) {
-                response.status(500);
-                response.send("Server couldn't connect to the database");
-                return;
-            }
+        let sql = "INSERT INTO Recipient (userId, firstName, lastName, birthDate, gender, description";
+        if (middleName === undefined) {
+            sql += ") VALUES (" + escape(userId) + ", " + escape(firstName) + ", " + escape(lastName) + ", " +
+                escape(birthDate) + ", " + escape(gender) + ", " + escape(description) + ")";
+        } else {
+            sql += ", middleName) VALUES (" + escape(userId) + ", " + escape(firstName) + ", " +
+                escape(lastName) + ", " +  escape(birthDate) + ", " + escape(gender) + ", " + escape(description) +
+                ", " + escape(middleName) + ")";
+        }
 
-            if (valid) {
-                response.status(409);
-                response.send("userId \"" + userId + "\" already in use");
-                return;
-            }
+        sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
+            escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
+            escape(postalCode) + ", " + escape(country) + ")";
 
-            let sql = "INSERT INTO Recipient (userId, firstName, lastName, birthDate, gender, description";
-            if (middleName === undefined) {
-                sql += ") VALUES (" + escape(userId) + ", " + escape(firstName) + ", " + escape(lastName) + ", " +
-                    escape(birthDate) + ", " + escape(gender) + ", " + escape(description) + ")";
-            } else {
-                sql += ", middleName) VALUES (" + escape(userId) + ", " + escape(firstName) + ", " +
-                    escape(lastName) + ", " +  escape(birthDate) + ", " + escape(gender) + ", " + escape(description) +
-                    ", " + escape(middleName) + ")";
-            }
+        sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Recipient\")";
 
-            sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
-                escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
-                escape(postalCode) + ", " + escape(country) + ")";
-
-            sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Recipient\")";
-
-            con.query(sql, err => {
-                if (err) {
-                    throw err;
-                }
-
-                response.status(201);
-                response.send("Created");
-            });
+        getPool.then(pool => {
+            pool.query(sql).then(() => response.status(201).send("Created"));
         });
-    });
+    }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
 
 recipientRouter.put("/", (request, response) => {
@@ -208,103 +168,61 @@ recipientRouter.put("/", (request, response) => {
     let description = request.body.description;
 
     if (new Date(birthDate).toString() === "Invalid Date") {
-        response.status(400);
-        response.send("The format of the given birthDate is invalid");
+        response.status(400).send("The format of the given birthDate is invalid");
         return;
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfRecipientExists(userId).then(exist => {
+        if (!exist) {
+            response.status(404).send("Recipient not found with the given userId \"" + userId + "\"");
             return;
         }
 
-        // check if the given userId exists
-        isValidRecipient(userId, (err, valid) => {
-            if (err) {
-                response.status(500);
-                response.send("Server couldn't connect to the database");
-                return;
-            }
+        let sql = "UPDATE Recipient SET firstName=" + escape(firstName) + ", lastName=" + escape(lastName) +
+            ", birthDate=" + escape(birthDate) + ", gender=" + escape(gender) + ", description=" + escape(description);
 
-            if (!valid) {
-                response.status(404);
-                response.send("Recipient not found with the given userId \"" + userId + "\"");
-                return;
-            }
+        if (middleName !== undefined) {
+            sql += ", middleName=" + escape(middleName);
+        }
 
-            let sql = "UPDATE Recipient SET firstName=" + escape(firstName) + ", lastName=" + escape(lastName) +
-                ", birthDate=" + escape(birthDate) + ", gender=" + escape(gender) + ", description=" + escape(description);
+        sql += " WHERE userId=" + escape(userId);
 
-            if (middleName !== undefined) {
-                sql += ", middleName=" + escape(middleName);
-            }
+        sql += ";UPDATE Address SET street=" + escape(street) + ", city=" + escape(city) + ", province=" +
+            escape(province) + ", postalCode=" + escape(postalCode) + ", country=" + escape(country) +
+            "WHERE userId=" + escape(userId);
 
-            sql += " WHERE userId=" + escape(userId);
-
-            sql += ";UPDATE Address SET street=" + escape(street) + ", city=" + escape(city) + ", province=" +
-                escape(province) + ", postalCode=" + escape(postalCode) + ", country=" + escape(country) +
-                "WHERE userId=" + escape(userId);
-
-            con.query(sql, err => {
-                if (err) {
-                    throw err;
-                }
-
-                response.status(200);
-                response.send("Updated");
-            });
+        getPool.then(pool => {
+            pool.query(sql).then(() => response.status(200).send("Updated"));
         });
-    });
+    }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
 
 recipientRouter.delete("/", (request, response) => {
     let userId = request.query.userId;
     if (userId === undefined) {
-        response.status(400);
-        response.send("Parameter userId is missing");
+        response.status(400).send("Parameter userId is missing");
         return;
     }
 
-    getConnection((err, con) => {
-        if (err) {
-            response.status(500);
-            response.send("Server couldn't connect to the database");
+    checkIfRecipientExists(userId).then(exist => {
+        if (!exist) {
+            response.status(404).send("Recipient not found with the given userId \"" + userId + "\"");
             return;
         }
 
-        isValidRecipient(userId, (err, valid) => {
-            if (err) {
-                response.status(500);
-                response.send("Server couldn't connect to the database");
-                return;
-            }
+        let sql = "DELETE FROM Recipient WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
+        sql += ";DELETE FROM Donation WHERE recipientUserId=" + escape(userId);
+        sql += ";DELETE FROM Transaction WHERE recipientUserId=" + escape(userId);
 
-            if (!valid) {
-                response.status(404);
-                response.send("Recipient not found with the given userId \"" + userId + "\"");
-                return;
-            }
-
-            let sql = "DELETE FROM Recipient WHERE userId=" + escape(userId);
-            sql += ";DELETE FROM Address WHERE userId=" + escape(userId);
-            sql += ";DELETE FROM AccountType WHERE userId=" + escape(userId);
-            sql += ";DELETE FROM Donation WHERE recipientUserId=" + escape(userId);
-            sql += ";DELETE FROM Transaction WHERE recipientUserId=" + escape(userId);
-
-            con.query(sql, (err) => {
-                if (err) {
-                    throw err;
-                }
-                response.status(200);
-                response.send("Deleted");
-            });
-        })
-    });
+        getPool.then(pool => {
+            pool.query(sql).then(() => response.status(200).send("Deleted"));
+        });
+    }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
 
 module.exports = {
     recipientRouter,
-    isValidRecipient
+    checkIfRecipientExists: checkIfRecipientExists
 };
