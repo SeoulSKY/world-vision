@@ -86,7 +86,7 @@ transactionRouter.get("/", (request, response) => {
                 });
             });
         });
-    });
+    }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
 
 transactionRouter.post("/", (request, response) => {
