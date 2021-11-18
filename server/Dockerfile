@@ -17,4 +17,3 @@ COPY . /app
 EXPOSE 5000
 
 ENTRYPOINT ["npm", "start"]
-
