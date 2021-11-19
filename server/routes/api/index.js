@@ -5,6 +5,7 @@ const { donationRouter } = require("./donation");
 const { recipientRouter } = require("./recipient");
 const { staffRouter } = require("./staff");
 const { transactionRouter } = require("./transaction");
+const { accountTypeRouter } = require("./accountType");
 
 const apiRouter = Router();
 
@@ -13,6 +14,7 @@ apiRouter.use("/donation", donationRouter);
 apiRouter.use("/recipient", recipientRouter);
 apiRouter.use("/staff", staffRouter);
 apiRouter.use("/transaction", transactionRouter);
+apiRouter.use("/accountType", accountTypeRouter);
 
 // Endpoint for smoke test
 apiRouter.get("/hello", (request, response) => {
