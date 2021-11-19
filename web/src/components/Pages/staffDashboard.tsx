@@ -1,12 +1,22 @@
-import React, { useEffect } from "react";
+
+import React, { useEffect, useState } from 'react';
 // import NavBar from './components'
 
 import { useForm } from 'react-hook-form';
 
+
   
 const StaffDashboard = () => {
-      
 
+    let [flaskMessage, setFlaskMessage] = useState("Failed to connect to the server.")
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/hello")
+            .then((response) => {
+                response.text().then((text) => setFlaskMessage(text)).catch(error => console.log(error));
+            })
+            .catch((error) => console.log(error));
+    }, []);
 
 
     const {register, handleSubmit, reset} = useForm();
@@ -46,7 +56,14 @@ const StaffDashboard = () => {
         
     const onSubmitStaffGet= (dataStaffGet: any)=> {
         console.log(dataStaffGet.staffUserIdGet)
+
+
+
+
+
+
         resetForm()
+        reset({ staffUserDisplay:flaskMessage,});
    
     }
 
@@ -86,6 +103,8 @@ const onSubmitRecipientGet = (dataRecipientGet: any)=> {
     // test that we can assess the user posted form data put request of staff account
     console.log(dataRecipientGet.recipientUserIdGet)
     resetForm()
+
+
 
 }
 
