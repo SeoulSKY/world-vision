@@ -260,7 +260,7 @@ function resetForm() {
             <input type ="text" placeholder="userId" {...register("staffUserIdGet") } required />
             <br/>
             <br/>
-            <textarea rows={10} cols={100}  placeholder='Staff Member info will go here' {...register("staffUserDisplay")} required />
+            <textarea readOnly = {true} rows={10} cols={100}  placeholder='Staff Member info will be shown here' {...register("staffUserDisplay")} />
             <br/>
             <br/>
             <input type="submit" />      
@@ -368,7 +368,7 @@ function resetForm() {
             <input type ="text" placeholder="userId" {...register("recipientUserIdGet") } />
             <br/>
             <br/>
-            <textarea rows={10} cols={100}  placeholder='Recipient info will go here' {...register("recipientUserDisplay")} />
+            <textarea readOnly = {true} rows={10} cols={100}  placeholder='Recipient info will be shown here' {...register("recipientUserDisplay")} />
             <br/>
             <br/>
             <input type="submit" />      
@@ -382,7 +382,7 @@ function resetForm() {
             <input type ="text" placeholder="userId" {...register("customerUserIdGet") } required />
             <br/>
             <br/>
-            <textarea rows={10} cols={100}  placeholder="Customer's recipients will be shown here" {...register("customerUserDisplayRecipients")} />
+            <textarea readOnly = {true} rows={10} cols={100}  placeholder="Customer's recipients will be shown here" {...register("customerUserDisplayRecipients")} />
             <br/>
             <br/>
             <input type="submit" />      
