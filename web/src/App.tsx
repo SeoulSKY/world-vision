@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import './App.css';
 import NavBar from './components/Navigation/navBar';
-import StaffDashboard from './components/Pages/staffDashboard'
+import StaffDashboard from './components/StaffDashboard/staffDashboard'
+import StaffPost from "./components/StaffDashboard/staffPost";
+import StaffPut from "./components/StaffDashboard/staffPut";
+import StaffDelete from "./components/StaffDashboard/staffDelete";
+import StaffGet from "./components/StaffDashboard/staffGet";
+import RecipientPost from "./components/StaffDashboard/recipientPost";
+import RecipientPut from "./components/StaffDashboard/recipientPut";
 
 
 // import NavBarComp from './components/ DesignerNavbar';
@@ -29,10 +35,12 @@ function App() {
 
       <NavBar/>
 
-      <StaffDashboard/>
-
-
-      
+        <StaffPost/>
+          <StaffPut/>
+        <StaffDelete/>
+        <StaffGet/>
+        <RecipientPost/>
+        <RecipientPut/>
     </div>
   );
 }

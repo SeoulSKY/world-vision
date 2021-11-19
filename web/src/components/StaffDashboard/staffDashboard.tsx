@@ -27,7 +27,7 @@ const StaffDashboard = () => {
 
         // test that we can assess the user posted form data for adding new staff account
         console.log(dataStaffPost.staffUserIdPost + " " + dataStaffPost.staffFirstNamePost + " " +dataStaffPost.staffCountryPost)
-        resetForm()
+        resetForm(dataStaffPost)
 
     }
 
@@ -36,7 +36,7 @@ const StaffDashboard = () => {
 
         // test that we can assess the user posted form data put request of staff account
         console.log(dataStaffPut.staffUserIdPut + " " + dataStaffPut.staffFirstNamePut + " " +dataStaffPut.staffCountryPut)
-        resetForm()
+        resetForm(dataStaffPut)
 
 
 
@@ -47,7 +47,7 @@ const StaffDashboard = () => {
 
         // test that we can assess the user posted form data put request of staff account
         console.log(dataStaffDelete.staffUserIdDelete)
-        resetForm()
+        resetForm(dataStaffDelete)
 
     }
 
@@ -62,7 +62,7 @@ const StaffDashboard = () => {
 
 
 
-        resetForm()
+        resetForm(dataStaffGet)
         reset({ staffUserDisplay:flaskMessage,});
    
     }
@@ -75,7 +75,7 @@ const StaffDashboard = () => {
 
         // test that we can assess the user posted form data for adding new recipient account
         console.log(dataRecipientPost.recipientUserIdPost + " " + dataRecipientPost.recipientFirstNamePost + " " +dataRecipientPost.recipientCountryPost + " " + dataRecipientPost.recipientBirthDatePost+ " " + dataRecipientPost.recipientDescriptionPost)
-        resetForm()
+        resetForm(dataRecipientPost)
     }
 
     const onSubmitRecipientPut = (dataRecipientPut: any)=> {
@@ -83,7 +83,7 @@ const StaffDashboard = () => {
 
        // test that we can assess the user posted form data for adding new recipient account
        console.log(dataRecipientPut.recipientUserIdPut)
-       resetForm()
+       resetForm(dataRecipientPut)
    }
 
 
@@ -93,7 +93,7 @@ const StaffDashboard = () => {
     // test that we can assess the user posted form data put request of staff account
     console.log(dataRecipientDelete.recipientUserIdDelete)
     console.log(dataRecipientDelete)
-    resetForm()
+    resetForm(dataRecipientDelete)
 
 }
 
@@ -102,7 +102,7 @@ const onSubmitRecipientGet = (dataRecipientGet: any)=> {
 
     // test that we can assess the user posted form data put request of staff account
     console.log(dataRecipientGet.recipientUserIdGet)
-    resetForm()
+    resetForm(dataRecipientGet)
 
 
 
@@ -114,12 +114,17 @@ const onSubmitCustomerGet = (dataCustomerGet: any)=> {
 
     // test that we can assess the user posted form data put request of staff account
     console.log(dataCustomerGet.customerUserIdGet)
-    resetForm()
+    resetForm(dataCustomerGet)
 
 }
 
-function resetForm() {
-    
+function resetForm(data: any) {
+
+    console.log(data)
+
+    for (var key in data) {
+        data[key] =""
+    }
     reset({staffUserIdPost:"",});
     reset({staffFirstNamePost:"",});
     reset({ staffMiddleNamePost:"",});
