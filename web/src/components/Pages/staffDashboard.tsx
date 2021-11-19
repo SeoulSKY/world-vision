@@ -145,7 +145,7 @@ function resetForm() {
     reset({ recipientLastNamePut:"",});  
     reset({ recipientGenderPut:"",});  
     reset({ recipientBirthDatePut:"",});  
-    reset({ recipientBuildingNumberPut:"",});  
+    reset({ recipientBuildingNumberPut:"",});
     reset({ recipientStreetPut:"",});  
     reset({ recipientCityPut:"",});  
     reset({ recipientProvincePut:"",});  
@@ -168,6 +168,10 @@ function resetForm() {
         
         
         <div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <h2>Create New Staff Account</h2>
             <p>Enter staff personal details</p>
 
@@ -176,6 +180,7 @@ function resetForm() {
             <input type ="text" placeholder="firstName" {...register("staffFirstNamePost")} required/>
             <input type ="text" placeholder="middleName" {...register("staffMiddleNamePost")} required/>
             <input type ="text" placeholder="lastName" {...register("staffLastNamePost")}required /> 
+            <br/>
             <br/>
             <p>Enter staff home address</p>
             <br/>

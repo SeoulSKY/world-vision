@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
 import './App.css';
-import StaffDashboard from './components/staffDashboard'
+import NavBar from './components/Navigation/navBar';
+import StaffDashboard from './components/Pages/staffDashboard'
+
+
+// import NavBarComp from './components/ DesignerNavbar';
+
 
 function App() {
 
@@ -16,11 +21,15 @@ function App() {
   // }, []);
 
   return (
-    <div className="App">
-       
-     
 
-        <StaffDashboard/>
+      
+      <div className='App'>
+
+
+
+      <NavBar/>
+
+      <StaffDashboard/>
 
 
       
