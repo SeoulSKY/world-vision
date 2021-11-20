@@ -15,20 +15,57 @@ const RecipientPost = () => {
     const onSubmitRecipientPost = (dataRecipientPost: any)=> {
         // used to handle post request for recipient account
 
-        // test that we can assess the user posted form data for adding new recipient account
-        console.log(dataRecipientPost.recipientUserIdPost + " " + dataRecipientPost.recipientFirstNamePost + " " +dataRecipientPost.recipientCountryPost + " " + dataRecipientPost.recipientBirthDatePost+ " " + dataRecipientPost.recipientDescriptionPost)
-        resetForm(dataRecipientPost)
+        const data = {
+            "userId": dataRecipientPost.userId,
+            "firstName": dataRecipientPost.firstName,
+            "middleName": dataRecipientPost.middleName,
+            "lastName": dataRecipientPost.lastName,
+            "homeAddress": {
+                "street": dataRecipientPost.street,
+                "city": dataRecipientPost.city,
+                "province": dataRecipientPost.province,
+                "postalCode": dataRecipientPost.postalCode,
+                "country": dataRecipientPost.country
+            },
+            "birthDate": dataRecipientPost.birthDate,
+            "gender": dataRecipientPost.gender,
+            "description": dataRecipientPost.recipientDescriptionPost
     }
 
-    function resetForm(data: any) {
+        // Post request using fetch with error handling
+        fetch('http://localhost:5000/api/recipient', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        }).then(async response => {
+            const isJson = response.headers.get('content-type')?.includes('application/json');
+            const data = isJson && await response.json();
 
-        console.log(data)
-        // reset return info
-        for (var key in data) {
-            data[key] =""
-        }
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+
+
+        })
+            .catch(error => {
+
+                alert("Error posting recipient")
+
+            })
+
+
+
+        // will prevent garbage collection
+        // for (var entry in dataRecipientPost) delete dataRecipientPost[entry];
+
+
+        // resetForm(dataRecipientPost)
         reset({});
-
     }
 
 
@@ -53,7 +90,7 @@ const RecipientPost = () => {
 
 
                 <p>Birthdate</p>
-                <input type="date" id="start" {...register("recipientBirthDatePost")} required/>
+                <input type="date" id="start" {...register("birthDate")} required/>
                 <br/>
                 <br/>
 

@@ -17,7 +17,7 @@ const StaffGet = () => {
 
 
         let userId = dataStaffGet.userId
-        resetForm(dataStaffGet)
+        // resetForm(dataStaffGet)
 
         // if empty id return all staff members
         if (userId!= "") {
@@ -88,6 +88,8 @@ const StaffGet = () => {
 
         }
 
+        reset({});
+
 
 
 
@@ -105,25 +107,7 @@ const StaffGet = () => {
 
     }
 
-
-
-    function resetForm(data: any) {
-
-        console.log(data)
-        // reset return info
-        for (var key in data) {
-            data[key] =""
-        }
-        reset({});
-
-    }
-
-
-
-
     return (
-
-
 
         <div>
 

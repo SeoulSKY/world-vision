@@ -12,7 +12,6 @@ const StaffPut= () => {
     const onSubmitStaffPut = (dataStaffPut: any)=> {
         // used to handle put request for staff account
 
-        // used to handle post request for staff account
         const data = {
             "userId": dataStaffPut.userId,
             "firstName": dataStaffPut.firstName,
@@ -53,24 +52,10 @@ const StaffPut= () => {
 
             });
 
-
-
-        // test that we can assess the user posted form data put request of staff account
-        resetForm(dataStaffPut)
-
-    }
-
-
-    function resetForm(data: any) {
-
-        console.log(data)
-        // reset return info
-        for (var key in data) {
-            data[key] =""
-        }
         reset({});
 
     }
+
 
     return (
 

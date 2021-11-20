@@ -10,24 +10,100 @@ const RecipientGet = () => {
 
 
     const onSubmitRecipientGet = (dataRecipientGet: any)=> {
-        // used to handle put request for staff account
 
-        // test that we can assess the user posted form data put request of staff account
-        console.log(dataRecipientGet.recipientUserIdGet)
-        resetForm(dataRecipientGet)
+        let userId = dataRecipientGet.userId
+        // resetForm(dataStaffGet)
 
-    }
+        // if empty id return all staff members
+        if (userId!= "") {
+            // fetch('http://localhost:5000/api/staff?userId=' + userId)
+            //     .then(response => response.json())
+            //     .then(data => display_info(data)).catch((error) => {
+            //     alert("Error: userId not found!");
+            // });;
 
-    function resetForm(data: any) {
+            fetch('http://localhost:5000/api/recipient?recipientUserId=' + userId, { method: 'GET' })
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
 
-        console.log(data)
-        // reset return info
-        for (var key in data) {
-            data[key] =""
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    }
+
+                    else {
+                        display_info(data)
+                    }
+
+
+                })
+                .catch(error => {
+
+                    if (error == 404) {
+                        alert("No recipient with specified userId")
+                    }
+                    else {
+                        alert("Error getting recipients")
+                    }
+
+
+                });
+
+
         }
+
+
+        else {
+
+            fetch('http://localhost:5000/api/recipient', { method: 'GET' })
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    }
+
+                    else {
+                        display_info(data)
+                    }
+
+                })
+                .catch(error => {
+
+                    alert("Error getting recipients")
+
+                });
+
+        }
+
         reset({});
 
+
+
+
+
     }
+
+    function display_info(data: any) {
+        data = JSON.stringify(data)
+        console.log(data)
+        reset({
+            recipientUserDisplay: data
+        }, {}
+
+        );
+
+    }
+
+
+
 
 
     return (

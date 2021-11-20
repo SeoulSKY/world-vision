@@ -13,24 +13,47 @@ const RecipientDelete = () => {
 
 
     const onSubmitRecipientDelete = (dataRecipientDelete: any)=> {
-        // used to handle put request for staff account
 
-        // test that we can assess the user posted form data put request of staff account
-        resetForm(dataRecipientDelete)
+        let recipientUserId = dataRecipientDelete.userId
+        fetch("http://localhost:5000/api/recipient?userId=" + recipientUserId, { method: 'DELETE' })
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
 
-    }
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
 
 
-    function resetForm(data: any) {
+            })
+            .catch(error => {
+                if (error == 404) {
+                    alert("Not valid userId to delete")
+                }
 
-        console.log(data)
-        // reset return info
-        for (var key in data) {
-            data[key] =""
-        }
+                else {
+                    alert("Error deleting recipient")
+                }
+
+            });
+
+
         reset({});
 
+
+
+
+
+        reset({});
+
+
+
     }
+
+
 
 
 

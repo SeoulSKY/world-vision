@@ -44,21 +44,12 @@ const StaffDelete = () => {
 
             });
 
-        // test that we can assess the user posted form data put request of staff account
-        resetForm(dataStaffDelete)
 
-    }
-
-    function resetForm(data: any) {
-
-        console.log(data)
-        // reset return info
-        for (var key in data) {
-            data[key] =""
-        }
         reset({});
 
+
     }
+
 
     return (
 

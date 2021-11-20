@@ -25,21 +25,6 @@ const StaffPost = () => {
             }
         };
 
-        // fetch('http://localhost:5000/api/staff', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(data),
-        // })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log('Success:', data);
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error:', error);
-        //     });
-
         // Post request using fetch with error handling
         fetch('http://localhost:5000/api/staff', {
             method: 'POST',
@@ -62,32 +47,11 @@ const StaffPost = () => {
             })
             .catch(error => {
 
-                alert("Error deleting staff")
+                alert("Error posting staff")
 
             });
 
 
-
-
-
-
-
-
-
-
-        resetForm(dataStaffPost)
-
-    }
-
-
-
-    function resetForm(data: any) {
-
-        console.log(data)
-        // reset return info
-        for (var key in data) {
-            data[key] =""
-        }
         reset({});
 
     }

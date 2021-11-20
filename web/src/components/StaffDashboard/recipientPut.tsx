@@ -13,24 +13,60 @@ const RecipientPut = () => {
 
 
     const onSubmitRecipientPut = (dataRecipientPut: any)=> {
-        // used to handle post request for recipient account
 
-        // test that we can assess the user posted form data for adding new recipient account
-        console.log(dataRecipientPut.recipientUserIdPut)
-        resetForm(dataRecipientPut)
-    }
-
-
-    function resetForm(data: any) {
-
-        console.log(data)
-        // reset return info
-        for (var key in data) {
-            data[key] =""
+        const data = {
+            "userId": dataRecipientPut.userId,
+            "firstName": dataRecipientPut.firstName,
+            "middleName": dataRecipientPut.middleName,
+            "lastName": dataRecipientPut.lastName,
+            "homeAddress": {
+                "street": dataRecipientPut.street,
+                "city": dataRecipientPut.city,
+                "province": dataRecipientPut.province,
+                "postalCode": dataRecipientPut.postalCode,
+                "country": dataRecipientPut.country
+            },
+            "birthDate": dataRecipientPut.birthDate,
+            "gender": dataRecipientPut.gender,
+            "description": dataRecipientPut.recipientDescriptionPut
         }
-        reset({});
 
+        // Post request using fetch with error handling
+        fetch('http://localhost:5000/api/recipient', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        }).then(async response => {
+            const isJson = response.headers.get('content-type')?.includes('application/json');
+            const data = isJson && await response.json();
+
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+
+
+        })
+            .catch(error => {
+
+                alert("Error putting recipient")
+
+            })
+
+
+
+        // will prevent garbage collection
+        // for (var entry in dataRecipientPost) delete dataRecipientPost[entry];
+
+
+        // resetForm(dataRecipientPost)
+        reset({});
     }
+
 
 
 
@@ -50,25 +86,25 @@ const RecipientPut = () => {
                 <input type ="text" placeholder="userId" {...register("userId") } required />
                 <br/>
                 <br/>
-                <input type ="text" placeholder="firstName" {...register("firstName")} />
-                <input type ="text" placeholder="middleName" {...register("middleName")} />
-                <input type ="text" placeholder="lastName" {...register("lastName")} />
-                <input type ="text" placeholder="gender" {...register("gender")} />
+                <input type ="text" placeholder="firstName" {...register("firstName" )} required />
+                <input type ="text" placeholder="middleName" {...register("middleName")} required  />
+                <input type ="text" placeholder="lastName" {...register("lastName")} required />
+                <input type ="text" placeholder="gender" {...register("gender")} required />
                 <p>Birthdate</p>
-                <input type="date" id="start" {...register("recipientBirthDatePut")} />
+                <input type="date" id="start" {...register("birthDate")} required />
                 <br/>
                 <br/>
 
-                <input type ="text" placeholder="buildingNumber" {...register("buildingNumber")} />
-                <input type ="text" placeholder="street" {...register("street")} />
-                <input type ="text" placeholder="city" {...register("city")}  />
-                <input type ="text" placeholder="province" {...register("province")} />
-                <input type ="text" placeholder="postalCode" {...register("postalCode")} />
-                <input type ="text" placeholder="country" {...register("country")}  />
+                <input type ="text" placeholder="buildingNumber" {...register("buildingNumber")} required  />
+                <input type ="text" placeholder="street" {...register("street")} required />
+                <input type ="text" placeholder="city" {...register("city")}  required />
+                <input type ="text" placeholder="province" {...register("province")} required />
+                <input type ="text" placeholder="postalCode" {...register("postalCode")} required />
+                <input type ="text" placeholder="country" {...register("country")}  required />
                 <br/>
 
                 <br/>
-                <textarea rows={10} cols={100}  placeholder='Description' {...register("recipientDescriptionPut")}  />
+                <textarea rows={10} cols={100}  placeholder='Description' {...register("recipientDescriptionPut")}  required />
 
                 <br/>
                 <br/>
