@@ -27,21 +27,31 @@ const StaffPut= () => {
             }
         };
 
+        // Putrequest using fetch with error handling
         fetch('http://localhost:5000/api/staff', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        }).then(async response => {
+            const isJson = response.headers.get('content-type')?.includes('application/json');
+            const data = isJson && await response.json();
 
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
+
+
+        })
+            .catch(error => {
+
+                alert("Error deleting staff")
+
+            });
 
 
 

@@ -13,7 +13,36 @@ const StaffDelete = () => {
 
 
     const onSubmitStaffDelete = (dataStaffDelete: any)=> {
-        // used to handle put request for staff account
+        // used to handle delete request for staff account
+        let userId = dataStaffDelete.userId
+
+
+// DELETE request using fetch with error handling
+
+        fetch("http://localhost:5000/api/staff?userId=" + userId, { method: 'DELETE' })
+            .then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+
+
+            })
+            .catch(error => {
+                if (error == 404) {
+                    alert("Not valid userId to delete")
+                }
+
+                else {
+                    alert("Error deleting staff")
+                }
+
+            });
 
         // test that we can assess the user posted form data put request of staff account
         resetForm(dataStaffDelete)

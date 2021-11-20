@@ -21,16 +21,71 @@ const StaffGet = () => {
 
         // if empty id return all staff members
         if (userId!= "") {
-            fetch('http://localhost:5000/api/staff?userId=' + userId)
-                .then(response => response.json())
-                .then(data => display_info(data));
+            // fetch('http://localhost:5000/api/staff?userId=' + userId)
+            //     .then(response => response.json())
+            //     .then(data => display_info(data)).catch((error) => {
+            //     alert("Error: userId not found!");
+            // });;
+
+            fetch('http://localhost:5000/api/staff?userId=' + userId, { method: 'GET' })
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    }
+
+                    else {
+                        display_info(data)
+                    }
+
+
+                })
+                .catch(error => {
+
+                    if (error == 404) {
+                        alert("No staff member with specified userId")
+                    }
+                    else {
+                        alert("Error getting staff")
+                    }
+
+
+                });
+
+
         }
 
 
         else {
-            fetch('http://localhost:5000/api/staff' )
-                .then(response => response.json())
-                .then(data => display_info(data));
+
+            fetch('http://localhost:5000/api/staff', { method: 'GET' })
+                .then(async response => {
+                    const isJson = response.headers.get('content-type')?.includes('application/json');
+                    const data = isJson && await response.json();
+
+                    // check for error response
+                    if (!response.ok) {
+                        // get error message from body or default to response status
+                        const error = (data && data.message) || response.status;
+                        return Promise.reject(error);
+                    }
+
+                    else {
+                        display_info(data)
+                    }
+
+                })
+                .catch(error => {
+
+                    alert("Error getting staff")
+
+                });
+
         }
 
 
