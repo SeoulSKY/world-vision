@@ -37,7 +37,7 @@ const NavBar = () => {
             </>
             <div>
                 <Routes>
-                    <Route path="/StaffDashboard">
+                    <Route path="/staffDashboard">
                         <StaffDashboard/>
                     </Route>
 
