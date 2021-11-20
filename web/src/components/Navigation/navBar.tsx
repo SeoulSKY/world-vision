@@ -37,13 +37,13 @@ const NavBar = () => {
             </>
             <div>
                 <Routes>
-                    <Route path="/staffDashboard">
-                        <StaffDashboard/>
-                    </Route>
+                    {/*<Route path="/staffDashboard">*/}
+                    {/*    <StaffDashboard/>*/}
+                    {/*</Route>*/}
 
-                    <Route path="/home">
-                        <HomePage />
-                    </Route>
+                    {/*<Route path="/home">*/}
+                    {/*    <HomePage />*/}
+                    {/*</Route>*/}
                 </Routes>
             </div>
         </Router>

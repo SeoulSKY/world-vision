@@ -35,9 +35,8 @@ function App() {
 
       
       <div className='App'>
-
-
-       <StaffDashboard/>
+          <NavBar/>
+        
 
     </div>
   );
