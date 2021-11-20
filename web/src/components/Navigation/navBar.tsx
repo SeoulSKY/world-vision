@@ -41,9 +41,8 @@ const NavBar = () => {
                     {/*    <StaffDashboard/>*/}
                     {/*</Route>*/}
 
-                    {/*<Route path="/home">*/}
-                    {/*    <HomePage />*/}
-                    {/*</Route>*/}
+                    <Route path='/home' element = {<HomePage/>} />
+                    <Route path='/staffDashboard' element = {<StaffDashboard/>} />
                 </Routes>
             </div>
         </Router>
