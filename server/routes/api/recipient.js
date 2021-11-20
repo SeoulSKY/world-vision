@@ -35,16 +35,21 @@ async function checkIfRecipientExists(recipientUserId) {
 }
 
 recipientRouter.get("/", (request, response) => {
-    let customerUserId = request.body.customerUserId;
-    let recipientUserId = request.body.recipientUserId;
+    let customerUserId = request.query.customerUserId;
+    let recipientUserId = request.query.recipientUserId;
 
     let sql = "SELECT * FROM Recipient INNER JOIN Address ON Recipient.userId=Address.userId ";
 
+    // if both are given, ignore recipientUserId
+    if (customerUserId !== undefined && recipientUserId !== undefined) {
+        recipientUserId = undefined;
+    }
+
     if (customerUserId !== undefined) {
         sql += "INNER JOIN Donation ON Donation.recipientUserId=Recipient.userId WHERE Donation.customerUserId=" +
-            escape(customerUserId) + " AND " + "Donation.recipientUserId=" + escape(recipientUserId);
+            escape(customerUserId);
     } else if (recipientUserId !== undefined) {
-        sql = "WHERE userId=" + escape(recipientUserId);
+        sql += "WHERE Recipient.userId=" + escape(recipientUserId);
     }
 
     getPool.then(pool => {
