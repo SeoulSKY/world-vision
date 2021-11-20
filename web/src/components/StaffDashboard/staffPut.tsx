@@ -12,6 +12,39 @@ const StaffPut= () => {
     const onSubmitStaffPut = (dataStaffPut: any)=> {
         // used to handle put request for staff account
 
+        // used to handle post request for staff account
+        const data = {
+            "userId": dataStaffPut.userId,
+            "firstName": dataStaffPut.firstName,
+            "middleName": dataStaffPut.middleName,
+            "lastName": dataStaffPut.lastName,
+            "homeAddress": {
+                "street": dataStaffPut.street,
+                "city": dataStaffPut.city,
+                "province": dataStaffPut.province,
+                "postalCode": dataStaffPut.postalCode,
+                "country": dataStaffPut.country
+            }
+        };
+
+        fetch('http://localhost:5000/api/staff', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+
+
+
         // test that we can assess the user posted form data put request of staff account
         resetForm(dataStaffPut)
 

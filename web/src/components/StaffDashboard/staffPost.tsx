@@ -1,9 +1,7 @@
+import React from 'react';
 
-import React, { useEffect, useState } from 'react';
 
-
-import { useForm } from 'react-hook-form';
-
+import {useForm} from 'react-hook-form';
 
 
 const StaffPost = () => {
@@ -13,6 +11,36 @@ const StaffPost = () => {
 
     const onSubmitStaffPost = (dataStaffPost: any)=> {
         // used to handle post request for staff account
+        const data = {
+            "userId": dataStaffPost.userId,
+            "firstName": dataStaffPost.firstName,
+            "middleName": dataStaffPost.middleName,
+            "lastName": dataStaffPost.lastName,
+            "homeAddress": {
+                "street": dataStaffPost.street,
+                "city": dataStaffPost.city,
+                "province": dataStaffPost.province,
+                "postalCode": dataStaffPost.postalCode,
+                "country": dataStaffPost.country
+            }
+        };
+
+        fetch('http://localhost:5000/api/staff', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+
 
         resetForm(dataStaffPost)
 
