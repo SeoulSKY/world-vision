@@ -9,6 +9,9 @@ import StaffDelete from "./components/StaffDashboard/staffDelete";
 import StaffGet from "./components/StaffDashboard/staffGet";
 import RecipientPost from "./components/StaffDashboard/recipientPost";
 import RecipientPut from "./components/StaffDashboard/recipientPut";
+import RecipientDelete from "./components/StaffDashboard/recipientDelete";
+import RecipientGet from "./components/StaffDashboard/recipientGet";
+import CustomerRecipientGet from "./components/StaffDashboard/customerRecipientGet";
 
 
 // import NavBarComp from './components/ DesignerNavbar';
@@ -35,12 +38,8 @@ function App() {
 
       <NavBar/>
 
-        <StaffPost/>
-          <StaffPut/>
-        <StaffDelete/>
-        <StaffGet/>
-        <RecipientPost/>
-        <RecipientPut/>
+       <StaffDashboard/>
+
     </div>
   );
 }

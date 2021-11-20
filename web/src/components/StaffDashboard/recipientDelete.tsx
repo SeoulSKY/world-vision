@@ -48,7 +48,7 @@ const RecipientDelete = () => {
             </p>
 
             <form onSubmit={handleSubmit(onSubmitRecipientDelete)}>
-                <input type ="text" placeholder="userId" {...register("recipientUserIdDelete") } required />
+                <input type ="text" placeholder="userId" {...register("userId") } required />
                 <input type="submit" />
             </form>
 

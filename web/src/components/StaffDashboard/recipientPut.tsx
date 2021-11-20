@@ -47,24 +47,24 @@ const RecipientPut = () => {
             <p>Enter recipient Id and any information to modify</p>
 
             <form onSubmit={handleSubmit(onSubmitRecipientPut)}>
-                <input type ="text" placeholder="userId" {...register("recipientUserIdPut") } required />
+                <input type ="text" placeholder="userId" {...register("userId") } required />
                 <br/>
                 <br/>
-                <input type ="text" placeholder="firstName" {...register("recipientFirstNamePut")} />
-                <input type ="text" placeholder="middleName" {...register("recipientMiddleNamePut")} />
-                <input type ="text" placeholder="lastName" {...register("recipientLastNamePut")} />
-                <input type ="text" placeholder="gender" {...register("recipientGenderPut")} />
+                <input type ="text" placeholder="firstName" {...register("firstName")} />
+                <input type ="text" placeholder="middleName" {...register("middleName")} />
+                <input type ="text" placeholder="lastName" {...register("lastName")} />
+                <input type ="text" placeholder="gender" {...register("gender")} />
                 <p>Birthdate</p>
                 <input type="date" id="start" {...register("recipientBirthDatePut")} />
                 <br/>
                 <br/>
 
-                <input type ="text" placeholder="buildingNumber" {...register("recipientBuildingNumberPut")} />
-                <input type ="text" placeholder="street" {...register("recipientStreetPut")} />
-                <input type ="text" placeholder="city" {...register("recipientCityPut")}  />
-                <input type ="text" placeholder="province" {...register("recipientProvincePut")} />
-                <input type ="text" placeholder="postalCode" {...register("recipientPostalCodePut")} />
-                <input type ="text" placeholder="country" {...register("recipientCountryPut")}  />
+                <input type ="text" placeholder="buildingNumber" {...register("buildingNumber")} />
+                <input type ="text" placeholder="street" {...register("street")} />
+                <input type ="text" placeholder="city" {...register("city")}  />
+                <input type ="text" placeholder="province" {...register("province")} />
+                <input type ="text" placeholder="postalCode" {...register("postalCode")} />
+                <input type ="text" placeholder="country" {...register("country")}  />
                 <br/>
 
                 <br/>
