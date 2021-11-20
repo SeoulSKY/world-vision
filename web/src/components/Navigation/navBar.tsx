@@ -12,7 +12,7 @@ const NavBar = () => {
                         <Nav.Link href="#home">Staff Dashboard</Nav.Link>
                         <Nav.Link href="#features">Customer Dashboard</Nav.Link>
                     </Nav>
-                    <Nav variant="pills">
+                    <Nav>
                         <Nav.Link href="/sign-in">Sign In</Nav.Link>
                         <Nav.Link href="/sign-up">Sign Up</Nav.Link>
                     </Nav>
