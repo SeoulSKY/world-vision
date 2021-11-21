@@ -29,7 +29,7 @@ const CustomerTransactionGet = () => {
             })
             .catch(error => {
 
-                if (error == 404) {
+                if (error === 404) {
                     alert('Invalid customer id')
                 } else {
                     alert("Error getting transactions of customer")

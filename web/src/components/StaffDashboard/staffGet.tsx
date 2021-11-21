@@ -13,7 +13,7 @@ const StaffGet = () => {
 
 
         // if empty id return all staff members
-        if (userId != "") {
+        if (userId !== "") {
 
             fetch('http://localhost:5000/api/staff?userId=' + userId, {method: 'GET'})
                 .then(async response => {
@@ -33,7 +33,7 @@ const StaffGet = () => {
                 })
                 .catch(error => {
 
-                    if (error == 404) {
+                    if (error === 404) {
                         alert("No staff member with specified userId")
                     } else {
                         alert("Error getting staff")

@@ -30,7 +30,7 @@ const CustomerRecipientGet = () => {
             })
             .catch(error => {
 
-                if (error == 404) {
+                if (error === 404) {
                     alert("No recipient with specified userId")
                 } else {
                     alert("Error getting recipient of customer")

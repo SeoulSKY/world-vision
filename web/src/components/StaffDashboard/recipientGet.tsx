@@ -10,7 +10,7 @@ const RecipientGet = () => {
         let userId = dataRecipientGet.userId
 
         // if empty id return all staff members
-        if (userId != "") {
+        if (userId !== "") {
 
             fetch('http://localhost:5000/api/recipient?recipientUserId=' + userId, {method: 'GET'})
                 .then(async response => {
@@ -30,7 +30,7 @@ const RecipientGet = () => {
                 })
                 .catch(error => {
 
-                    if (error == 404) {
+                    if (error === 404) {
                         alert("No recipient with specified userId")
                     } else {
                         alert("Error getting recipients")

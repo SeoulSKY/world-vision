@@ -29,7 +29,7 @@ const StaffDelete = () => {
 
             })
             .catch(error => {
-                if (error == 404) {
+                if (error === 404) {
                     alert("Not valid userId to delete")
                 } else {
                     alert("Error deleting staff")
