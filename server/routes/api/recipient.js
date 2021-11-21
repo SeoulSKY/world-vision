@@ -54,10 +54,8 @@ recipientRouter.get("/", (request, response) => {
 
     getPool.then(pool => {
         pool.query(sql).then(result => {
-            if (recipientUserId !== undefined && customerUserId === undefined && result.length === 0) {
-                response
-                    .status(404)
-                    .send("Recipient not found with the given recipientUserId \"" + recipientUserId + "\"");
+            if (result.length === 0) {
+                response.status(404).send("Recipient not found");
                 return;
             }
 
