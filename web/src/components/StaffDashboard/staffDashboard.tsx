@@ -1,8 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
-// import NavBar from './components'
-
-import { useForm } from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import StaffPost from "./staffPost";
 import StaffPut from "./staffPut";
 import StaffDelete from "./staffDelete";
@@ -15,15 +11,12 @@ import CustomerRecipientGet from "./customerRecipientGet";
 import CustomerTransactionGet from "./customerTransactionGet";
 
 
-  
 const StaffDashboard = () => {
-
 
 
     return (
 
-        
-        
+
         <div>
             <StaffPost/>
             <StaffPut/>
@@ -35,8 +28,6 @@ const StaffDashboard = () => {
             <RecipientGet/>
             <CustomerRecipientGet/>
             <CustomerTransactionGet/>
-
-
 
 
         </div>

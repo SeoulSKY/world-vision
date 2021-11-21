@@ -1,9 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
-
-
-import { useForm } from 'react-hook-form';
-
+import {useForm} from 'react-hook-form';
 
 
 const RecipientDelete = () => {
@@ -11,11 +6,10 @@ const RecipientDelete = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-
-    const onSubmitRecipientDelete = (dataRecipientDelete: any)=> {
+    const onSubmitRecipientDelete = (dataRecipientDelete: any) => {
 
         let recipientUserId = dataRecipientDelete.userId
-        fetch("http://localhost:5000/api/recipient?userId=" + recipientUserId, { method: 'DELETE' })
+        fetch("http://localhost:5000/api/recipient?userId=" + recipientUserId, {method: 'DELETE'})
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -32,9 +26,7 @@ const RecipientDelete = () => {
             .catch(error => {
                 if (error == 404) {
                     alert("Not valid userId to delete")
-                }
-
-                else {
+                } else {
                     alert("Error deleting recipient")
                 }
 
@@ -44,21 +36,10 @@ const RecipientDelete = () => {
         reset({});
 
 
-
-
-
-        reset({});
-
-
-
     }
 
 
-
-
-
     return (
-
 
 
         <div>
@@ -71,16 +52,13 @@ const RecipientDelete = () => {
             </p>
 
             <form onSubmit={handleSubmit(onSubmitRecipientDelete)}>
-                <input type ="text" placeholder="userId" {...register("userId") } required />
-                <input type="submit" />
+                <input type="text" placeholder="userId" {...register("userId")} required/>
+                <input type="submit"/>
             </form>
 
 
             <br/>
             <br/>
-
-
-
 
 
         </div>

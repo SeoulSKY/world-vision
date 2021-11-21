@@ -1,9 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
-
-
-import { useForm } from 'react-hook-form';
-
+import {useForm} from 'react-hook-form';
 
 
 const StaffDelete = () => {
@@ -12,14 +7,14 @@ const StaffDelete = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-    const onSubmitStaffDelete = (dataStaffDelete: any)=> {
-        // used to handle delete request for staff account
+    const onSubmitStaffDelete = (dataStaffDelete: any) => {
+
         let userId = dataStaffDelete.userId
 
 
-// DELETE request using fetch with error handling
+        // DELETE request using fetch with error handling
 
-        fetch("http://localhost:5000/api/staff?userId=" + userId, { method: 'DELETE' })
+        fetch("http://localhost:5000/api/staff?userId=" + userId, {method: 'DELETE'})
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -36,9 +31,7 @@ const StaffDelete = () => {
             .catch(error => {
                 if (error == 404) {
                     alert("Not valid userId to delete")
-                }
-
-                else {
+                } else {
                     alert("Error deleting staff")
                 }
 
@@ -54,7 +47,6 @@ const StaffDelete = () => {
     return (
 
 
-
         <div>
 
             <br/>
@@ -65,8 +57,8 @@ const StaffDelete = () => {
             </p>
 
             <form onSubmit={handleSubmit(onSubmitStaffDelete)}>
-                <input type ="text" placeholder="userId" {...register("userId") } required />
-                <input type="submit" />
+                <input type="text" placeholder="userId" {...register("userId")} required/>
+                <input type="submit"/>
             </form>
 
             <br/>

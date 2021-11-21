@@ -1,9 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
-// import NavBar from './components'
-
-import { useForm } from 'react-hook-form';
-
+import {useForm} from 'react-hook-form';
 
 
 const RecipientPost = () => {
@@ -11,8 +6,7 @@ const RecipientPost = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-
-    const onSubmitRecipientPost = (dataRecipientPost: any)=> {
+    const onSubmitRecipientPost = (dataRecipientPost: any) => {
         // used to handle post request for recipient account
 
         const data = {
@@ -30,7 +24,7 @@ const RecipientPost = () => {
             "birthDate": dataRecipientPost.birthDate,
             "gender": dataRecipientPost.gender,
             "description": dataRecipientPost.recipientDescriptionPost
-    }
+        }
 
         // Post request using fetch with error handling
         fetch('http://localhost:5000/api/recipient', {
@@ -58,20 +52,11 @@ const RecipientPost = () => {
 
             })
 
-
-
-        // will prevent garbage collection
-        // for (var entry in dataRecipientPost) delete dataRecipientPost[entry];
-
-
-        // resetForm(dataRecipientPost)
         reset({});
     }
 
 
-
     return (
-
 
 
         <div>
@@ -82,11 +67,11 @@ const RecipientPost = () => {
             <p>Enter recipient personal details</p>
 
             <form onSubmit={handleSubmit(onSubmitRecipientPost)}>
-                <input type ="text" placeholder="userId" {...register("userId") } required />
-                <input type ="text" placeholder="firstName" {...register("firstName")} required/>
-                <input type ="text" placeholder="middleName" {...register("middleName")} required/>
-                <input type ="text" placeholder="lastName" {...register("lastName")}required />
-                <input type ="text" placeholder="gender" {...register("gender")}required />
+                <input type="text" placeholder="userId" {...register("userId")} required/>
+                <input type="text" placeholder="firstName" {...register("firstName")} required/>
+                <input type="text" placeholder="middleName" {...register("middleName")} required/>
+                <input type="text" placeholder="lastName" {...register("lastName")} required/>
+                <input type="text" placeholder="gender" {...register("gender")} required/>
 
 
                 <p>Birthdate</p>
@@ -97,31 +82,28 @@ const RecipientPost = () => {
                 <br/>
                 <p>Enter recipient home address</p>
                 <br/>
-                <input type ="text" placeholder="buildingNumber" {...register("buildingNumber")} required/>
-                <input type ="text" placeholder="street" {...register("street")} required/>
-                <input type ="text" placeholder="city" {...register("city")} required />
-                <input type ="text" placeholder="province" {...register("province")} required/>
-                <input type ="text" placeholder="postalCode" {...register("postalCode")}required />
-                <input type ="text" placeholder="country" {...register("country")} required />
+                <input type="text" placeholder="buildingNumber" {...register("buildingNumber")} required/>
+                <input type="text" placeholder="street" {...register("street")} required/>
+                <input type="text" placeholder="city" {...register("city")} required/>
+                <input type="text" placeholder="province" {...register("province")} required/>
+                <input type="text" placeholder="postalCode" {...register("postalCode")} required/>
+                <input type="text" placeholder="country" {...register("country")} required/>
                 <br/>
 
                 <p>Enter recipient description</p>
                 <br/>
-                <textarea rows={10} cols={100}  placeholder='Description' {...register("recipientDescriptionPost")} required />
+                <textarea rows={10} cols={100} placeholder='Description' {...register("recipientDescriptionPost")}
+                          required/>
 
                 <br/>
                 <br/>
-                <input type="submit" />
-
+                <input type="submit"/>
 
 
             </form>
 
             <br/>
             <br/>
-
-
-
 
 
         </div>

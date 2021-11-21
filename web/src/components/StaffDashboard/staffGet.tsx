@@ -1,33 +1,21 @@
-
-import React, { useEffect, useState } from 'react';
-
-
-import { useForm } from 'react-hook-form';
-
+import {useForm} from 'react-hook-form';
 
 
 const StaffGet = () => {
 
 
-
-
     const {register, handleSubmit, reset} = useForm();
 
-    const onSubmitStaffGet= (dataStaffGet: any)=> {
+    const onSubmitStaffGet = (dataStaffGet: any) => {
 
 
         let userId = dataStaffGet.userId
-        // resetForm(dataStaffGet)
+
 
         // if empty id return all staff members
-        if (userId!= "") {
-            // fetch('http://localhost:5000/api/staff?userId=' + userId)
-            //     .then(response => response.json())
-            //     .then(data => display_info(data)).catch((error) => {
-            //     alert("Error: userId not found!");
-            // });;
+        if (userId != "") {
 
-            fetch('http://localhost:5000/api/staff?userId=' + userId, { method: 'GET' })
+            fetch('http://localhost:5000/api/staff?userId=' + userId, {method: 'GET'})
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
@@ -37,9 +25,7 @@ const StaffGet = () => {
                         // get error message from body or default to response status
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
-                    }
-
-                    else {
+                    } else {
                         display_info(data)
                     }
 
@@ -49,8 +35,7 @@ const StaffGet = () => {
 
                     if (error == 404) {
                         alert("No staff member with specified userId")
-                    }
-                    else {
+                    } else {
                         alert("Error getting staff")
                     }
 
@@ -58,12 +43,9 @@ const StaffGet = () => {
                 });
 
 
-        }
+        } else {
 
-
-        else {
-
-            fetch('http://localhost:5000/api/staff', { method: 'GET' })
+            fetch('http://localhost:5000/api/staff', {method: 'GET'})
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
                     const data = isJson && await response.json();
@@ -73,9 +55,7 @@ const StaffGet = () => {
                         // get error message from body or default to response status
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
-                    }
-
-                    else {
+                    } else {
                         display_info(data)
                     }
 
@@ -91,9 +71,6 @@ const StaffGet = () => {
         reset({});
 
 
-
-
-
     }
 
     function display_info(data: any) {
@@ -101,9 +78,7 @@ const StaffGet = () => {
         console.log(data)
         reset({
             staffUserDisplay: data
-        }, {
-
-        });
+        }, {});
 
     }
 
@@ -116,13 +91,14 @@ const StaffGet = () => {
             </p>
 
             <form onSubmit={handleSubmit(onSubmitStaffGet)}>
-                <input type ="text" placeholder="userId" {...register("userId") } />
+                <input type="text" placeholder="userId" {...register("userId")} />
                 <br/>
                 <br/>
-                <textarea readOnly = {true} rows={10} cols={100}  placeholder='Staff Member info will be shown here' {...register("staffUserDisplay")} />
+                <textarea readOnly={true} rows={10} cols={100}
+                          placeholder='Staff Member info will be shown here' {...register("staffUserDisplay")} />
                 <br/>
                 <br/>
-                <input type="submit" />
+                <input type="submit"/>
             </form>
 
             <br/>

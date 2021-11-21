@@ -1,9 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
-
-
-import { useForm } from 'react-hook-form';
-
+import {useForm} from 'react-hook-form';
 
 
 const CustomerTransactionGet = () => {
@@ -11,11 +6,11 @@ const CustomerTransactionGet = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-    const onSubmitCustomerTransactionGet = (dataCustomerGet: any)=> {
+    const onSubmitCustomerTransactionGet = (dataCustomerGet: any) => {
 
         let userId = dataCustomerGet.userId
 
-        fetch('http://localhost:5000/api/transaction?customerUserId=' + userId, { method: 'GET' })
+        fetch('http://localhost:5000/api/transaction?customerUserId=' + userId, {method: 'GET'})
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -26,9 +21,7 @@ const CustomerTransactionGet = () => {
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
 
-                }
-
-                else {
+                } else {
                     display_info(data)
                 }
 
@@ -38,8 +31,7 @@ const CustomerTransactionGet = () => {
 
                 if (error == 404) {
                     alert('Invalid customer id')
-                }
-                else {
+                } else {
                     alert("Error getting transactions of customer")
                 }
 
@@ -47,11 +39,7 @@ const CustomerTransactionGet = () => {
             });
 
 
-
         reset({});
-
-
-
 
 
     }
@@ -62,18 +50,12 @@ const CustomerTransactionGet = () => {
         reset({
                 customerTransactions: data
             }, {}
-
         );
 
     }
 
 
-
-
-
-
     return (
-
 
 
         <div>
@@ -85,13 +67,14 @@ const CustomerTransactionGet = () => {
             </p>
 
             <form onSubmit={handleSubmit(onSubmitCustomerTransactionGet)}>
-                <input type ="text" placeholder="userId" {...register("userId") } required />
+                <input type="text" placeholder="userId" {...register("userId")} required/>
                 <br/>
                 <br/>
-                <textarea readOnly = {true} rows={10} cols={100}  placeholder="Customer's transactions will be shown here" {...register("customerTransactions")} />
+                <textarea readOnly={true} rows={10} cols={100}
+                          placeholder="Customer's transactions will be shown here" {...register("customerTransactions")} />
                 <br/>
                 <br/>
-                <input type="submit" />
+                <input type="submit"/>
             </form>
             <br/>
             <br/>

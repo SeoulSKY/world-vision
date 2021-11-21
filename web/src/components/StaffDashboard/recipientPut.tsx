@@ -1,9 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
-// import NavBar from './components'
-
-import { useForm } from 'react-hook-form';
-
+import {useForm} from 'react-hook-form';
 
 
 const RecipientPut = () => {
@@ -11,8 +6,7 @@ const RecipientPut = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-
-    const onSubmitRecipientPut = (dataRecipientPut: any)=> {
+    const onSubmitRecipientPut = (dataRecipientPut: any) => {
 
         const data = {
             "userId": dataRecipientPut.userId,
@@ -57,21 +51,11 @@ const RecipientPut = () => {
 
             })
 
-
-
-        // will prevent garbage collection
-        // for (var entry in dataRecipientPost) delete dataRecipientPost[entry];
-
-
-        // resetForm(dataRecipientPost)
         reset({});
     }
 
 
-
-
     return (
-
 
 
         <div>
@@ -83,39 +67,37 @@ const RecipientPut = () => {
             <p>Enter recipient Id and any information to modify</p>
 
             <form onSubmit={handleSubmit(onSubmitRecipientPut)}>
-                <input type ="text" placeholder="userId" {...register("userId") } required />
+                <input type="text" placeholder="userId" {...register("userId")} required/>
                 <br/>
                 <br/>
-                <input type ="text" placeholder="firstName" {...register("firstName" )} required />
-                <input type ="text" placeholder="middleName" {...register("middleName")} required  />
-                <input type ="text" placeholder="lastName" {...register("lastName")} required />
-                <input type ="text" placeholder="gender" {...register("gender")} required />
+                <input type="text" placeholder="firstName" {...register("firstName")} required/>
+                <input type="text" placeholder="middleName" {...register("middleName")} required/>
+                <input type="text" placeholder="lastName" {...register("lastName")} required/>
+                <input type="text" placeholder="gender" {...register("gender")} required/>
                 <p>Birthdate</p>
-                <input type="date" id="start" {...register("birthDate")} required />
+                <input type="date" id="start" {...register("birthDate")} required/>
                 <br/>
                 <br/>
 
-                <input type ="text" placeholder="buildingNumber" {...register("buildingNumber")} required  />
-                <input type ="text" placeholder="street" {...register("street")} required />
-                <input type ="text" placeholder="city" {...register("city")}  required />
-                <input type ="text" placeholder="province" {...register("province")} required />
-                <input type ="text" placeholder="postalCode" {...register("postalCode")} required />
-                <input type ="text" placeholder="country" {...register("country")}  required />
+                <input type="text" placeholder="buildingNumber" {...register("buildingNumber")} required/>
+                <input type="text" placeholder="street" {...register("street")} required/>
+                <input type="text" placeholder="city" {...register("city")} required/>
+                <input type="text" placeholder="province" {...register("province")} required/>
+                <input type="text" placeholder="postalCode" {...register("postalCode")} required/>
+                <input type="text" placeholder="country" {...register("country")} required/>
                 <br/>
 
                 <br/>
-                <textarea rows={10} cols={100}  placeholder='Description' {...register("recipientDescriptionPut")}  required />
+                <textarea rows={10} cols={100} placeholder='Description' {...register("recipientDescriptionPut")}
+                          required/>
 
                 <br/>
                 <br/>
-                <input type="submit" />
+                <input type="submit"/>
             </form>
 
             <br/>
             <br/>
-
-
-
 
 
         </div>

@@ -1,6 +1,3 @@
-import React from 'react';
-
-
 import {useForm} from 'react-hook-form';
 
 
@@ -9,7 +6,7 @@ const StaffPost = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-    const onSubmitStaffPost = (dataStaffPost: any)=> {
+    const onSubmitStaffPost = (dataStaffPost: any) => {
         // used to handle post request for staff account
         const data = {
             "userId": dataStaffPost.userId,
@@ -33,18 +30,18 @@ const StaffPost = () => {
             },
             body: JSON.stringify(data),
         }).then(async response => {
-                const isJson = response.headers.get('content-type')?.includes('application/json');
-                const data = isJson && await response.json();
+            const isJson = response.headers.get('content-type')?.includes('application/json');
+            const data = isJson && await response.json();
 
-                // check for error response
-                if (!response.ok) {
-                    // get error message from body or default to response status
-                    const error = (data && data.message) || response.status;
-                    return Promise.reject(error);
-                }
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.message) || response.status;
+                return Promise.reject(error);
+            }
 
 
-            })
+        })
             .catch(error => {
 
                 alert("Error posting staff")
@@ -68,23 +65,23 @@ const StaffPost = () => {
             <p>Enter staff personal details</p>
 
             <form onSubmit={handleSubmit(onSubmitStaffPost)}>
-                <input type ="text" placeholder="userId" {...register("userId") } required />
-                <input type ="text" placeholder="firstName" {...register("firstName")} required/>
-                <input type ="text" placeholder="middleName" {...register("middleName")} required/>
-                <input type ="text" placeholder="lastName" {...register("lastName")}required />
+                <input type="text" placeholder="userId" {...register("userId")} required/>
+                <input type="text" placeholder="firstName" {...register("firstName")} required/>
+                <input type="text" placeholder="middleName" {...register("middleName")} required/>
+                <input type="text" placeholder="lastName" {...register("lastName")} required/>
                 <br/>
                 <br/>
                 <p>Enter staff home address</p>
                 <br/>
-                <input type ="text" placeholder="buildingNumber" {...register("buildingNumber")} required/>
-                <input type ="text" placeholder="street" {...register("street")} required/>
-                <input type ="text" placeholder="city" {...register("city")} required />
-                <input type ="text" placeholder="province" {...register("province")} required/>
-                <input type ="text" placeholder="postalCode" {...register("postalCode")}required />
-                <input type ="text" placeholder="country" {...register("country")} required />
+                <input type="text" placeholder="buildingNumber" {...register("buildingNumber")} required/>
+                <input type="text" placeholder="street" {...register("street")} required/>
+                <input type="text" placeholder="city" {...register("city")} required/>
+                <input type="text" placeholder="province" {...register("province")} required/>
+                <input type="text" placeholder="postalCode" {...register("postalCode")} required/>
+                <input type="text" placeholder="country" {...register("country")} required/>
                 <br/>
                 <br/>
-                <input type="submit" />
+                <input type="submit"/>
             </form>
 
             <br/>
