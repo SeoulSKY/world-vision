@@ -13,6 +13,7 @@ import RecipientPut from "./components/StaffDashboard/recipientPut";
 import RecipientDelete from "./components/StaffDashboard/recipientDelete";
 import RecipientGet from "./components/StaffDashboard/recipientGet";
 import CustomerRecipientGet from "./components/StaffDashboard/customerRecipientGet";
+import HomePage from "./components/Pages/homePage";
 
 
 
@@ -36,6 +37,7 @@ function App() {
       
       <div className='App'>
           <NavBar/>
+
         
 
     </div>

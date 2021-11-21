@@ -6,17 +6,16 @@ import { useForm } from 'react-hook-form';
 
 
 
-const CustomerRecipientGet = () => {
+const CustomerTransactionGet = () => {
 
     const {register, handleSubmit, reset} = useForm();
 
 
-    const onSubmitCustomerGet = (dataCustomerGet: any)=> {
+    const onSubmitCustomerTransactionGet = (dataCustomerGet: any)=> {
 
         let userId = dataCustomerGet.userId
-        // resetForm(dataStaffGet)
 
-        fetch('http://localhost:5000/api/recipient?customerUserId=' + userId, { method: 'GET' })
+        fetch('http://localhost:5000/api/transaction?customerUserId=' + userId, { method: 'GET' })
             .then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -38,10 +37,10 @@ const CustomerRecipientGet = () => {
             .catch(error => {
 
                 if (error == 404) {
-                    alert("No recipient with specified userId")
+                    alert('Invalid customer id')
                 }
                 else {
-                    alert("Error getting recipient of customer")
+                    alert("Error getting transactions of customer")
                 }
 
 
@@ -61,12 +60,14 @@ const CustomerRecipientGet = () => {
         data = JSON.stringify(data)
         console.log(data)
         reset({
-            customerUserDisplayRecipients: data
+                customerTransactions: data
             }, {}
 
         );
 
     }
+
+
 
 
 
@@ -83,11 +84,11 @@ const CustomerRecipientGet = () => {
             <p>Enter ID of Customer Account to get the Customer's recipients.
             </p>
 
-            <form onSubmit={handleSubmit(onSubmitCustomerGet)}>
+            <form onSubmit={handleSubmit(onSubmitCustomerTransactionGet)}>
                 <input type ="text" placeholder="userId" {...register("userId") } required />
                 <br/>
                 <br/>
-                <textarea readOnly = {true} rows={10} cols={100}  placeholder="Customer's recipients will be shown here" {...register("customerUserDisplayRecipients")} />
+                <textarea readOnly = {true} rows={10} cols={100}  placeholder="Customer's transactions will be shown here" {...register("customerTransactions")} />
                 <br/>
                 <br/>
                 <input type="submit" />
@@ -103,4 +104,4 @@ const CustomerRecipientGet = () => {
 }
 
 
-export default CustomerRecipientGet;
+export default CustomerTransactionGet;
