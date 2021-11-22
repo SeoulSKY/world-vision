@@ -12,6 +12,7 @@ import {
 
 import StaffDashboard from "../StaffDashboard/staffDashboard";
 import HomePage from "../Pages/homePage";
+import CustomerDashboard from "../CustomerDashboard/customerDashboard";
 
 
 const NavBar = () => {
@@ -37,6 +38,7 @@ const NavBar = () => {
                 <Routes>
                     <Route path='/home' element={<HomePage/>}/>
                     <Route path='/staffDashboard' element={<StaffDashboard/>}/>
+                    <Route path='/customerDashboard' element={<CustomerDashboard/>}/>
                 </Routes>
             </div>
         </Router>
