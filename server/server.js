@@ -3,25 +3,26 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const mySql = require("mysql");
 
-const server = express();
+// read .env file
+require("dotenv").config();
 
-server.use(cors({ origin: "*" }));
-server.use(bodyParser.urlencoded({ extended : true }));
+const { apiRouter } = require("./routes/api");
 
-const PORT = 5000;
-const HOST = "0.0.0.0";
+const app = express();
 
-let con = mySql.createConnection({
-    host: HOST,
-    user: "root",
-    database: "user",
-    password: "cmpt353"
+app.use(cors({ origin: "*" }));
+app.use(bodyParser.urlencoded({ extended : true }));
+app.use(bodyParser.json());
+
+const PORT = process.env.PORT;
+const HOST = process.env.HOST;
+
+app.use("/api", apiRouter);
+
+require("./mysqlLib").init().then(() => {
+    app.listen(PORT, HOST, () => {console.log("Started listening " + HOST + ":" + PORT)});
+}).catch(() => {
+    console.log("Database is not yet ready to be used. Please try running the server later");
+    process.exit(0);
 });
-
-server.get("/api/hello", (request, response) => {
-    response.send("Hello from the server");
-});
-
-server.listen(PORT, HOST, () => {console.log("Started listening " + HOST + ":" + PORT)});
