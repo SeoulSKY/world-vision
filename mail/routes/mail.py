@@ -44,7 +44,7 @@ def get():
 @mail_bp.route("/", methods=["POST"])
 def post():
     """
-    Takes data from contact-page.html input fields and formats for email sending.
+    Send a mail
     """
     json = request.get_json()
     if not is_valid_json(json):
