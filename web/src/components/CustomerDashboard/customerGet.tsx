@@ -36,7 +36,7 @@ const CustomerGet = () => {
                     if (error === 404) {
                         alert("No customer member with specified userId")
                     } else {
-                        alert("Error getting staff")
+                        alert("Error getting customer")
                     }
 
 
