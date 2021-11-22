@@ -1,13 +1,13 @@
 import {useForm} from 'react-hook-form';
 
 
-const StaffPost = () => {
+const CustomerPost = () => {
 
     const {register, handleSubmit, reset} = useForm();
 
 
     const onSubmitStaffPost = (dataStaffPost: any) => {
-        // used to handle post request for staff account
+        // used to handle post request for customer account
         const data = {
             "userId": dataStaffPost.userId,
             "firstName": dataStaffPost.firstName,
@@ -23,7 +23,7 @@ const StaffPost = () => {
         };
 
         // Post request using fetch with error handling
-        fetch('http://localhost:5000/api/staff', {
+        fetch('http://localhost:5000/api/customer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,8 +61,8 @@ const StaffPost = () => {
             <br/>
             <br/>
             <br/>
-            <h2>Create New Staff Account</h2>
-            <p>Enter staff personal details</p>
+            <h2>Create New Customer Account</h2>
+            <p>Enter Customer Personal Details</p>
 
             <form onSubmit={handleSubmit(onSubmitStaffPost)}>
                 <input type="text" placeholder="userId" {...register("userId")} required/>
@@ -71,7 +71,7 @@ const StaffPost = () => {
                 <input type="text" placeholder="lastName" {...register("lastName")} required/>
                 <br/>
                 <br/>
-                <p>Enter staff home address</p>
+                <p>Enter customer billing address</p>
                 <br/>
                 <input type="text" placeholder="buildingNumber" {...register("buildingNumber")} required/>
                 <input type="text" placeholder="street" {...register("street")} required/>
@@ -94,4 +94,4 @@ const StaffPost = () => {
 }
 
 
-export default StaffPost;
+export default CustomerPost;
