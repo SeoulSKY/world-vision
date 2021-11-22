@@ -18,7 +18,7 @@ Visit the address in a browser to enjoy!
 ## Architecture
 ![architecture](https://user-images.githubusercontent.com/48105703/142818093-26c7fb3e-6317-4dcf-b7f3-da49ab31307d.png)
 
-Flask server provides API to send a mail to admin email account. React uses this API to implement the contact-us page. Firebase is responsible for authentication.
+Flask server provides API to send a mail to the admin email account. React uses this API to implement the contact-us page. Firebase is responsible for authentication.
 
 ## API
 <details>
