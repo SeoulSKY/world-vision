@@ -1,12 +1,12 @@
 version: "3.9"
 services:
-  web:
-    build: ./web
-    container_name: web
-    depends_on:
-      - server
-    ports:
-      - 80:8080
+#  web:
+#    build: ./web
+#    container_name: web
+#    depends_on:
+#      - server
+#    ports:
+#      - 80:8080
       
   server:
     build: ./server
@@ -15,6 +15,11 @@ services:
       - mySQL
     ports:
       - 5000:5000
+    command: ["./wait-for-it.sh", "mySQL:3306", "--", "sh", "-c", "npm", "start"]
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
       
   mySQL:
     image: mysql:5.7.31
@@ -29,3 +34,4 @@ services:
     
 volumes:
   mysql-data:
+
