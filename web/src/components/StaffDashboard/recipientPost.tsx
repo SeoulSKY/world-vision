@@ -3,12 +3,11 @@ import {useForm} from 'react-hook-form';
 
 const RecipientPost = () => {
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField} = useForm();
 
 
     const onSubmitRecipientPost = (dataRecipientPost: any) => {
         // used to handle post request for recipient account
-
         const data = {
             "userId": dataRecipientPost.userId,
             "firstName": dataRecipientPost.firstName,
@@ -48,11 +47,16 @@ const RecipientPost = () => {
         })
             .catch(error => {
 
-                alert("Error posting recipient")
+                alert("Error posting recipient: " + error)
 
             })
 
+        // reset Form
+        for (var key in dataRecipientPost) {
+            resetField(key);
+        }
         reset({});
+
     }
 
 
@@ -69,7 +73,7 @@ const RecipientPost = () => {
             <form onSubmit={handleSubmit(onSubmitRecipientPost)}>
                 <input type="text" placeholder="userId" {...register("userId")} required/>
                 <input type="text" placeholder="firstName" {...register("firstName")} required/>
-                <input type="text" placeholder="middleName" {...register("middleName")} required/>
+                <input type="text" placeholder="middleName" {...register("middleName")} />
                 <input type="text" placeholder="lastName" {...register("lastName")} required/>
                 <input type="text" placeholder="gender" {...register("gender")} required/>
 

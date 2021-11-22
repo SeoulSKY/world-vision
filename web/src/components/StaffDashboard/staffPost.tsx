@@ -3,7 +3,7 @@ import {useForm} from 'react-hook-form';
 
 const StaffPost = () => {
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField} = useForm();
 
 
     const onSubmitStaffPost = (dataStaffPost: any) => {
@@ -44,13 +44,15 @@ const StaffPost = () => {
         })
             .catch(error => {
 
-                alert("Error posting staff")
+                alert("Error posting staff: " + error)
 
             });
 
-
+        // reset Form
+        for (var key in dataStaffPost) {
+            resetField(key);
+        }
         reset({});
-
     }
 
 

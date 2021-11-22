@@ -3,7 +3,7 @@ import {useForm} from 'react-hook-form';
 
 const StaffPut = () => {
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField,} = useForm();
 
     const onSubmitStaffPut = (dataStaffPut: any) => {
         // used to handle put request for staff account
@@ -44,10 +44,14 @@ const StaffPut = () => {
         })
             .catch(error => {
 
-                alert("Error deleting staff")
+                alert("Error putting staff: " + error)
 
             });
 
+        // reset Form
+        for (var key in dataStaffPut) {
+            resetField(key);
+        }
         reset({});
 
     }
@@ -66,7 +70,7 @@ const StaffPut = () => {
             <form onSubmit={handleSubmit(onSubmitStaffPut)}>
                 <input type="text" placeholder="userId" {...register("userId")} required/>
                 <input type="text" placeholder="firstName" {...register("firstName")} required/>
-                <input type="text" placeholder="middleName" {...register("middleName")} required/>
+                <input type="text" placeholder="middleName" {...register("middleName")} />
                 <input type="text" placeholder="lastName" {...register("lastName")} required/>
                 <br/>
                 <input type="text" placeholder="buildingNumber" {...register("buildingNumber")} required/>

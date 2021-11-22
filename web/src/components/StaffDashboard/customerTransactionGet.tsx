@@ -3,11 +3,12 @@ import {useForm} from 'react-hook-form';
 
 const CustomerTransactionGet = () => {
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField} = useForm();
 
 
     const onSubmitCustomerTransactionGet = (dataCustomerGet: any) => {
 
+        // used to handle get request for getting customers transactions
         let userId = dataCustomerGet.userId
 
         fetch('http://localhost:5000/api/transaction?customerUserId=' + userId, {method: 'GET'})
@@ -32,14 +33,19 @@ const CustomerTransactionGet = () => {
                 if (error === 404) {
                     alert('Invalid customer id')
                 } else {
-                    alert("Error getting transactions of customer")
+                    alert("Error getting transactions of customer: " + error)
                 }
 
 
             });
 
 
+        // reset Form
+        for (var key in dataCustomerGet) {
+            resetField(key);
+        }
         reset({});
+
 
 
     }
@@ -62,8 +68,8 @@ const CustomerTransactionGet = () => {
 
             <br/>
             <br/>
-            <h2>Get Customer Account's Recipients</h2>
-            <p>Enter ID of Customer Account to get the Customer's recipients.
+            <h2>Get Customer Account's Transactions</h2>
+            <p>Enter ID of Customer Account to get the Customer's transactions.
             </p>
 
             <form onSubmit={handleSubmit(onSubmitCustomerTransactionGet)}>

@@ -4,15 +4,14 @@ import {useForm} from 'react-hook-form';
 const StaffDelete = () => {
 
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField} = useForm();
 
 
     const onSubmitStaffDelete = (dataStaffDelete: any) => {
 
         let userId = dataStaffDelete.userId
 
-
-        // DELETE request using fetch with error handling
+        // used to handle delete request for staff account
 
         fetch("http://localhost:5000/api/staff?userId=" + userId, {method: 'DELETE'})
             .then(async response => {
@@ -32,12 +31,16 @@ const StaffDelete = () => {
                 if (error === 404) {
                     alert("Not valid userId to delete")
                 } else {
-                    alert("Error deleting staff")
+                    alert("Error deleting staff: " + error)
                 }
 
             });
 
 
+        // reset Form
+        for (var key in dataStaffDelete) {
+            resetField(key);
+        }
         reset({});
 
 
