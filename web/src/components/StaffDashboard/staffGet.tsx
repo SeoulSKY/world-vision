@@ -77,14 +77,20 @@ const StaffGet = () => {
 
     }
 
-    function display_info(data: any) {
-        data = JSON.stringify(data)
-        console.log(data)
+    function display_info(data: JSON) {
+        // display info of staff
+        const toDisplay = JSON.stringify(data, null, 2);
+
+        console.log(toDisplay)
         reset({
-            staffUserDisplay: data
+            staffUserDisplay: toDisplay
         }, {});
 
+
+
     }
+
+
 
     return (
 

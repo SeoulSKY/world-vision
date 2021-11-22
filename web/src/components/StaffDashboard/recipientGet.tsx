@@ -75,13 +75,14 @@ const RecipientGet = () => {
 
     }
 
-    function display_info(data: any) {
-        data = JSON.stringify(data)
-        console.log(data)
+    function display_info(data: JSON) {
+        // display info of recipient
+        const toDisplay = JSON.stringify(data, null, 2);
+
+        console.log(toDisplay)
         reset({
-                recipientUserDisplay: data
-            }, {}
-        );
+            recipientUserDisplay: toDisplay
+        }, {});
 
     }
 

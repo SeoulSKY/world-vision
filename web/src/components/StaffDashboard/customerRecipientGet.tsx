@@ -49,13 +49,15 @@ const CustomerRecipientGet = () => {
 
     }
 
-    function display_info(data: any) {
-        data = JSON.stringify(data)
-        console.log(data)
+    function display_info(data: JSON) {
+
+        // display info of recipient
+        const toDisplay = JSON.stringify(data, null, 2);
+
+        console.log(toDisplay)
         reset({
-                customerUserDisplayRecipients: data
-            }, {}
-        );
+            customerUserDisplayRecipients: toDisplay
+        }, {});
 
     }
 
@@ -67,7 +69,7 @@ const CustomerRecipientGet = () => {
 
             <br/>
             <br/>
-            <h2>Get Customer Account's Recipients</h2>
+            <h2>Get Customer Recipients</h2>
             <p>Enter ID of Customer Account to get the Customer's recipients.
             </p>
 
