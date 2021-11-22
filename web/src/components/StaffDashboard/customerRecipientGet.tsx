@@ -67,7 +67,7 @@ const CustomerRecipientGet = () => {
 
             <br/>
             <br/>
-            <h2>Get Customer Account's Recipients</h2>
+            <h2>Get Customer Recipients</h2>
             <p>Enter ID of Customer Account to get the Customer's recipients.
             </p>
 

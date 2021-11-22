@@ -68,7 +68,7 @@ const CustomerTransactionGet = () => {
 
             <br/>
             <br/>
-            <h2>Get Customer Account's Transactions</h2>
+            <h2>Get Customer Transactions</h2>
             <p>Enter ID of Customer Account to get the Customer's transactions.
             </p>
 
