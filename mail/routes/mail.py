@@ -2,7 +2,7 @@ import os
 from flask import Blueprint, request, Response, Flask
 from flask_mail import Mail, Message
 
-mail_bp = Blueprint("mail", __name__)
+_mail_bp = Blueprint("mail", __name__)
 
 _mail = Mail()
 
@@ -32,8 +32,10 @@ def init_mail(app: Flask) -> None:
 
     _mail.init_app(app)
 
+    app.register_blueprint(_mail_bp, url_prefix="/mail")
 
-@mail_bp.route("/", methods=["GET"])
+
+@_mail_bp.route("/", methods=["GET"])
 def get():
     """
     An endpoint for smoke test
@@ -41,7 +43,7 @@ def get():
     return "Hello from mail"
 
 
-@mail_bp.route("/", methods=["POST"])
+@_mail_bp.route("/", methods=["POST"])
 def post():
     """
     Send a mail
