@@ -3,10 +3,12 @@ import {useForm} from 'react-hook-form';
 
 const RecipientDelete = () => {
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField} = useForm();
 
 
     const onSubmitRecipientDelete = (dataRecipientDelete: any) => {
+
+        // used to handle delete request for recipient account
 
         let recipientUserId = dataRecipientDelete.userId
         fetch("http://localhost:5000/api/recipient?userId=" + recipientUserId, {method: 'DELETE'})
@@ -27,15 +29,17 @@ const RecipientDelete = () => {
                 if (error === 404) {
                     alert("Not valid userId to delete")
                 } else {
-                    alert("Error deleting recipient")
+                    alert("Error deleting recipient: " + error)
                 }
 
             });
 
 
+        // reset Form
+        for (var key in dataRecipientDelete) {
+            resetField(key);
+        }
         reset({});
-
-
     }
 
 

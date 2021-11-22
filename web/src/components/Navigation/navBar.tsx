@@ -37,6 +37,7 @@ const NavBar = () => {
             <div>
                 <Routes>
                     <Route path='/home' element={<HomePage/>}/>
+                    <Route path='/' element={<HomePage/>}/>
                     <Route path='/staffDashboard' element={<StaffDashboard/>}/>
                     <Route path='/customerDashboard' element={<CustomerDashboard/>}/>
                 </Routes>

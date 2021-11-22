@@ -3,10 +3,11 @@ import {useForm} from 'react-hook-form';
 
 const RecipientPut = () => {
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField} = useForm();
 
 
     const onSubmitRecipientPut = (dataRecipientPut: any) => {
+        // used to handle put request for recipient account
 
         const data = {
             "userId": dataRecipientPut.userId,
@@ -25,7 +26,6 @@ const RecipientPut = () => {
             "description": dataRecipientPut.recipientDescriptionPut
         }
 
-        // Post request using fetch with error handling
         fetch('http://localhost:5000/api/recipient', {
             method: 'PUT',
             headers: {
@@ -47,11 +47,16 @@ const RecipientPut = () => {
         })
             .catch(error => {
 
-                alert("Error putting recipient")
+                alert("Error putting recipient: " +error)
 
             })
 
+        // reset Form
+        for (var key in dataRecipientPut) {
+            resetField(key);
+        }
         reset({});
+
     }
 
 
@@ -71,7 +76,7 @@ const RecipientPut = () => {
                 <br/>
                 <br/>
                 <input type="text" placeholder="firstName" {...register("firstName")} required/>
-                <input type="text" placeholder="middleName" {...register("middleName")} required/>
+                <input type="text" placeholder="middleName" {...register("middleName")} />
                 <input type="text" placeholder="lastName" {...register("lastName")} required/>
                 <input type="text" placeholder="gender" {...register("gender")} required/>
                 <p>Birthdate</p>

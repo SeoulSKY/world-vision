@@ -2,14 +2,14 @@ import {useForm} from 'react-hook-form';
 
 const RecipientGet = () => {
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField} = useForm();
 
 
     const onSubmitRecipientGet = (dataRecipientGet: any) => {
-
+        // used to handle get request for recipient account
         let userId = dataRecipientGet.userId
 
-        // if empty id return all staff members
+        // if empty id return all recipients
         if (userId !== "") {
 
             fetch('http://localhost:5000/api/recipient?recipientUserId=' + userId, {method: 'GET'})
@@ -33,7 +33,7 @@ const RecipientGet = () => {
                     if (error === 404) {
                         alert("No recipient with specified userId")
                     } else {
-                        alert("Error getting recipients")
+                        alert("Error getting recipients: " +error)
                     }
 
 
@@ -41,7 +41,7 @@ const RecipientGet = () => {
 
 
         } else {
-
+            // return recipient with specified userId
             fetch('http://localhost:5000/api/recipient', {method: 'GET'})
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
@@ -59,13 +59,18 @@ const RecipientGet = () => {
                 })
                 .catch(error => {
 
-                    alert("Error getting recipients")
+                    alert("Error getting recipients: " +error)
 
                 });
 
         }
 
+        // reset Form
+        for (var key in dataRecipientGet) {
+            resetField(key);
+        }
         reset({});
+
 
 
     }

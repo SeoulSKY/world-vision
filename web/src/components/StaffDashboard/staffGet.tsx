@@ -4,13 +4,13 @@ import {useForm} from 'react-hook-form';
 const StaffGet = () => {
 
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField} = useForm();
 
     const onSubmitStaffGet = (dataStaffGet: any) => {
 
+        // used to handle get request for staff account
 
         let userId = dataStaffGet.userId
-
 
         // if empty id return all staff members
         if (userId !== "") {
@@ -44,7 +44,7 @@ const StaffGet = () => {
 
 
         } else {
-
+            // return staff member with specified userId
             fetch('http://localhost:5000/api/staff', {method: 'GET'})
                 .then(async response => {
                     const isJson = response.headers.get('content-type')?.includes('application/json');
@@ -62,12 +62,16 @@ const StaffGet = () => {
                 })
                 .catch(error => {
 
-                    alert("Error getting staff")
+                    alert("Error getting staff: " + error)
 
                 });
 
         }
 
+        // reset Form
+        for (var key in dataStaffGet) {
+            resetField(key);
+        }
         reset({});
 
 

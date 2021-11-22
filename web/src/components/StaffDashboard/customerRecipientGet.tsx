@@ -3,13 +3,14 @@ import {useForm} from 'react-hook-form';
 
 const CustomerRecipientGet = () => {
 
-    const {register, handleSubmit, reset} = useForm();
+    const {register, handleSubmit, reset, resetField} = useForm();
 
 
     const onSubmitCustomerGet = (dataCustomerGet: any) => {
 
+        // used to handle get request for getting customers recipients
+
         let userId = dataCustomerGet.userId
-        // resetForm(dataStaffGet)
 
         fetch('http://localhost:5000/api/recipient?customerUserId=' + userId, {method: 'GET'})
             .then(async response => {
@@ -33,13 +34,16 @@ const CustomerRecipientGet = () => {
                 if (error === 404) {
                     alert("No recipient with specified userId")
                 } else {
-                    alert("Error getting recipient of customer")
+                    alert("Error getting recipient of customer: " + error)
                 }
 
 
             });
 
-
+        // reset Form
+        for (var key in dataCustomerGet) {
+            resetField(key);
+        }
         reset({});
 
 
