@@ -24,7 +24,7 @@ Flask server provides API to send a mail to the admin email account. React uses 
 <details>
 <summary>(Click the arrow to open) You can import this to SwaggerHub for the visual description of the API</summary>
   
-```
+```yaml
 openapi: 3.0.0
 info:
   description: Documentation for cmpt353 API
