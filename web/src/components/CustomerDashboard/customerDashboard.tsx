@@ -1,6 +1,7 @@
 import CustomerPost from "./customerPost";
 import CustomerPut from "./customerPut";
 import CustomerDelete from "./customerDelete";
+import CustomerGet from "./customerGet";
 
 
 const CustomerDashboard = () => {
@@ -13,7 +14,7 @@ const CustomerDashboard = () => {
             <CustomerPost/>
             <CustomerPut/>
             <CustomerDelete/>
-            {/*<StaffGet/>*/}
+            <CustomerGet/>
             {/*<RecipientPost/>*/}
             {/*<RecipientPut/>*/}
             {/*<RecipientDelete/>*/}
