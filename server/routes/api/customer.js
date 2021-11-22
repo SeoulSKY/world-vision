@@ -13,6 +13,7 @@ function isValidBody(body) {
         body.firstName !== undefined &&
         body.lastName !== undefined &&
         body.billingAddress !== undefined &&
+        body.billingAddress.buildingNumber !== undefined &&
         body.billingAddress.street !== undefined &&
         body.billingAddress.city !== undefined &&
         body.billingAddress.province !== undefined &&
@@ -45,13 +46,13 @@ customerRouter.get("/", (request, response) => {
 
     getPool.then(pool => {
         pool.query(sql).then(result => {
-            // convert the result to json format
-            let newResult = JSON.parse(JSON.stringify(result));
-
-            if (userId !== undefined && newResult.length === 0) {
+            if (userId !== undefined && result.length === 0) {
                 response.status(404).send("Customer not found with the given userId \"" + userId + "\"");
                 return;
             }
+
+            // convert the result to json format
+            let newResult = JSON.parse(JSON.stringify(result));
 
             let array = [];
             for (let i = 0; i < newResult.length; i++) {
@@ -60,6 +61,7 @@ customerRouter.get("/", (request, response) => {
                     firstName: newResult[i].firstName,
                     lastName: newResult[i].lastName,
                     billingAddress: {
+                        buildingNumber: newResult[i].buildingNumber,
                         street: newResult[i].street,
                         city: newResult[i].city,
                         province: newResult[i].province,
@@ -98,6 +100,7 @@ customerRouter.post("/", (request, response) => {
     let billingAddress = request.body.billingAddress;
     let card = request.body.card;
 
+    let buildingNumber = billingAddress.buildingNumber;
     let street = billingAddress.street;
     let city = billingAddress.city;
     let province = billingAddress.province;
@@ -127,9 +130,9 @@ customerRouter.post("/", (request, response) => {
                 escape(lastName) + ", " + escape(middleName) + ")";
         }
 
-        sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
-            escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
-            escape(postalCode) + ", " + escape(country) + ")";
+        sql += ";INSERT INTO Address (userId, buildingNumber, street, city, province, postalCode, country) VALUES (" +
+            escape(userId) + ", " + escape(buildingNumber) + ", " + escape(street) + ", " + escape(city) + ", " +
+            escape(province) + ", " + escape(postalCode) + ", " + escape(country) + ")";
 
         sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Customer\")";
 
@@ -137,7 +140,7 @@ customerRouter.post("/", (request, response) => {
             escape(number) + ", " + escape(expirationDate) + ", " + escape(cvv) + ")";
 
         getPool.then(pool => {
-            pool.query(sql).then(() => response.status(200).send("created"));
+            pool.query(sql).then(() => response.status(200).send("Created"));
         });
     }).catch(() => response.status(500).send("Server couldn't connect to the database"));
 });
@@ -155,6 +158,7 @@ customerRouter.put("/", (request, response) => {
     let billingAddress = request.body.billingAddress;
     let card = request.body.card;
 
+    let buildingNumber = billingAddress.buildingNumber;
     let street = billingAddress.street;
     let city = billingAddress.city;
     let province = billingAddress.province;
@@ -185,9 +189,9 @@ customerRouter.put("/", (request, response) => {
 
         sql += " WHERE userId=" + escape(userId);
 
-        sql += ";UPDATE Address SET street=" + escape(street) + ", city=" + escape(city) + ", province=" +
-            escape(province) + ", postalCode=" + escape(postalCode) + ", country=" + escape(country) +
-            "WHERE userId=" + escape(userId);
+        sql += ";UPDATE Address SET buildingNumber=" +  escape(buildingNumber) +  ", street=" + escape(street) +
+            ", city=" + escape(city) + ", province=" + escape(province) + ", postalCode=" + escape(postalCode) +
+            ", country=" + escape(country) + "WHERE userId=" + escape(userId);
 
         sql += ";UPDATE Card SET number=" + escape(number) + ", expirationDate=" +
             escape(expirationDate) + ", cvv=" + escape(cvv);
