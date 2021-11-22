@@ -1,32 +1,48 @@
-import React, {useRef, Component} from 'react';
-import {Card, Form, Button, Container} from "react-bootstrap";
+import React, {useRef, Component, useState} from 'react';
+import {Card, Form, Button, Container, Alert} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"
-import {AuthProvider, useAuth} from "./contexts/AuthContext ";
+import {AuthProvider, useAuth} from "../../contexts/AuthContext ";
 
 export default function Signup() {
     const emailRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
     const passwordRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
     const passwordConfirmRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
-    const {signup} = useAuth()
+    const { signup } = useAuth()
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
 
-    function handleSubmit(e: any) {
-        // if (passwordRef.current.value)
+
+    async function handleSubmit(e: any) {
         e.preventDefault()
-        signup(emailRef.current.value, passwordRef.current.value)
-    }
 
+        if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+            return setError("Passwords do not match")
+        }
+
+        try {
+            setError("")
+            setLoading(true)
+            await signup(emailRef.current.value, passwordRef.current.value)
+
+        } catch (e){
+            console.log(e)
+            setError("Failed to create an account")
+        }
+
+        setLoading(false)
+    }
     return (
         <AuthProvider>
             <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "80vh"}}>
                 <div className="w-100" style={{maxWidth: '1000px'}}>
-
                     <>
-
                         <Card style={{minHeight: 500}}>
                             <Card.Body>
+
+                                {error && <Alert variant="danger" >{error}</Alert>}
                                 <br/>
                                 <h2 className="text-center mb-20">Sign Up</h2>
-                                <Form>
+                                <Form onSubmit={handleSubmit}>
                                     <br/>
                                     <Form.Group id="email">
                                         <Form.Label> Email</Form.Label>
@@ -44,7 +60,7 @@ export default function Signup() {
                                     </Form.Group>
 
                                     <br/>
-                                    <Button className="w-100" style={{background: "#212529"}} type="submit"> Sign
+                                    <Button disabled={loading} className="w-100" style={{background: "#212529"}} type="submit"> Sign
                                         Up </Button>
                                 </Form>
                             </Card.Body>
@@ -56,5 +72,6 @@ export default function Signup() {
                 </div>
             </Container>
         </AuthProvider>
+
     )
 }

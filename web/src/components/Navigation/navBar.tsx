@@ -12,7 +12,7 @@ import {
 import StaffDashboard from "../StaffDashboard/staffDashboard";
 import HomePage from "../Pages/homePage";
 import Signup from "../Authentication/Signup";
-import {AuthProvider} from "../Authentication/contexts/AuthContext ";
+import {AuthProvider} from "../../contexts/AuthContext ";
 
 
 const NavBar = () => {
