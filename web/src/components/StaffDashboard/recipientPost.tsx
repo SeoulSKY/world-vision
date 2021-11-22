@@ -14,6 +14,7 @@ const RecipientPost = () => {
             "middleName": dataRecipientPost.middleName,
             "lastName": dataRecipientPost.lastName,
             "homeAddress": {
+                "buildingNumber": dataRecipientPost.buildingNumber,
                 "street": dataRecipientPost.street,
                 "city": dataRecipientPost.city,
                 "province": dataRecipientPost.province,

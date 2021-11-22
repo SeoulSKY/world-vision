@@ -15,6 +15,7 @@ const RecipientPut = () => {
             "middleName": dataRecipientPut.middleName,
             "lastName": dataRecipientPut.lastName,
             "homeAddress": {
+                "buildingNumber": dataRecipientPut.buildingNumber,
                 "street": dataRecipientPut.street,
                 "city": dataRecipientPut.city,
                 "province": dataRecipientPut.province,

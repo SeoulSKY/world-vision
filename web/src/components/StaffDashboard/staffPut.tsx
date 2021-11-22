@@ -14,6 +14,7 @@ const StaffPut = () => {
             "middleName": dataStaffPut.middleName,
             "lastName": dataStaffPut.lastName,
             "homeAddress": {
+                "buildingNumber": dataStaffPut.buildingNumber,
                 "street": dataStaffPut.street,
                 "city": dataStaffPut.city,
                 "province": dataStaffPut.province,

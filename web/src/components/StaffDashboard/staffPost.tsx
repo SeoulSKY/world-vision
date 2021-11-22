@@ -14,6 +14,7 @@ const StaffPost = () => {
             "middleName": dataStaffPost.middleName,
             "lastName": dataStaffPost.lastName,
             "homeAddress": {
+                "buildingNumber": dataStaffPost.buildingNumber,
                 "street": dataStaffPost.street,
                 "city": dataStaffPost.city,
                 "province": dataStaffPost.province,
