@@ -44,7 +44,7 @@ export default function Signup() {
                                     </Form.Group>
 
                                     <br/>
-                                    <Button className="w-100" style={{background: "#000000"}} type="submit"> Sign
+                                    <Button className="w-100" style={{background: "#212529"}} type="submit"> Sign
                                         Up </Button>
                                 </Form>
                             </Card.Body>
