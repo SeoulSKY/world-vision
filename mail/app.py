@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from routes.mail import mail_bp, init_mail
+from routes.mail import init_mail
 from waitress import serve
 
 
@@ -13,8 +13,6 @@ def create_app() -> Flask:
     CORS(app)
 
     init_mail(app)
-
-    app.register_blueprint(mail_bp, url_prefix="/mail")
 
     return app
 
