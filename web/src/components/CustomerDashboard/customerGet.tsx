@@ -95,7 +95,7 @@ const CustomerGet = () => {
                 <br/>
                 <br/>
                 <textarea readOnly={true} rows={10} cols={100}
-                          placeholder='Staff Member info will be shown here' {...register("staffUserDisplay")} />
+                          placeholder='Customer Member info will be shown here' {...register("customerUserDisplay")} />
                 <br/>
                 <br/>
                 <input type="submit"/>
