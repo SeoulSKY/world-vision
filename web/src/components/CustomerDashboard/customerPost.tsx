@@ -6,7 +6,7 @@ const CustomerPost = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-    const onSubmitStaffPost = (dataCustomerPost: any) => {
+    const onSubmitCustomerPost = (dataCustomerPost: any) => {
         // used to handle post request for customer account
         const data = {
             "userId": dataCustomerPost.userId,
@@ -65,7 +65,7 @@ const CustomerPost = () => {
             <h2>Create New Customer Account</h2>
             <p>Enter Customer Personal Details</p>
 
-            <form onSubmit={handleSubmit(onSubmitStaffPost)}>
+            <form onSubmit={handleSubmit(onSubmitCustomerPost)}>
                 <input type="text" placeholder="userId" {...register("userId")} required/>
                 <input type="text" placeholder="firstName" {...register("firstName")} required/>
                 <input type="text" placeholder="middleName" {...register("middleName")} />

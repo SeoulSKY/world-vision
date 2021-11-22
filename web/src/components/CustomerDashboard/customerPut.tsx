@@ -5,7 +5,7 @@ const CustomerPut = () => {
 
     const {register, handleSubmit, reset} = useForm();
 
-    const onSubmitStaffPut = (dataCustomerPut: any) => {
+    const onSubmitCustomerPut = (dataCustomerPut: any) => {
         // used to handle put request for customer account
 
         const data = {
@@ -64,7 +64,7 @@ const CustomerPut = () => {
             <p>Enter ID of Customer Account to edit along with any optional field you would like to modify
             </p>
 
-            <form onSubmit={handleSubmit(onSubmitStaffPut)}>
+            <form onSubmit={handleSubmit(onSubmitCustomerPut)}>
                 <input type="text" placeholder="userId" {...register("userId")} required/>
                 <input type="text" placeholder="firstName" {...register("firstName")} required/>
                 <input type="text" placeholder="middleName" {...register("middleName")} />

@@ -7,7 +7,7 @@ const CustomerDelete = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-    const onSubmitStaffDelete = (dataCustomerDelete: any) => {
+    const onSubmitCustomerDelete = (dataCustomerDelete: any) => {
 
         let userId = dataCustomerDelete.userId
 
@@ -56,7 +56,7 @@ const CustomerDelete = () => {
             <p>Enter ID of Customer Account to delete
             </p>
 
-            <form onSubmit={handleSubmit(onSubmitStaffDelete)}>
+            <form onSubmit={handleSubmit(onSubmitCustomerDelete)}>
                 <input type="text" placeholder="userId" {...register("userId")} required/>
                 <input type="submit"/>
             </form>
