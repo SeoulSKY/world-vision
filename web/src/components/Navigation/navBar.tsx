@@ -11,8 +11,10 @@ import {
 
 import StaffDashboard from "../StaffDashboard/staffDashboard";
 import HomePage from "../Pages/homePage";
-import Signup from "../Authentication/Signup";
+import SignupStaff from "../Authentication/SignupStaff";
 import {AuthProvider} from "../../contexts/AuthContext ";
+import SignUpSelect from "../Authentication/SignUpSelect";
+import Login from "../Authentication/Login";
 
 
 const NavBar = () => {
@@ -30,7 +32,7 @@ const NavBar = () => {
                         </Nav>
                         <Nav>
                             <Nav.Link as={Link} to={"/signIn"}>Sign In</Nav.Link>
-                            <Nav.Link as={Link} to={"/signUp"}>Sign Up</Nav.Link>
+                            <Nav.Link as={Link} to={"/signUpSelect"}>Sign Up</Nav.Link>
                         </Nav>
                     </Container>
                 </Navbar>
@@ -40,7 +42,9 @@ const NavBar = () => {
                     <Route path='/home' element={<HomePage/>}/>
                     <Route path='/' element={<HomePage/>}/>
                     <Route path='/staffDashboard' element={<StaffDashboard/>}/>
-                    <Route path='/signUp' element={<Signup/>}/>
+                    <Route path='/signUpSelect' element={<SignUpSelect/>}/>
+                    <Route path='/signUpStaff' element={<SignupStaff/>}/>
+                    <Route path='/signIn' element={<Login/>}/>
                 </Routes>
             </div>
         </Router>
