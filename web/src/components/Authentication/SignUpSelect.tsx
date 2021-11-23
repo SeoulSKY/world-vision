@@ -1,4 +1,4 @@
-import React, {useRef, Component, useState} from 'react';
+import React, { useState} from 'react';
 import {Card, Form, Button, Container, Alert} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"
 import {Link, useNavigate} from "react-router-dom";
@@ -41,7 +41,6 @@ export default function SignUpSelect() {
 
         <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "60vh"}}>
             <div className="w-100" style={{maxWidth: '1000px'}}>
-                <>
                     <Card style={{minHeight: 300}}>
                         <Card.Body>
                             {error && <Alert variant="danger">{error}</Alert>}
@@ -66,7 +65,6 @@ export default function SignUpSelect() {
                     <div className="w-100 text-center mt-2">
                         Already have an account ? <Link to="/signIn">Log In</Link>
                     </div>
-                </>
             </div>
         </Container>
 

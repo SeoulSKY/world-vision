@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react"
-import {AuthProvider, useAuth} from "../../contexts/AuthContext ";
+import React, {useState } from "react"
+import {useAuth} from "../../contexts/AuthContext ";
 import { Link, useNavigate } from "react-router-dom"
 import {Card, Form, Button, Container, Alert} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -46,12 +46,13 @@ export default function Login() {
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" ref={passwordRef} required />
                         </Form.Group>
+                        <br/>
                         <Button disabled={loading} className="w-100" style={{background: "#212529"}} type="submit">
                             Log In
                         </Button>
                     </Form>
                     <div className="w-100 text-center mt-3">
-                        <Link to="/forgot-password">Forgot Password?</Link>
+                        <Link to="/resetPassword">Forgot Password?</Link>
                     </div>
                 </Card.Body>
             </Card>

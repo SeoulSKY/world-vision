@@ -7,17 +7,19 @@ import {
     BrowserRouter as Router,
     Routes,
     Route,
-    Link, useNavigate
+    Link,
 } from "react-router-dom";
 
 import StaffDashboard from "../StaffDashboard/staffDashboard";
 import HomePage from "../Pages/homePage";
 import SignupStaff from "../Authentication/SignupStaff";
-import {AuthProvider, useAuth} from "../../contexts/AuthContext ";
+import {AuthProvider} from "../../contexts/AuthContext ";
 import SignUpSelect from "../Authentication/SignUpSelect";
 import Login from "../Authentication/Login";
 import SignupCustomer from "../Authentication/SignupCustomer";
 import Profile from "../Pages/profile";
+import ResetPassword from "../Pages/resetPassword";
+
 
 
 
@@ -54,9 +56,13 @@ const NavBar = () => {
                         <Route path='/staffDashboard' element={<StaffDashboard/>}/>
                         <Route path='/signUpSelect' element={<SignUpSelect/>}/>
                         <Route path='/signUpStaff' element={<SignupStaff/>}/>
+
+
+
                         <Route path='/signUpCustomer' element={<SignupCustomer/>}/>
                         <Route path='/signIn' element={<Login/>}/>
                         <Route path='/profile' element={<Profile/>}/>
+                        <Route path='/resetPassword' element={<ResetPassword/>}/>
                     </Routes>
                 </div>
             </Router>
