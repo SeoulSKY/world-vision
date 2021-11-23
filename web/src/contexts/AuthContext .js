@@ -16,8 +16,6 @@ export function AuthProvider({children}) {
 
         return createUserWithEmailAndPassword(auth, email, password).then(function (data) {
             console.log('uid', data.user.uid) // used to access user right after account creation
-            setCurrentUser(data.user)
-
 
             const data_staff = {
                 "userId": data.user.uid,
@@ -58,12 +56,65 @@ export function AuthProvider({children}) {
                 alert("Error posting staff: " + error)
 
             });
+        })
+    }
+
+    function signUpCustomer(email, password, firstName, middleName, lastName, buildingNumber, streetNumber, postalCode, country, city, province, expirationDate, creditCardNumber, cvv) {
+
+        return createUserWithEmailAndPassword(auth, email, password).then(function (data) {
+            console.log('uid', data.user.uid) // used to access user right after account creation
+
+            const data_customer = {
+                "userId": data.user.uid,
+                "firstName": firstName,
+                "middleName": middleName,
+                "lastName": lastName,
+                "billingAddress": {
+                    "buildingNumber": buildingNumber,
+                    "street": streetNumber,
+                    "city": city,
+                    "province": province,
+                    "postalCode": postalCode,
+                    "country": country
+                },
+                "card": {
+                    "number": creditCardNumber,
+                    "expirationDate": expirationDate,
+                    "cvv": cvv
+                }
+            };
+
+            // Post request using fetch with error handling
+            fetch('http://localhost:5000/api/customer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data_customer),
+            }).then(async response => {
+                const isJson = response.headers.get('content-type')?.includes('application/json');
+                const data = isJson && await response.json();
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error = (data && data.message) || response.status;
+                    return Promise.reject(error);
+                }
+
+
+            }).catch(error => {
+
+                alert("Error posting customer: " + error)
+
+            });
 
 
         })
 
 
     }
+
 
     function login(email, password) {
         return signInWithEmailAndPassword(email, password)
@@ -95,7 +146,8 @@ export function AuthProvider({children}) {
     const value = {
         currentUser,
         login,
-        signup: signupStaff,
+        signupStaff,
+        signUpCustomer,
         logout,
         resetPassword,
         updateEmail,

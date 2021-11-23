@@ -15,12 +15,25 @@ export default function SignUpSelect() {
         e.preventDefault()
         setLoading(false)
 
-        if (secretRef.current.value !== "cmpt353") {
-            return setError("Incorrect secret code")
+        if (secretRef.current.value === "cmpt353") {
+            navigate('../signUpStaff', { replace: true })
+
+        }
+
+
+        if (secretRef.current.value === "") {
+            navigate('../signUpCustomer', { replace: true })
         }
 
         else {
-            navigate('../signUpStaff', { replace: true })}
+
+            return setError("Incorrect secret code")
+
+           }
+
+
+
+
     }
 
 
