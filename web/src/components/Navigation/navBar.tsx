@@ -17,6 +17,7 @@ import {AuthProvider, useAuth} from "../../contexts/AuthContext ";
 import SignUpSelect from "../Authentication/SignUpSelect";
 import Login from "../Authentication/Login";
 import SignupCustomer from "../Authentication/SignupCustomer";
+import Profile from "../Pages/profile";
 
 
 
@@ -40,7 +41,7 @@ const NavBar = () => {
 
                                 <Nav.Link as={Link} to={"/signIn"}>Sign In</Nav.Link>
                                 <Nav.Link as={Link} to={"/signUpSelect"}>Sign Up</Nav.Link>
-                                <Nav.Link as={Link} to={"/logOut"}>{"log out"}</Nav.Link>
+                                <Nav.Link as={Link} to={"/profile"}>{"Profile"}</Nav.Link>
 
                             </Nav>
                         </Container>
@@ -55,6 +56,7 @@ const NavBar = () => {
                         <Route path='/signUpStaff' element={<SignupStaff/>}/>
                         <Route path='/signUpCustomer' element={<SignupCustomer/>}/>
                         <Route path='/signIn' element={<Login/>}/>
+                        <Route path='/profile' element={<Profile/>}/>
                     </Routes>
                 </div>
             </Router>

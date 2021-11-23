@@ -63,6 +63,7 @@ export default function SignupCustomer() {
             setError("Failed to create an account")
         }
 
+        setLoading(false)
 
     }
 
