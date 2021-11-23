@@ -145,32 +145,24 @@ export function AuthProvider({children}) {
 
                 fetch('http://localhost:5000/api/accountType?userId=' + user.uid, {method: 'GET'})
                     .then(async response => {
-                        const isJson = response.headers.get('content-type')?.includes('application/json');
-                        const data = isJson && await response.json();
-
-                        // check for error response
-                        if (!response.ok) {
-                            // get error message from body or default to response status
-                            const error = (data && data.message) || response.status;
-                            return Promise.reject(error);
-
-                        } else {
-                            console.log(data)
-                            setCurrentUserAccountType(JSON.stringify(data))
-                        }
+                        response.text().then(function (accountType) {
+                            // do something with the text response
+                            setCurrentUserAccountType(accountType)
+                        });
 
 
                     })
                     .catch(error => {
 
                         if (error === 404) {
-                            alert("No account with specified userId")
+                            alert("No staff member with specified userId")
                         } else {
-                            alert("Error getting account from server: " + error)
+                            alert("Error getting staff")
                         }
 
 
                     });
+
 
             }
 
