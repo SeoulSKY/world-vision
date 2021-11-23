@@ -10,6 +10,7 @@ export function useAuth() {
 
 export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState()
+    const [currentUserAccountType, setCurrentUserAccountType] = useState()
     const [loading, setLoading] = useState(true)
 
     function signupStaff(email, password, firstName, middleName, lastName, buildingNumber, streetNumber, postalCode, country, city, province) {
@@ -139,12 +140,64 @@ export function AuthProvider({children}) {
     useEffect(() => {
         return auth.onAuthStateChanged(user => {
             setCurrentUser(user)
+
+            if (user) {
+
+                fetch('http://localhost:5000/api/accountType?userId=' + user.uid, {method: 'GET'})
+                    .then(async response => {
+                        const isJson = response.headers.get('content-type')?.includes('application/json');
+                        const data = isJson && await response.json();
+
+                        // check for error response
+                        if (!response.ok) {
+                            // get error message from body or default to response status
+                            const error = (data && data.message) || response.status;
+                            return Promise.reject(error);
+
+                        } else {
+                            console.log(data)
+                            setCurrentUserAccountType(JSON.stringify(data))
+                        }
+
+
+                    })
+                    .catch(error => {
+
+                        if (error === 404) {
+                            alert("No account with specified userId")
+                        } else {
+                            alert("Error getting account from server: " + error)
+                        }
+
+
+                    });
+
+            }
+
+
+
+
+
+
+
+
+
+
+
             setLoading(false)
+
+
+
+
+
+
+
         })
     }, [])
 
     const value = {
         currentUser,
+        currentUserAccountType,
         login,
         signupStaff,
         signUpCustomer,

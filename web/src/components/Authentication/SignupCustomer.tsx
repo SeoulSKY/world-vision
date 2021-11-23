@@ -50,10 +50,7 @@ export default function SignupCustomer() {
                 expirationDateRef.current.value,
                 creditCardNumberRef.current.value,
                 cvvRef.current.value
-            )
-
-            setLoading(false)
-
+            ).finally( () => setLoading(false))
 
             navigate('../customerDashboard', {replace: true})
 
@@ -62,8 +59,6 @@ export default function SignupCustomer() {
             console.log(e)
             setError("Failed to create an account")
         }
-
-        setLoading(false)
 
     }
 

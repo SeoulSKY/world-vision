@@ -18,7 +18,7 @@ export default function SignupStaff() {
         cityRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
         provinceRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
 
-        {signupStaff,currentUser} = useAuth(), [error, setError] = useState(""), [loading, setLoading] = useState(false),
+        {signupStaff} = useAuth(), [error, setError] = useState(""), [loading, setLoading] = useState(false),
         navigate = useNavigate();
 
 
@@ -42,9 +42,9 @@ export default function SignupStaff() {
                 postalCodeRef.current.value,
                 countryRef.current.value,
                 cityRef.current.value,
-                provinceRef.current.value)
+                provinceRef.current.value).finally( () => setLoading(false))
 
-            setLoading(false)
+
 
 
             navigate('../staffDashboard', {replace: true})
@@ -55,7 +55,7 @@ export default function SignupStaff() {
             setError("Failed to create an account")
         }
 
-        setLoading(false)
+
     }
 
     return (

@@ -18,15 +18,14 @@ export default function Login() {
         try {
             setError("")
             setLoading(true)
-            await login(emailRef.current.value, passwordRef.current.value)
-            setLoading(false)
+            await login(emailRef.current.value, passwordRef.current.value).finally( () => setLoading(false))
             navigate('../', { replace: true })
 
         } catch {
             setError("Failed to log in")
         }
 
-        setLoading(false)
+
     }
 
     return (
