@@ -166,6 +166,10 @@ export function AuthProvider({children}) {
 
             }
 
+            else {
+                setCurrentUserAccountType(null)
+            }
+
 
 
 
