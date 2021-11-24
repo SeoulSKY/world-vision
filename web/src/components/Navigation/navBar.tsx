@@ -20,6 +20,7 @@ import SignupCustomer from "../Authentication/SignupCustomer";
 import Profile from "../Pages/profile";
 import ResetPassword from "../Pages/resetPassword";
 import CustomerDashboard from "../CustomerDashboard/customerDashboard";
+import ContactUsPage from "../Pages/contactUsPage";
 
 
 
@@ -45,6 +46,8 @@ const NavBar = () => {
                                 <Nav.Link as={Link} to={"/signIn"}>Sign In</Nav.Link>
                                 <Nav.Link as={Link} to={"/signUpSelect"}>Sign Up</Nav.Link>
                                 <Nav.Link as={Link} to={"/profile"}>{"Profile"}</Nav.Link>
+                                <Nav.Link as={Link} to={"/contact-us"}>Contact Us</Nav.Link>
+
 
                             </Nav>
                         </Container>
@@ -65,6 +68,7 @@ const NavBar = () => {
                         <Route path='/signIn' element={<Login/>}/>
                         <Route path='/profile' element={<Profile/>}/>
                         <Route path='/resetPassword' element={<ResetPassword/>}/>
+                        <Route path="/contact-us" element={<ContactUsPage/>}/>
                     </Routes>
                 </div>
             </Router>
