@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, {useEffect, useState} from "react"
 import {Form, Button, Card, Alert, Container} from "react-bootstrap"
 
 import { Link, useNavigate } from "react-router-dom"
@@ -9,9 +9,25 @@ export default function EditProfileStaff() {
     const passwordRef = React.useRef() as React.MutableRefObject<HTMLInputElement>
     const passwordConfirmRef = React.useRef() as React.MutableRefObject<HTMLInputElement>
     const { currentUser, updatePasswordCurrentUser, updateEmailCurrentUser } = useAuth()
+
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+
+    const [state, setState] = useState({});
+
+    useEffect(() => {
+        cleanState();
+        return () => {
+            setState({}); // This worked for me
+        };
+    }, []);
+
+    const cleanState = () => {
+        setState({
+            cleanUp: ''
+        })
+    }
 
     function handleSubmit(e:any) {
         e.preventDefault()
@@ -32,6 +48,7 @@ export default function EditProfileStaff() {
 
         Promise.all(promises)
             .then(() => {
+                cleanState()
                 navigate('../profile', { replace: true })
             })
             .catch(() => {
