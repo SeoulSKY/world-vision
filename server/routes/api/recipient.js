@@ -13,6 +13,7 @@ function isValidBody(body) {
         body.firstName !== undefined &&
         body.lastName !== undefined &&
         body.homeAddress !== undefined &&
+        body.homeAddress.buildingNumber !== undefined &&
         body.homeAddress.street !== undefined &&
         body.homeAddress.city !== undefined &&
         body.homeAddress.province !== undefined &&
@@ -69,6 +70,7 @@ recipientRouter.get("/", (request, response) => {
                     firstName: newResult[i].firstName,
                     lastName: newResult[i].lastName,
                     homeAddress: {
+                        buildingNumber: newResult[i].street,
                         street: newResult[i].street,
                         city: newResult[i].city,
                         province: newResult[i].province,
@@ -104,6 +106,7 @@ recipientRouter.post("/", (request, response) => {
     let middleName = request.body.middleName;
     let homeAddress = request.body.homeAddress;
 
+    let buildingNumber = homeAddress.buildingNumber;
     let street = homeAddress.street;
     let city = homeAddress.city;
     let province = homeAddress.province;
@@ -135,9 +138,9 @@ recipientRouter.post("/", (request, response) => {
                 ", " + escape(middleName) + ")";
         }
 
-        sql += ";INSERT INTO Address (userId, street, city, province, postalCode, country) VALUES (" +
-            escape(userId) + ", " + escape(street) + ", " + escape(city) + ", " + escape(province) + ", " +
-            escape(postalCode) + ", " + escape(country) + ")";
+        sql += ";INSERT INTO Address (userId, buildingNumber, street, city, province, postalCode, country) VALUES (" +
+            escape(userId) + ", " + escape(buildingNumber) + ", " + escape(street) + ", " + escape(city) + ", " +
+            escape(province) + ", " + escape(postalCode) + ", " + escape(country) + ")";
 
         sql += ";INSERT INTO AccountType (userId, type) VALUES (" + escape(userId) + ", \"Recipient\")";
 
@@ -160,6 +163,7 @@ recipientRouter.put("/", (request, response) => {
     let middleName = request.body.middleName;
     let homeAddress = request.body.homeAddress;
 
+    let buildingNumber = homeAddress.buildingNumber;
     let street = homeAddress.street;
     let city = homeAddress.city;
     let province = homeAddress.province;
@@ -190,9 +194,9 @@ recipientRouter.put("/", (request, response) => {
 
         sql += " WHERE userId=" + escape(userId);
 
-        sql += ";UPDATE Address SET street=" + escape(street) + ", city=" + escape(city) + ", province=" +
-            escape(province) + ", postalCode=" + escape(postalCode) + ", country=" + escape(country) +
-            "WHERE userId=" + escape(userId);
+        sql += ";UPDATE Address SET buildingNumber= " + escape(buildingNumber) + " street=" + escape(street) +
+            ", city=" + escape(city) + ", province=" + escape(province) + ", postalCode=" + escape(postalCode) +
+            ", country=" + escape(country) + "WHERE userId=" + escape(userId);
 
         getPool.then(pool => {
             pool.query(sql).then(() => response.status(200).send("Updated"));
