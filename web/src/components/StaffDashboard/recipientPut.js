@@ -6,7 +6,7 @@ const RecipientPut = () => {
     const {register, handleSubmit, reset, resetField} = useForm();
 
 
-    const onSubmitRecipientPut = (dataRecipientPut: any) => {
+    const onSubmitRecipientPut = (dataRecipientPut) => {
         // used to handle put request for recipient account
 
         const data = {

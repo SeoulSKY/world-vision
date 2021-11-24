@@ -6,7 +6,7 @@ const CustomerTransactionGet = () => {
     const {register, handleSubmit, reset, resetField} = useForm();
 
 
-    const onSubmitCustomerTransactionGet = (dataCustomerGet: any) => {
+    const onSubmitCustomerTransactionGet = (dataCustomerGet) => {
 
         // used to handle get request for getting customers transactions
         let userId = dataCustomerGet.userId
@@ -50,7 +50,7 @@ const CustomerTransactionGet = () => {
 
     }
 
-    function display_info(data: JSON) {
+    function display_info(data) {
 
         // display info of recipient
         const toDisplay = JSON.stringify(data, null, 2);

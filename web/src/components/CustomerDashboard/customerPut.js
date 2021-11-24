@@ -5,7 +5,7 @@ const CustomerPut = () => {
 
     const {register, handleSubmit, reset} = useForm();
 
-    const onSubmitCustomerPut = (dataCustomerPut: any) => {
+    const onSubmitCustomerPut = (dataCustomerPut) => {
         // used to handle put request for customer account
 
         const data = {

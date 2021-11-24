@@ -7,7 +7,7 @@ const StaffDelete = () => {
     const {register, handleSubmit, reset, resetField} = useForm();
 
 
-    const onSubmitStaffDelete = (dataStaffDelete: any) => {
+    const onSubmitStaffDelete = (dataStaffDelete) => {
 
         let userId = dataStaffDelete.userId
 

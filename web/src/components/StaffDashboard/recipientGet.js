@@ -5,7 +5,7 @@ const RecipientGet = () => {
     const {register, handleSubmit, reset, resetField} = useForm();
 
 
-    const onSubmitRecipientGet = (dataRecipientGet: any) => {
+    const onSubmitRecipientGet = (dataRecipientGet) => {
         // used to handle get request for recipient account
         let userId = dataRecipientGet.userId
 
@@ -75,7 +75,7 @@ const RecipientGet = () => {
 
     }
 
-    function display_info(data: JSON) {
+    function display_info(data) {
         // display info of recipient
         const toDisplay = JSON.stringify(data, null, 2);
 

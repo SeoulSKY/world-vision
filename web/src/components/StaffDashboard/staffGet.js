@@ -6,7 +6,7 @@ const StaffGet = () => {
 
     const {register, handleSubmit, reset, resetField} = useForm();
 
-    const onSubmitStaffGet = (dataStaffGet: any) => {
+    const onSubmitStaffGet = (dataStaffGet) => {
 
         // used to handle get request for staff account
 
@@ -77,7 +77,7 @@ const StaffGet = () => {
 
     }
 
-    function display_info(data: JSON) {
+    function display_info(data) {
         // display info of staff
         const toDisplay = JSON.stringify(data, null, 2);
 

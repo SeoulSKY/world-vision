@@ -6,7 +6,7 @@ const RecipientDelete = () => {
     const {register, handleSubmit, reset, resetField} = useForm();
 
 
-    const onSubmitRecipientDelete = (dataRecipientDelete: any) => {
+    const onSubmitRecipientDelete = (dataRecipientDelete) => {
 
         // used to handle delete request for recipient account
 

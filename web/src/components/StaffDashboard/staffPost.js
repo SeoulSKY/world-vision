@@ -6,7 +6,7 @@ const StaffPost = () => {
     const {register, handleSubmit, reset, resetField} = useForm();
 
 
-    const onSubmitStaffPost = (dataStaffPost: any) => {
+    const onSubmitStaffPost = (dataStaffPost) => {
         // used to handle post request for staff account
         const data = {
             "userId": dataStaffPost.userId,

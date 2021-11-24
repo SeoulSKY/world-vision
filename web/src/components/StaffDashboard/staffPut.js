@@ -5,7 +5,7 @@ const StaffPut = () => {
 
     const {register, handleSubmit, reset, resetField,} = useForm();
 
-    const onSubmitStaffPut = (dataStaffPut: any) => {
+    const onSubmitStaffPut = (dataStaffPut) => {
         // used to handle put request for staff account
 
         const data = {

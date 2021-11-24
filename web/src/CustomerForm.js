@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 const CustomerForm = () => {
     const {register, handleSubmit} = useForm();
-    const onSubmit = (data: any)=> {
+    const onSubmit = (data)=> {
         console.log(data)
     }
     return (

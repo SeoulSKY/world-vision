@@ -6,7 +6,7 @@ const CustomerRecipientGet = () => {
     const {register, handleSubmit, reset, resetField} = useForm();
 
 
-    const onSubmitCustomerGet = (dataCustomerGet: any) => {
+    const onSubmitCustomerGet = (dataCustomerGet) => {
 
         // used to handle get request for getting customers recipients
 
@@ -49,7 +49,7 @@ const CustomerRecipientGet = () => {
 
     }
 
-    function display_info(data: JSON) {
+    function display_info(data) {
 
         // display info of recipient
         const toDisplay = JSON.stringify(data, null, 2);

@@ -7,7 +7,7 @@ const CustomerDelete = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-    const onSubmitCustomerDelete = (dataCustomerDelete: any) => {
+    const onSubmitCustomerDelete = (dataCustomerDelete) => {
 
         let userId = dataCustomerDelete.userId
 

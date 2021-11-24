@@ -6,7 +6,7 @@ const CustomerGet = () => {
 
     const {register, handleSubmit, reset} = useForm();
 
-    const onSubmitCustomerGet = (dataStaffGet: any) => {
+    const onSubmitCustomerGet = (dataStaffGet) => {
 
 
         let userId = dataStaffGet.userId
@@ -73,7 +73,7 @@ const CustomerGet = () => {
 
     }
 
-    function display_info(data: any) {
+    function display_info(data) {
         data = JSON.stringify(data)
         console.log(data)
         reset({

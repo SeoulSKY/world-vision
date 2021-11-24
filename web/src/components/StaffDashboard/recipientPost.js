@@ -6,7 +6,7 @@ const RecipientPost = () => {
     const {register, handleSubmit, reset, resetField} = useForm();
 
 
-    const onSubmitRecipientPost = (dataRecipientPost: any) => {
+    const onSubmitRecipientPost = (dataRecipientPost) => {
         // used to handle post request for recipient account
         const data = {
             "userId": dataRecipientPost.userId,
