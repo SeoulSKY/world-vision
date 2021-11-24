@@ -20,7 +20,7 @@ import SignupCustomer from "../Pages/signUp/SignupCustomer";
 import Profile from "../Pages/profilePage/profile";
 import ResetPassword from "../Pages/resetPassWord/resetPassword";
 import CustomerDashboard from "../CustomerDashboard/customerDashboard";
-import ContactUsPage from "../Pages/contactUsPage";
+import ContactUsPage from "../Pages/Contact Us /contactUsPage";
 
 
 

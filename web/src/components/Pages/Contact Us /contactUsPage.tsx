@@ -13,7 +13,9 @@ export default function ContactUsPage() {
 
     const emailRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
         titleRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
-        messageRef =React.useRef() as React.MutableRefObject<HTMLTextAreaElement>;
+        messageRef =React.useRef() as React.MutableRefObject<HTMLTextAreaElement>,
+        formRef = React.useRef(null);
+
 
     async function handleSubmit(e: any) {
         e.preventDefault()
@@ -47,6 +49,8 @@ export default function ContactUsPage() {
             }).finally(()=>{
                 setLoading(false)
                 setSendingMessageButton("Send Message")
+                // @ts-ignore
+                formRef.current.reset();
 
             })
 
@@ -93,7 +97,7 @@ export default function ContactUsPage() {
                         <h1>Contact Us</h1>
                         {error && <Alert variant="danger">{error}</Alert>}
                         {message && <Alert variant="success">{message}</Alert>}
-                        <Form onSubmit={handleSubmit}>
+                        <Form ref={formRef} onSubmit={handleSubmit}>
                             <br/>
 
                             <Form.Group id="email">
