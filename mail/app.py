@@ -10,8 +10,6 @@ def create_app() -> Flask:
     :return: Flask app
     """
     app = Flask(__name__)
-    CORS(app)
-
     init_mail(app)
 
     return app
@@ -19,6 +17,7 @@ def create_app() -> Flask:
 
 if __name__ == '__main__':
     app = create_app()
+    CORS(app)
 
     HOST = "0.0.0.0"
     PORT = 5001
