@@ -19,6 +19,7 @@ import Login from "../Authentication/Login";
 import SignupCustomer from "../Authentication/SignupCustomer";
 import Profile from "../Pages/profile";
 import ResetPassword from "../Pages/resetPassword";
+import CustomerDashboard from "../CustomerDashboard/customerDashboard";
 
 
 
@@ -54,6 +55,7 @@ const NavBar = () => {
                         <Route path='/home' element={<HomePage/>}/>
                         <Route path='/' element={<HomePage/>}/>
                         <Route path='/staffDashboard' element={<StaffDashboard/>}/>
+                        <Route path='/customerDashboard' element={<CustomerDashboard/>}/>
                         <Route path='/signUpSelect' element={<SignUpSelect/>}/>
                         <Route path='/signUpStaff' element={<SignupStaff/>}/>
 
