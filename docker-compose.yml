@@ -22,15 +22,6 @@ services:
       restart_policy:
         condition: any
         delay: 5s
-        
-  mail:
-    build: ./mail
-    container_name: mail
-    ports:
-      - 5001:5001
-    environment:
-      MAIL_USERNAME: cmpt353worldvision@gmail.com
-      MAIL_PASSWORD: cmpt353pass
       
   mySQL:
     image: mysql:5.7.31
