@@ -6,7 +6,7 @@ const CustomerPost = () => {
     const {register, handleSubmit, reset} = useForm();
 
 
-    const onSubmitCustomerPost = (dataCustomerPost: any) => {
+    const onSubmitCustomerPost = (dataCustomerPost) => {
         // used to handle post request for customer account
         const data = {
             "userId": dataCustomerPost.userId,
