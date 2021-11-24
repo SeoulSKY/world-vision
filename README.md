@@ -7,7 +7,7 @@ docker-compose up --build
 ```
 When it is ready, `web` container will print the ip address, for example:
 
-`web       |   On Your Network:  http://172.60.0.0:3000`
+`web       |   Local:            http://localhost:8080`
 
 Visit the address in a browser to enjoy!
 
