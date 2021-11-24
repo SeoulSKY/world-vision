@@ -35,9 +35,9 @@ export default function ContactUsPage() {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <br/>
-            <input type="email" placeholder="Your email address" size={40} {...register("senderEmail")}/> <br/><br/>
-            <input id="title" placeholder="Title" size={40} {...register("title")}/> <br/><br/>
-            <textarea id="message" placeholder="Your concern" rows={20} cols={50} {...register("message")} /> <br/><br/>
+            <input type="email" placeholder="Your email address" size={40} {...register("senderEmail")} required/> <br/><br/>
+            <input placeholder="Title" size={40} {...register("title")} required/> <br/><br/>
+            <textarea placeholder="Your concern" rows={20} cols={50} {...register("message")} required/> <br/><br/>
             <button> {buttonText} </button>
         </form>
     )
