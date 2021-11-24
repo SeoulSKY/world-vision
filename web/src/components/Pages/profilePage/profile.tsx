@@ -1,7 +1,7 @@
 import React, {useState} from "react"
-import {Card, Button, Alert, Container} from "react-bootstrap"
+import {Card, Button, Alert, Container, Form} from "react-bootstrap"
 
-import {Link, useNavigate} from "react-router-dom"
+import { useNavigate} from "react-router-dom"
 import {useAuth} from "../../../contexts/AuthContext ";
 
 
@@ -21,6 +21,28 @@ export default function Profile() {
         }
     }
 
+
+    async function handleSubmit(e:any) {
+        e.preventDefault()
+
+        try {
+            if (currentUserAccountType === "Customer"){
+                navigate('../editProfileCustomer', { replace: true })
+            }
+
+            if (currentUserAccountType === "Staff"){
+                navigate('../editProfileStaff', { replace: true })
+            }
+
+        } catch {
+            alert("Failed to get account type.")
+        }
+
+    }
+
+
+
+
     return (
 
         <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "60vh"}}>
@@ -32,12 +54,22 @@ export default function Profile() {
                         <strong>Email:</strong> {currentUser && currentUser.email}
                         <br/>
                         <strong>Account Type:</strong> {currentUserAccountType}
-                        <Link to="/updateProfile" style={{background: "#212529"}}
-                              className="btn btn-primary w-100 mt-3">
-                            Update Profile
-                        </Link>
+                        {/*<Link to="/updateProfile" style={{background: "#212529"}}*/}
+                        {/*      className="btn btn-primary w-100 mt-3">*/}
+                        {/*    Update Profile*/}
+                        {/*</Link>*/}
+
+                        <br/>
+                        <br/>
+                        <Form onSubmit={handleSubmit}>
+                        <Button className="w-100" style={{background: "#212529"}}
+                                type="submit"> {"Update Profile"}</Button>
+
+                        </Form>
+
                     </Card.Body>
                 </Card>
+
                 <div className="w-100 text-center mt-2">
                     <Button variant="link" onClick={handleLogout}>
                         Log Out

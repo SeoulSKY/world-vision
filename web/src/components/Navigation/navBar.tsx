@@ -20,7 +20,9 @@ import SignupCustomer from "../Pages/signUp/SignupCustomer";
 import Profile from "../Pages/profilePage/profile";
 import ResetPassword from "../Pages/resetPassWord/resetPassword";
 import CustomerDashboard from "../CustomerDashboard/customerDashboard";
-import ContactUsPage from "../Pages/Contact Us /contactUsPage";
+import ContactUsPage from "../Pages/contactUs/contactUsPage";
+import EditProfileStaff from "../Pages/editProfile/editProfileStaff";
+import EditProfileCustomer from "../Pages/editProfile/editProfileCustomer";
 
 
 
@@ -69,6 +71,11 @@ const NavBar = () => {
                         <Route path='/profile' element={<Profile/>}/>
                         <Route path='/resetPassword' element={<ResetPassword/>}/>
                         <Route path="/contact-us" element={<ContactUsPage/>}/>
+
+
+                        <Route path="/editProfileStaff" element={<EditProfileStaff/>}/>
+                        <Route path="/editProfileCustomer" element={<EditProfileCustomer/>}/>
+
                     </Routes>
                 </div>
             </Router>

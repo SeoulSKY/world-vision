@@ -4,7 +4,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    sendPasswordResetEmail,
+    sendPasswordResetEmail,updatePassword, updateEmail
 
 } from "firebase/auth";
 
@@ -145,12 +145,14 @@ export function AuthProvider({children}) {
         return sendPasswordResetEmail(auth,email)
     }
 
-    function updateEmail(email) {
-        return currentUser.updateEmail(email)
+    function updateEmailCurrentUser(email)     {
+        console.log(email)
+        return updateEmail(currentUser,email)
     }
 
-    function updatePassword(password) {
-        return currentUser.updatePassword(password)
+    function updatePasswordCurrentUser(password) {
+        console.log(password)
+        return updatePassword(currentUser,password)
     }
 
     useEffect(() => {
@@ -197,9 +199,10 @@ export function AuthProvider({children}) {
         signupStaff,
         signUpCustomer,
         logout,
+        updateEmailCurrentUser,
+        updatePasswordCurrentUser,
         resetPassword,
-        updateEmail,
-        updatePassword
+
     }
 
     return (
