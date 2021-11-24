@@ -45,11 +45,9 @@ export default function SignupStaff() {
                 cityRef.current.value,
                 provinceRef.current.value).finally( () => setLoading(false))
 
-
-
-
             navigate('../staffDashboard', {replace: true})
             window.location.reload()
+
 
 
         } catch (e) {

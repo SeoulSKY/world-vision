@@ -45,6 +45,7 @@ export function AuthProvider({children}) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data_staff),
+
             }).then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -57,6 +58,7 @@ export function AuthProvider({children}) {
                 }
                 else {
                     setCurrentUser(data.user)
+
                 }
 
 

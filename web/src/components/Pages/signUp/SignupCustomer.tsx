@@ -53,8 +53,10 @@ export default function SignupCustomer() {
                 cvvRef.current.value
             ).finally( () => setLoading(false))
 
+
             navigate('../customerDashboard', {replace: true})
             window.location.reload()
+
 
 
         } catch (e) {
