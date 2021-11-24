@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {Card, Form, Button, Container, Alert} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"
-import {AuthProvider, useAuth} from "../../contexts/AuthContext ";
+
 import {Link, useNavigate} from "react-router-dom";
+import {AuthProvider, useAuth} from "../../../contexts/AuthContext ";
 
-export default function SignupCustomer() {
-
+export default function SignupStaff() {
     const emailRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
         passwordRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
         passwordConfirmRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
@@ -18,11 +18,8 @@ export default function SignupCustomer() {
         countryRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
         cityRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
         provinceRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
-        expirationDateRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
-        creditCardNumberRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
-        cvvRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
 
-        {signUpCustomer} = useAuth(), [error, setError] = useState(""), [loading, setLoading] = useState(false),
+        {signupStaff} = useAuth(), [error, setError] = useState(""), [loading, setLoading] = useState(false),
         navigate = useNavigate();
 
 
@@ -36,7 +33,7 @@ export default function SignupCustomer() {
         try {
             setError("")
             setLoading(true)
-            await signUpCustomer(emailRef.current.value,
+            await signupStaff(emailRef.current.value,
                 passwordRef.current.value,
                 firstNameRef.current.value,
                 middleNameRef.current.value,
@@ -46,19 +43,16 @@ export default function SignupCustomer() {
                 postalCodeRef.current.value,
                 countryRef.current.value,
                 cityRef.current.value,
-                provinceRef.current.value,
-                expirationDateRef.current.value,
-                creditCardNumberRef.current.value,
-                cvvRef.current.value
-            ).finally( () => setLoading(false))
+                provinceRef.current.value).finally( () => setLoading(false))
 
-            navigate('../customerDashboard', {replace: true})
+            navigate('../staffDashboard', {replace: true})
 
 
         } catch (e) {
             console.log(e)
             setError("Failed to create an account")
         }
+
 
     }
 
@@ -71,7 +65,7 @@ export default function SignupCustomer() {
                             <Card.Body>
                                 {error && <Alert variant="danger">{error}</Alert>}
                                 <br/>
-                                <h1 className="text-center mb-20">Sign Up Customer</h1>
+                                <h1 className="text-center mb-20">Sign Up Staff</h1>
                                 <Form onSubmit={handleSubmit}>
                                     <br/>
                                     <Form.Group id="email">
@@ -120,36 +114,7 @@ export default function SignupCustomer() {
                                     <br/>
                                     <br/>
 
-                                    <h3>Enter Credit Card Information </h3>
-                                    <br/>
-
-                                    <Form.Group id="creditCardNumber">
-                                        <Form.Control type="text" placeholder="Credit Card Number"
-                                                      style={{textAlign: "center"}} ref={creditCardNumberRef} required/>
-                                    </Form.Group>
-
-                                    <br/>
-                                    <br/>
-
-                                    <Form.Group id="expirationDate">
-                                        <p>Enter card expiration date</p>
-                                        <Form.Control type="Date" placeholder="Expiration Date"
-                                                      style={{textAlign: "center"}} ref={expirationDateRef} required/>
-                                    </Form.Group>
-
-                                    <br/>
-                                    <br/>
-
-
-                                    <Form.Group id="cvv">
-                                        <Form.Control type="text" placeholder="CVV"
-                                                      style={{textAlign: "center"}} ref={cvvRef} required/>
-                                    </Form.Group>
-
-                                    <br/>
-                                    <br/>
-
-                                    <h3>Enter Billing Address</h3>
+                                    <h3>Enter Address</h3>
                                     <br/>
 
                                     <Form.Group id="buildingNumber">
@@ -183,7 +148,7 @@ export default function SignupCustomer() {
                                     <br/>
 
                                     <Form.Group id="postalCode">
-                                        <Form.Control type="text" placeholder="Province" style={{textAlign: "center"}}
+                                        <Form.Control type="text" placeholder="Postal Code" style={{textAlign: "center"}}
                                                       ref={postalCodeRef} required/>
                                     </Form.Group>
 
@@ -197,18 +162,12 @@ export default function SignupCustomer() {
                                     <br/>
 
 
-                                    <br/>
-
-
                                     <Button disabled={loading} className="w-100" style={{background: "#212529"}}
                                             type="submit"> Sign
                                         Up </Button>
                                 </Form>
                             </Card.Body>
                         </Card>
-
-
-
                         <div className="w-100 text-center mt-2">
                             Already have an account ? <Link to="/signIn">Log In</Link>
                         </div>

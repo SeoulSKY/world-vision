@@ -1,6 +1,12 @@
 import React, {useContext, useEffect, useState} from "react"
 import {auth} from "./firebase"
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    sendPasswordResetEmail,updatePassword, updateEmail
+
+} from "firebase/auth";
 
 const AuthContext = React.createContext()
 
@@ -17,7 +23,6 @@ export function AuthProvider({children}) {
 
         return createUserWithEmailAndPassword(auth, email, password).then(function (data) {
             console.log('uid', data.user.uid) // used to access user right after account creation
-
             const data_staff = {
                 "userId": data.user.uid,
                 "firstName": firstName,
@@ -40,6 +45,7 @@ export function AuthProvider({children}) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data_staff),
+
             }).then(async response => {
                 const isJson = response.headers.get('content-type')?.includes('application/json');
                 const data = isJson && await response.json();
@@ -50,6 +56,10 @@ export function AuthProvider({children}) {
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 }
+                else {
+                    setCurrentUserAccountType("Staff")
+
+                }
 
 
             }).catch(error => {
@@ -57,6 +67,8 @@ export function AuthProvider({children}) {
                 alert("Error posting staff: " + error)
 
             });
+
+
         })
     }
 
@@ -103,6 +115,10 @@ export function AuthProvider({children}) {
                     return Promise.reject(error);
                 }
 
+                else {
+                        setCurrentUserAccountType("Customer")
+                }
+
 
             }).catch(error => {
 
@@ -129,12 +145,14 @@ export function AuthProvider({children}) {
         return sendPasswordResetEmail(auth,email)
     }
 
-    function updateEmail(email) {
-        return currentUser.updateEmail(email)
+    function updateEmailCurrentUser(email)     {
+        console.log(email)
+        return updateEmail(currentUser,email)
     }
 
-    function updatePassword(password) {
-        return currentUser.updatePassword(password)
+    function updatePasswordCurrentUser(password) {
+        console.log(password)
+        return updatePassword(currentUser,password)
     }
 
     useEffect(() => {
@@ -150,19 +168,17 @@ export function AuthProvider({children}) {
                             setCurrentUserAccountType(accountType)
                         });
 
-
                     })
                     .catch(error => {
 
                         if (error === 404) {
-                            alert("No staff member with specified userId")
+                            alert("No user specified userId")
                         } else {
-                            alert("Error getting staff")
+                            alert("Error getting user")
                         }
 
 
                     });
-
 
             }
 
@@ -171,22 +187,7 @@ export function AuthProvider({children}) {
             }
 
 
-
-
-
-
-
-
-
-
-
             setLoading(false)
-
-
-
-
-
-
 
         })
     }, [])
@@ -198,9 +199,10 @@ export function AuthProvider({children}) {
         signupStaff,
         signUpCustomer,
         logout,
+        updateEmailCurrentUser,
+        updatePasswordCurrentUser,
         resetPassword,
-        updateEmail,
-        updatePassword
+
     }
 
     return (

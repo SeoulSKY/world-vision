@@ -11,16 +11,18 @@ import {
 } from "react-router-dom";
 
 import StaffDashboard from "../StaffDashboard/staffDashboard";
-import HomePage from "../Pages/homePage";
-import SignupStaff from "../Authentication/SignupStaff";
+import HomePage from "../Pages/homePage/homePage";
+import SignupStaff from "../Pages/signUp/SignupStaff";
 import {AuthProvider} from "../../contexts/AuthContext ";
-import SignUpSelect from "../Authentication/SignUpSelect";
-import Login from "../Authentication/Login";
-import SignupCustomer from "../Authentication/SignupCustomer";
-import Profile from "../Pages/profile";
-import ResetPassword from "../Pages/resetPassword";
+import SignUpSelect from "../Pages/signUp/SignUpSelect";
+import Login from "../Pages/logIn/Login";
+import SignupCustomer from "../Pages/signUp/SignupCustomer";
+import Profile from "../Pages/profilePage/profile";
+import ResetPassword from "../Pages/resetPassWord/resetPassword";
 import CustomerDashboard from "../CustomerDashboard/customerDashboard";
-import ContactUsPage from "../Pages/contactUsPage";
+import ContactUsPage from "../Pages/contactUs/contactUsPage";
+import EditProfileStaff from "../Pages/editProfile/editProfileStaff";
+import EditProfileCustomer from "../Pages/editProfile/editProfileCustomer";
 
 
 
@@ -69,6 +71,11 @@ const NavBar = () => {
                         <Route path='/profile' element={<Profile/>}/>
                         <Route path='/resetPassword' element={<ResetPassword/>}/>
                         <Route path="/contact-us" element={<ContactUsPage/>}/>
+
+
+                        <Route path="/editProfileStaff" element={<EditProfileStaff/>}/>
+                        <Route path="/editProfileCustomer" element={<EditProfileCustomer/>}/>
+
                     </Routes>
                 </div>
             </Router>
