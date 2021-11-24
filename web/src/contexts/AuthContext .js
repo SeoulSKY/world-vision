@@ -57,7 +57,7 @@ export function AuthProvider({children}) {
                     return Promise.reject(error);
                 }
                 else {
-                    setCurrentUser(data.user)
+                    setCurrentUserAccountType("Staff")
 
                 }
 
@@ -116,7 +116,7 @@ export function AuthProvider({children}) {
                 }
 
                 else {
-                    setCurrentUser(data.user)
+                        setCurrentUserAccountType("Customer")
                 }
 
 

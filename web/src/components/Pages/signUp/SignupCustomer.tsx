@@ -55,7 +55,7 @@ export default function SignupCustomer() {
 
 
             navigate('../customerDashboard', {replace: true})
-            window.location.reload()
+
 
 
 
@@ -187,7 +187,7 @@ export default function SignupCustomer() {
                                     <br/>
 
                                     <Form.Group id="postalCode">
-                                        <Form.Control type="text" placeholder="Province" style={{textAlign: "center"}}
+                                        <Form.Control type="text" placeholder="Postal Code" style={{textAlign: "center"}}
                                                       ref={postalCodeRef} required/>
                                     </Form.Group>
 

@@ -46,8 +46,6 @@ export default function SignupStaff() {
                 provinceRef.current.value).finally( () => setLoading(false))
 
             navigate('../staffDashboard', {replace: true})
-            window.location.reload()
-
 
 
         } catch (e) {
@@ -150,7 +148,7 @@ export default function SignupStaff() {
                                     <br/>
 
                                     <Form.Group id="postalCode">
-                                        <Form.Control type="text" placeholder="Province" style={{textAlign: "center"}}
+                                        <Form.Control type="text" placeholder="Postal Code" style={{textAlign: "center"}}
                                                       ref={postalCodeRef} required/>
                                     </Form.Group>
 
