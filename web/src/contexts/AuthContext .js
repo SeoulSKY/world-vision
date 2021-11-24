@@ -1,6 +1,12 @@
 import React, {useContext, useEffect, useState} from "react"
 import {auth} from "./firebase"
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    sendPasswordResetEmail,
+
+} from "firebase/auth";
 
 const AuthContext = React.createContext()
 
@@ -17,7 +23,6 @@ export function AuthProvider({children}) {
 
         return createUserWithEmailAndPassword(auth, email, password).then(function (data) {
             console.log('uid', data.user.uid) // used to access user right after account creation
-
             const data_staff = {
                 "userId": data.user.uid,
                 "firstName": firstName,
@@ -50,6 +55,9 @@ export function AuthProvider({children}) {
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 }
+                else {
+                    setCurrentUser(data.user)
+                }
 
 
             }).catch(error => {
@@ -57,6 +65,8 @@ export function AuthProvider({children}) {
                 alert("Error posting staff: " + error)
 
             });
+
+
         })
     }
 
@@ -101,6 +111,10 @@ export function AuthProvider({children}) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
+                }
+
+                else {
+                    setCurrentUser(data.user)
                 }
 
 
@@ -150,19 +164,17 @@ export function AuthProvider({children}) {
                             setCurrentUserAccountType(accountType)
                         });
 
-
                     })
                     .catch(error => {
 
                         if (error === 404) {
-                            alert("No staff member with specified userId")
+                            alert("No user specified userId")
                         } else {
-                            alert("Error getting staff")
+                            alert("Error getting user")
                         }
 
 
                     });
-
 
             }
 
@@ -171,22 +183,7 @@ export function AuthProvider({children}) {
             }
 
 
-
-
-
-
-
-
-
-
-
             setLoading(false)
-
-
-
-
-
-
 
         })
     }, [])

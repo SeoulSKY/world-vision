@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {Card, Form, Button, Container, Alert} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css"
-import {AuthProvider, useAuth} from "../../contexts/AuthContext ";
+
 import {Link, useNavigate} from "react-router-dom";
+import {AuthProvider, useAuth} from "../../../contexts/AuthContext ";
 
 export default function SignupCustomer() {
 
@@ -53,6 +54,7 @@ export default function SignupCustomer() {
             ).finally( () => setLoading(false))
 
             navigate('../customerDashboard', {replace: true})
+            window.location.reload()
 
 
         } catch (e) {
