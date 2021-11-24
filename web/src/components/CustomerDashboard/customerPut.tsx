@@ -1,31 +1,31 @@
 import {useForm} from 'react-hook-form';
 
 
-const StaffPost = () => {
+const CustomerPut = () => {
 
-    const {register, handleSubmit, reset, resetField} = useForm();
+    const {register, handleSubmit, reset} = useForm();
 
+    const onSubmitCustomerPut = (dataCustomerPut: any) => {
+        // used to handle put request for customer account
 
-    const onSubmitStaffPost = (dataStaffPost: any) => {
-        // used to handle post request for staff account
         const data = {
-            "userId": dataStaffPost.userId,
-            "firstName": dataStaffPost.firstName,
-            "middleName": dataStaffPost.middleName,
-            "lastName": dataStaffPost.lastName,
+            "userId": dataCustomerPut.userId,
+            "firstName": dataCustomerPut.firstName,
+            "middleName": dataCustomerPut.middleName,
+            "lastName": dataCustomerPut.lastName,
             "homeAddress": {
-                "buildingNumber": dataStaffPost.buildingNumber,
-                "street": dataStaffPost.street,
-                "city": dataStaffPost.city,
-                "province": dataStaffPost.province,
-                "postalCode": dataStaffPost.postalCode,
-                "country": dataStaffPost.country
+                "buildingNumber": dataCustomerPut.buildingNumber,
+                "street": dataCustomerPut.street,
+                "city": dataCustomerPut.city,
+                "province": dataCustomerPut.province,
+                "postalCode": dataCustomerPut.postalCode,
+                "country": dataCustomerPut.country
             }
         };
 
-        // Post request using fetch with error handling
-        fetch('http://localhost:5000/api/staff', {
-            method: 'POST',
+        // Put request using fetch with error handling
+        fetch('http://localhost:5000/api/customer', {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -45,15 +45,12 @@ const StaffPost = () => {
         })
             .catch(error => {
 
-                alert("Error posting staff: " + error)
+                alert("Error changing customer")
 
             });
 
-        // reset Form
-        for (var key in dataStaffPost) {
-            resetField(key);
-        }
         reset({});
+
     }
 
 
@@ -62,19 +59,16 @@ const StaffPost = () => {
         <div>
             <br/>
             <br/>
-            <br/>
-            <br/>
-            <h2>Create New Staff Account</h2>
-            <p>Enter staff personal details</p>
 
-            <form onSubmit={handleSubmit(onSubmitStaffPost)}>
+            <h2>Edit Customer Account Details</h2>
+            <p>Enter ID of Customer Account to edit along with any optional field you would like to modify
+            </p>
+
+            <form onSubmit={handleSubmit(onSubmitCustomerPut)}>
                 <input type="text" placeholder="userId" {...register("userId")} required/>
                 <input type="text" placeholder="firstName" {...register("firstName")} required/>
                 <input type="text" placeholder="middleName" {...register("middleName")} />
                 <input type="text" placeholder="lastName" {...register("lastName")} required/>
-                <br/>
-                <br/>
-                <p>Enter staff home address</p>
                 <br/>
                 <input type="text" placeholder="buildingNumber" {...register("buildingNumber")} required/>
                 <input type="text" placeholder="street" {...register("street")} required/>
@@ -85,8 +79,8 @@ const StaffPost = () => {
                 <br/>
                 <br/>
                 <input type="submit"/>
-            </form>
 
+            </form>
             <br/>
             <br/>
 
@@ -97,4 +91,4 @@ const StaffPost = () => {
 }
 
 
-export default StaffPost;
+export default CustomerPut;
