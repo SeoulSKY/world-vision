@@ -1,7 +1,5 @@
-import {Alert, Button, Card, Container, FloatingLabel, Form} from "react-bootstrap";
+import {Alert, Button, Card, Container, Form} from "react-bootstrap";
 import React from "react";
-import ReactDOM from "react-dom";
-
 
 const {useState} = require("react")
 
@@ -9,6 +7,7 @@ const {useState} = require("react")
 export default function ContactUsPage() {
 
     const [loading, setLoading] = useState(false)
+    const [sendingMessageButton, setSendingMessageButton] = useState("Send Message")
     const [error, setError] = useState("")
     const [message, setMessage] = useState("")
 
@@ -29,6 +28,7 @@ export default function ContactUsPage() {
             setError("")
             setMessage("")
             setLoading(true)
+            setSendingMessageButton("Sending message please wait...")
 
             await fetch("http://localhost:5001/mail/", {
                 method: "POST",
@@ -46,6 +46,7 @@ export default function ContactUsPage() {
                 }
             }).finally(()=>{
                 setLoading(false)
+                setSendingMessageButton("Send Message")
 
             })
 
@@ -124,7 +125,7 @@ export default function ContactUsPage() {
 
 
                             <Button disabled={loading} className="w-100" style={{background: "#212529"}}
-                                    type="submit"> Send Message</Button>
+                                    type="submit"> {sendingMessageButton}</Button>
 
 
                         </Form>
