@@ -3,12 +3,16 @@ import {Card, Button, Alert, Container, Form} from "react-bootstrap"
 
 import { useNavigate} from "react-router-dom"
 import {useAuth} from "../../../contexts/AuthContext ";
+import TransactionsButton from "./transactionsButton";
 
 
 export default function Profile() {
     const [error, setError] = useState("")
     const {currentUser, currentUserAccountType, logout} = useAuth()
     const navigate = useNavigate()
+
+
+    const state = {visible:"Customer"}
 
     async function handleLogout() {
         setError("")
@@ -66,6 +70,10 @@ export default function Profile() {
                                 type="submit"> {"Update Profile"}</Button>
 
                         </Form>
+
+                        {state.visible ? <TransactionsButton/> :null}
+
+
 
                     </Card.Body>
                 </Card>
