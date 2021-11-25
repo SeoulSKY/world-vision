@@ -14,21 +14,6 @@ export default function EditProfileStaff() {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
-    const [state, setState] = useState({});
-
-    useEffect(() => {
-        cleanState();
-        return () => {
-            setState({}); // This worked for me
-        };
-    }, []);
-
-    const cleanState = () => {
-        setState({
-            cleanUp: ''
-        })
-    }
-
     function handleSubmit(e:any) {
         e.preventDefault()
         if (passwordRef.current.value !== passwordConfirmRef.current.value) {
@@ -48,7 +33,7 @@ export default function EditProfileStaff() {
 
         Promise.all(promises)
             .then(() => {
-                cleanState()
+
                 navigate('../profile', { replace: true })
             })
             .catch(() => {
