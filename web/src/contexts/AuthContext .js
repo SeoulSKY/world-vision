@@ -19,10 +19,12 @@ export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState()
     const [currentUserAccountType, setCurrentUserAccountType] = useState()
     const [loading, setLoading] = useState(true)
+    const [addingUser, setAddingUser] = useState(false)
 
     function signupStaff(email, password, firstName, middleName, lastName, buildingNumber, streetNumber, postalCode, country, city, province) {
 
         return createUserWithEmailAndPassword(auth, email, password).then(function (data) {
+            setAddingUser(true)
             console.log('uid', data.user.uid) // used to access user right after account creation
             const data_staff = {
                 "userId": data.user.uid,
@@ -56,25 +58,18 @@ export function AuthProvider({children}) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
-                }
-                else {
+                } else {
                     setCurrentUserAccountType("Staff")
-
                 }
 
 
-            }).catch(error => {
-
-                alert("Error posting staff: " + error)
-
-            });
-
+            }).finally( () => setAddingUser(false))
 
         })
     }
 
     function signUpCustomer(email, password, firstName, middleName, lastName, buildingNumber, streetNumber, postalCode, country, city, province, expirationDate, creditCardNumber, cvv) {
-
+        setAddingUser(true)
         return createUserWithEmailAndPassword(auth, email, password).then(function (data) {
             console.log('uid', data.user.uid) // used to access user right after account creation
 
@@ -120,12 +115,8 @@ export function AuthProvider({children}) {
                         setCurrentUserAccountType("Customer")
                 }
 
+            }).finally( () => setAddingUser(false))
 
-            }).catch(error => {
-
-                alert("Error posting customer: " + error)
-
-            });
 
 
         })
@@ -160,7 +151,7 @@ export function AuthProvider({children}) {
         return auth.onAuthStateChanged(user => {
             setCurrentUser(user)
 
-            if (user) {
+            if (user && !addingUser) {
 
                 fetch('http://localhost:5000/api/accountType?userId=' + user.uid, {method: 'GET'})
                     .then(async response => {
