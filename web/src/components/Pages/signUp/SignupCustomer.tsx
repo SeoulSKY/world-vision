@@ -55,6 +55,7 @@ export default function SignupCustomer() {
 
 
             navigate('../customerDashboard', {replace: true})
+            window.location.reload();
 
 
 
