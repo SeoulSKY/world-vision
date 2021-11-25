@@ -18,6 +18,7 @@ import ContactUsPage from "../Pages/contactUs/contactUsPage";
 import EditProfileStaff from "../Pages/editProfile/editProfileStaff";
 import EditProfileCustomer from "../Pages/editProfile/editProfileCustomer";
 import NavWrapper from "./navWrapper";
+import ShowBillingHistory from "../Pages/showBillingHistory/showBillingHistory";
 
 
 const NavBar = () => {
@@ -46,6 +47,9 @@ const NavBar = () => {
 
                         <Route path="/editProfileStaff" element={<EditProfileStaff/>}/>
                         <Route path="/editProfileCustomer" element={<EditProfileCustomer/>}/>
+                        <Route path="/viewBillingHistory" element={<ShowBillingHistory/>}/>
+
+
 
                     </Routes>
                 </div>

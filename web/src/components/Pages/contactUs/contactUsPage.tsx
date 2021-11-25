@@ -62,32 +62,6 @@ export default function ContactUsPage() {
 
     }
 
-    // function onSubmit(data: any) {
-    //     setButtonText("Sending...")
-    //
-    //     fetch("http://localhost:5001/mail/", {
-    //         method: "POST",
-    //         body: JSON.stringify(data),
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         }
-    //     }).then(response => {
-    //         if (response.status === 201) {
-    //             alert("An email has been sent. Thank you for contacting us, we will respond shortly.")
-    //         } else {
-    //             console.log(response);
-    //             alert("Failed to send the email. Please try again.")
-    //         }
-    //
-    //         reset();
-    //     }).catch(err => {
-    //         console.log(err);
-    //         alert("Failed to send the email. Please try again.")
-    //     }).finally(() => {
-    //         setButtonText("Send");
-    //     });
-    // }
-
     return (
         <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "100vh"}}>
             <div className="w-100" style={{maxWidth: '1000px'}}>

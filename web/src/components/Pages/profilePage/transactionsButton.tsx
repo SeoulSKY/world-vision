@@ -1,5 +1,5 @@
-import React, {useState} from "react"
-import {Card, Button, Alert, Container, Form} from "react-bootstrap"
+import React from "react"
+import {Button, Form} from "react-bootstrap"
 
 import { useNavigate} from "react-router-dom"
 
@@ -15,11 +15,7 @@ export default function TransactionsButton() {
     async function handleSubmit(e:any) {
         e.preventDefault()
 
-        try {
-
-        } catch {
-            alert("Failed to get account type.")
-        }
+        navigate('../viewBillingHistory', { replace: true })
 
     }
 
