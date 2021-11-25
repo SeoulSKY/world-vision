@@ -19,12 +19,12 @@ export function AuthProvider({children}) {
     const [currentUser, setCurrentUser] = useState()
     const [currentUserAccountType, setCurrentUserAccountType] = useState()
     const [loading, setLoading] = useState(true)
-    const [addingUser, setAddingUser] = useState(false)
+
 
     function signupStaff(email, password, firstName, middleName, lastName, buildingNumber, streetNumber, postalCode, country, city, province) {
 
         return createUserWithEmailAndPassword(auth, email, password).then(function (data) {
-            setAddingUser(true)
+            setCurrentUserAccountType("Customer")
             console.log('uid', data.user.uid) // used to access user right after account creation
             const data_staff = {
                 "userId": data.user.uid,
@@ -57,27 +57,22 @@ export function AuthProvider({children}) {
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
+                    setCurrentUserAccountType(null)
                     return Promise.reject(error);
-                } else {
-                    setCurrentUserAccountType("Staff")
                 }
 
+            })
 
-            }).then( async () => {
-
-                setAddingUser(false)
-                await auth.currentUser.reload();
-
-
-            }).finally(setAddingUser(false))
-
+            setLoading(false)
         })
+
 
     }
 
     function signUpCustomer(email, password, firstName, middleName, lastName, buildingNumber, streetNumber, postalCode, country, city, province, expirationDate, creditCardNumber, cvv) {
-        setAddingUser(true)
+
         return createUserWithEmailAndPassword(auth, email, password).then(function (data) {
+            setCurrentUserAccountType("Customer")
             console.log('uid', data.user.uid) // used to access user right after account creation
 
             const data_customer = {
@@ -115,21 +110,14 @@ export function AuthProvider({children}) {
                 if (!response.ok) {
                     // get error message from body or default to response status
                     const error = (data && data.message) || response.status;
+                    setCurrentUserAccountType(null)
                     return Promise.reject(error);
+
                 }
-
-            }).then( async () => {
-
-                setAddingUser(false)
-                await auth.currentUser.reload();
-
-
-            }).finally(setAddingUser(false))
-
-
+            })
+            setLoading(false)
 
         })
-
 
     }
 
@@ -160,7 +148,7 @@ export function AuthProvider({children}) {
         return auth.onAuthStateChanged(user => {
             setCurrentUser(user)
 
-            if (user && !addingUser) {
+            if (user) {
 
                 fetch('http://localhost:5000/api/accountType?userId=' + user.uid, {method: 'GET'})
                     .then(async response => {
