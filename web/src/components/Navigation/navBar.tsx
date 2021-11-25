@@ -1,13 +1,7 @@
-import Navbar from 'react-bootstrap/Navbar';
-import Container from "react-bootstrap/Container";
-import {Nav} from "react-bootstrap";
-
-
 import {
     BrowserRouter as Router,
     Routes,
     Route,
-    Link,
 } from "react-router-dom";
 
 import StaffDashboard from "../StaffDashboard/staffDashboard";
@@ -23,38 +17,16 @@ import CustomerDashboard from "../CustomerDashboard/customerDashboard";
 import ContactUsPage from "../Pages/contactUs/contactUsPage";
 import EditProfileStaff from "../Pages/editProfile/editProfileStaff";
 import EditProfileCustomer from "../Pages/editProfile/editProfileCustomer";
-
-
+import NavWrapper from "./navWrapper";
 
 
 const NavBar = () => {
-
     return (
 
         <AuthProvider>
             <Router>
-                <>
-                    <Navbar bg="dark" variant="dark">
-                        <Container>
+                <NavWrapper/>
 
-                            <Navbar.Brand as={Link} to={"/home"}>World Vision</Navbar.Brand>
-                            <Nav className="me-auto">
-                                <Nav.Link as={Link} to={"/staffDashboard"}>Staff Dashboard</Nav.Link>
-                                <Nav.Link as={Link} to={"/customerDashboard"}>Customer Dashboard</Nav.Link>
-                            </Nav>
-
-                            <Nav>
-
-                                <Nav.Link as={Link} to={"/signIn"}>Sign In</Nav.Link>
-                                <Nav.Link as={Link} to={"/signUpSelect"}>Sign Up</Nav.Link>
-                                <Nav.Link as={Link} to={"/profile"}>{"Profile"}</Nav.Link>
-                                <Nav.Link as={Link} to={"/contact-us"}>Contact Us</Nav.Link>
-
-
-                            </Nav>
-                        </Container>
-                    </Navbar>
-                </>
                 <div>
                     <Routes>
                         <Route path='/home' element={<HomePage/>}/>
@@ -63,7 +35,6 @@ const NavBar = () => {
                         <Route path='/customerDashboard' element={<CustomerDashboard/>}/>
                         <Route path='/signUpSelect' element={<SignUpSelect/>}/>
                         <Route path='/signUpStaff' element={<SignupStaff/>}/>
-
 
 
                         <Route path='/signUpCustomer' element={<SignupCustomer/>}/>
