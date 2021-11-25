@@ -4,6 +4,7 @@ import {Card, Button, Alert, Container, Form} from "react-bootstrap"
 import {useNavigate} from "react-router-dom"
 import {useAuth} from "../../../contexts/AuthContext ";
 import TransactionsButton from "./transactionsButton";
+import DeleteAccountButton from "./deleteAccountButton";
 
 
 export default function Profile() {
@@ -65,7 +66,11 @@ export default function Profile() {
 
                         </Form>
 
-                            {currentUserAccountType === "Customer" && <TransactionsButton/>}
+
+                        {currentUser !== null && <DeleteAccountButton/>}
+
+
+                        {currentUserAccountType === "Customer" && <TransactionsButton/>}
 
 
 

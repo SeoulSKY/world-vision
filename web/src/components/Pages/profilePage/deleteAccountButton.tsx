@@ -5,26 +5,23 @@ import { useNavigate} from "react-router-dom"
 
 
 
-export default function TransactionsButton() {
+export default function DeleteAccountButton() {
 
     const navigate = useNavigate()
-
 
     async function handleSubmit(e:any) {
         e.preventDefault()
 
-        navigate('../viewBillingHistory', { replace: true })
+        navigate('../deleteAccount', { replace: true })
 
     }
-
-
 
     return (
         <div >
             <br/>
             <Form onSubmit={handleSubmit}>
                 <Button className="w-100" style={{background: "#212529"}}
-                        type="submit"> {"View Transaction History"}</Button>
+                        type="submit"> {"Delete Account"}</Button>
 
             </Form>
         </div>

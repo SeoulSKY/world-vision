@@ -5,7 +5,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    sendPasswordResetEmail,updatePassword, updateEmail
+    sendPasswordResetEmail,updatePassword, updateEmail, deleteUser
 
 } from "firebase/auth";
 
@@ -267,6 +267,77 @@ export function AuthProvider({children}) {
         })
     }, [])
 
+    function deleteAccount() {
+        let accountType = currentUserAccountType
+        let uid = currentUser.uid
+
+
+        if (accountType==="Staff") {
+            return deleteUser(currentUser).then(()=>{
+                fetch("http://localhost:5000/api/staff?userId=" + uid, {method: 'DELETE'})
+                    .then(async response => {
+                        const isJson = response.headers.get('content-type')?.includes('application/json');
+                        const data = isJson && await response.json();
+
+                        // check for error response
+                        if (!response.ok) {
+                            // get error message from body or default to response status
+                            const error = (data && data.message) || response.status;
+                            return Promise.reject(error);
+                        }
+
+
+                    })
+                    .catch(error => {
+                        if (error === 404) {
+                            alert("Not valid userId to delete")
+                        } else {
+                            alert("Error deleting staff: " + error)
+                        }
+
+                    });
+
+
+            })
+        }
+
+        if (accountType==="Customer") {
+            return deleteUser(currentUser).then(()=>{
+
+                fetch("http://localhost:5000/api/customer?userId=" + uid, {method: 'DELETE'})
+                    .then(async response => {
+                        const isJson = response.headers.get('content-type')?.includes('application/json');
+                        const data = isJson && await response.json();
+
+                        // check for error response
+                        if (!response.ok) {
+                            // get error message from body or default to response status
+                            const error = (data && data.message) || response.status;
+                            return Promise.reject(error);
+                        }
+
+
+                    })
+                    .catch(error => {
+                        if (error === 404) {
+                            alert("Not valid userId to delete")
+                        } else {
+                            alert("Error deleting customer")
+                        }
+
+                    });
+
+
+
+            })
+        }
+
+
+
+    }
+
+
+
     const value = {
         currentUser,
         currentUserAccountType,
@@ -278,8 +349,9 @@ export function AuthProvider({children}) {
         updatePasswordCurrentUser,
         resetPassword,
         updateStaffInfo,
-        updateCustomerInfo
+        updateCustomerInfo,
 
+        deleteAccount
     }
 
     return (
