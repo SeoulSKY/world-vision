@@ -19,7 +19,6 @@ accountTypeRouter.get("/", (request, response) => {
            }
 
            let newResult = JSON.parse(JSON.stringify(result));
-           console.log(newResult);
            response.status(200).send(newResult[0].type);
         });
         
