@@ -63,9 +63,16 @@ export function AuthProvider({children}) {
                 }
 
 
-            }).finally( () => setAddingUser(false))
+            }).then( async () => {
+
+                setAddingUser(false)
+                await auth.currentUser.reload();
+
+
+            }).finally(setAddingUser(false))
 
         })
+
     }
 
     function signUpCustomer(email, password, firstName, middleName, lastName, buildingNumber, streetNumber, postalCode, country, city, province, expirationDate, creditCardNumber, cvv) {
@@ -111,11 +118,13 @@ export function AuthProvider({children}) {
                     return Promise.reject(error);
                 }
 
-                else {
-                        setCurrentUserAccountType("Customer")
-                }
+            }).then( async () => {
 
-            }).finally( () => setAddingUser(false))
+                setAddingUser(false)
+                await auth.currentUser.reload();
+
+
+            }).finally(setAddingUser(false))
 
 
 
