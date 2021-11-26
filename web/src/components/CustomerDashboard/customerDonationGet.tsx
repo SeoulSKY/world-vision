@@ -20,7 +20,7 @@ const CustomerDonationGet = () => {
         <div>
             <br/>
             <br/>
-            <h2>Your Donations</h2>
+            <h2>Your Monthly Donations</h2>
             <br/>
             <textarea readOnly={true} rows={10} cols={100}
                       placeholder="Your donations will be shown here" value={JSON.stringify(donations, null, 2)}/>

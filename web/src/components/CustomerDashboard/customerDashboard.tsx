@@ -18,7 +18,6 @@ const CustomerDashboard = () => {
         <div>
 
             <RecipientGet/>
-            <CustomerRecipientGet/>
 
             <CustomerDonatePost/>
             <CustomerDonatePut/>
@@ -28,7 +27,6 @@ const CustomerDashboard = () => {
 
 
 
-            <CustomerTransactionGet/>
             <CustomerTransactionPost/>
             <CustomerTransactionDelete/>
 
