@@ -5,7 +5,7 @@ import CustomerGet from "./customerGet";
 import RecipientGet from "../StaffDashboard/recipientGet";
 import CustomerRecipientGet from "../StaffDashboard/customerRecipientGet";
 import CustomerTransactionGet from "../StaffDashboard/customerTransactionGet";
-import CustomerDonate from "./customerDonatePost";
+import CustomerDonatePost from "./customerDonatePost";
 
 
 const CustomerDashboard = () => {
@@ -22,7 +22,7 @@ const CustomerDashboard = () => {
             <RecipientGet/>
             <CustomerRecipientGet/>
             <CustomerTransactionGet/>
-            <CustomerDonate/>
+            <CustomerDonatePost/>
 
 
         </div>

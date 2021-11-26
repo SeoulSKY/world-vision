@@ -1,7 +1,7 @@
 import {useForm} from 'react-hook-form';
 
 
-const CustomerDonatePost = () => {
+const CustomerDonatePut = () => {
 
     const {register, handleSubmit, reset, resetField} = useForm();
 
@@ -92,4 +92,4 @@ const CustomerDonatePost = () => {
 }
 
 
-export default CustomerDonatePost;
+export default CustomerDonatePut;
