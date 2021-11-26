@@ -3,7 +3,7 @@ import CustomerPut from "./customerPut";
 import CustomerDelete from "./customerDelete";
 import CustomerGet from "./customerGet";
 import RecipientGet from "../StaffDashboard/recipientGet";
-import CustomerRecipientGet from "../StaffDashboard/customerRecipientGet";
+import CustomerRecipientGet from "../CustomerDashboard/customerRecipientGet";
 import CustomerTransactionGet from "../StaffDashboard/customerTransactionGet";
 
 
