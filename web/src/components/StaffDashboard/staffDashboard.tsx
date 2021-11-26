@@ -1,6 +1,3 @@
-import StaffPost from "./staffPost";
-import StaffPut from "./staffPut";
-import StaffDelete from "./staffDelete";
 import StaffGet from "./staffGet";
 import RecipientPost from "./recipientPost";
 import RecipientPut from "./recipientPut";
@@ -17,9 +14,7 @@ const StaffDashboard = () => {
 
 
         <div>
-            <StaffPost/>
-            <StaffPut/>
-            <StaffDelete/>
+
             <StaffGet/>
             <RecipientPost/>
             <RecipientPut/>
