@@ -7,21 +7,11 @@ const CustomerRecipientGet = () => {
     const {currentUser} = useAuth();
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/recipient?customerUserId=' + currentUser.uid)
-            .then(async response => {
-                const isJson = response.headers.get('content-type')?.includes('application/json');
-                const data = isJson && await response.json();
-
-                if (response.ok) {
-                    setRecipients(data);
-                }
-            })
-            .catch(error => {
-                if (error !== 404) {
-                    throw error;
-                }
-            });
-    }, []);
+        fetch("http://localhost:5000/api/recipient?customerUserId=" + currentUser.uid)
+            .then(response => response.json())
+            .then(json => setRecipients(json))
+            .catch(error => setRecipients([]));
+    });
 
     return (
         <div>
@@ -30,7 +20,7 @@ const CustomerRecipientGet = () => {
             <h2>Your Recipients</h2>
             <br/>
             <textarea readOnly={true} rows={10} cols={100}
-                      placeholder="Customer's recipients will be shown here" value={JSON.stringify(recipients)}/>
+                      placeholder="Customer's recipients will be shown here" value={JSON.stringify(recipients, null, 2)}/>
             <br/>
             <br/>
             <br/>

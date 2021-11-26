@@ -247,9 +247,9 @@ export function AuthProvider({children}) {
                     .catch(error => {
 
                         if (error === 404) {
-                            alert("No user specified userId")
+                            console.log("No user specified userId")
                         } else {
-                            alert("Error getting user")
+                            console.log("Error getting user")
                         }
 
 
