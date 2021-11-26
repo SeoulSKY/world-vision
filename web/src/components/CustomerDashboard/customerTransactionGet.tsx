@@ -19,7 +19,7 @@ export default function() {
             <h2>Your Transactions</h2>
             <br/>
             <textarea readOnly={true} rows={10} cols={100}
-                      placeholder="Your transaction will be shown here" value={JSON.stringify(transactions)}/>
+                      placeholder="Your transaction will be shown here" value={JSON.stringify(transactions, null, 2)}/>
             <br/>
             <br/>
             <br/>
