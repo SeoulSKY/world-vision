@@ -72,8 +72,6 @@ const CustomerDonatePut = () => {
                 <input type="number" step="0.01"  placeholder="Monthly donation amount" {...register("monthlyDonation")} required/>
                 <br/>
                 <br/>
-                <br/>
-                <br/>
                 <input type="submit"/>
             </form>
 
