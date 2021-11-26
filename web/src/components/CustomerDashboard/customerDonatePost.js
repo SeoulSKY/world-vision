@@ -47,7 +47,7 @@ const CustomerDonatePost = () => {
 
 
                 else {
-                    alert("Error deleting recipient: " + error)
+                    alert("Error making monthly donation to recipient: " + error)
                 }
 
             });
@@ -68,7 +68,7 @@ const CustomerDonatePost = () => {
             <br/>
             <br/>
             <br/>
-            <h2>Make a donation</h2>
+            <h2>Make a monthly donation</h2>
             <p>Please select a recipient to subscribe to a monthly donation.</p>
 
             <form onSubmit={handleSubmit(onSubmitCustomerPost)}>

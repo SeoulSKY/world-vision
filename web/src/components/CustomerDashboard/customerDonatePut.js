@@ -6,17 +6,17 @@ const CustomerDonatePut = () => {
     const {register, handleSubmit, reset, resetField} = useForm();
 
 
-    const onSubmitCustomerPost = (dataCustomerPost) => {
-        // used to handle post request for monthly donation
+    const onSubmitCustomerPut = (dataCustomerPut) => {
+        // used to handle put request for monthly donation
         const dataDonation = {
-            "customerUserId": dataCustomerPost.customerUserId,
-            "recipientUserId": dataCustomerPost.recipientUserId,
-            "monthlyTransactionAmount": parseFloat(dataCustomerPost.monthlyDonation)
+            "customerUserId": dataCustomerPut.customerUserId,
+            "recipientUserId": dataCustomerPut.recipientUserId,
+            "monthlyTransactionAmount": parseFloat(dataCustomerPut.monthlyDonation)
         };
 
         // Post request using fetch with error handling
         fetch('http://localhost:5000/api/donation', {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -38,23 +38,18 @@ const CustomerDonatePut = () => {
             .catch(error => {
 
                 if (error === 404) {
-                    alert("Please enter valid customer and recipient user ID's to make donation")
+                    alert("Please enter valid customer and recipient user ID's to edit monthly donation")
                 }
-
-                else if (error === 409) {
-                    alert("You have already made a donation to this recipient")
-                }
-
 
                 else {
-                    alert("Error deleting recipient: " + error)
+                    alert("Error editing monthly donation to recipient: " + error)
                 }
 
             });
 
 
         // reset Form
-        for (const key in dataCustomerPost) {
+        for (const key in dataCustomerPut) {
             resetField(key);
         }
         reset({});
@@ -68,10 +63,10 @@ const CustomerDonatePut = () => {
             <br/>
             <br/>
             <br/>
-            <h2>Make a donation</h2>
-            <p>Please select a recipient to subscribe to a monthly donation.</p>
+            <h2>Edit monthly donation amount</h2>
+            <p>Please enter the customer and recipient user Id to edit the monthly donation amount</p>
 
-            <form onSubmit={handleSubmit(onSubmitCustomerPost)}>
+            <form onSubmit={handleSubmit(onSubmitCustomerPut)}>
                 <input type="text" placeholder="Customer userId" {...register("customerUserId")} required/>
                 <input type="text" placeholder="Recipient userId" {...register("recipientUserId")} required/>
                 <input type="number" step="0.01"  placeholder="Monthly donation amount" {...register("monthlyDonation")} required/>
