@@ -6,14 +6,16 @@ export default function CustomerTransactionDelete() {
     const {currentUser} = useAuth();
 
     function deleteTransaction() {
+        let params = "customerUserId=" + currentUser.uid
         if (recipientUserId === "") {
             const selectedYes = window.confirm("Are you sure you would like to delete all histories of your transaction?");
             if (!selectedYes) {
                 return;
             }
-        }
+        } else {
+            params += "&recipientUserId=" + recipientUserId;
 
-        const params = "customerUserId=" + currentUser.uid + "&recipientUserId=" + recipientUserId;
+        }
 
         // clear the input field
         setRecipientUserId("");
