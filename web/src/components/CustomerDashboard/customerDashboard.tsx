@@ -1,7 +1,3 @@
-import CustomerPost from "./customerPost";
-import CustomerPut from "./customerPut";
-import CustomerDelete from "./customerDelete";
-import CustomerGet from "./customerGet";
 import RecipientGet from "../StaffDashboard/recipientGet";
 import CustomerRecipientGet from "../CustomerDashboard/customerRecipientGet";
 import CustomerTransactionGet from "../CustomerDashboard/customerTransactionGet";
@@ -20,10 +16,7 @@ const CustomerDashboard = () => {
 
 
         <div>
-            <CustomerPost/>
-            <CustomerPut/>
-            <CustomerDelete/>
-            <CustomerGet/>
+
             <RecipientGet/>
             <CustomerRecipientGet/>
 

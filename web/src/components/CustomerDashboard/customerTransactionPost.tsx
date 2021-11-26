@@ -46,7 +46,7 @@ export default function CustomerTransactionPost() {
 
     return (
         <>
-            <h2>Send a Transaction</h2>
+            <h2>Make an optional donation</h2>
             <br/>
             <input placeholder={"recipientUserId"} value={recipientUserId} onInput={e => setRecipientUserId((e.target as HTMLInputElement).value)}/>
             <input type={"number"} placeholder={"amount"} value={amount} onInput={e => setAmount(Number((e.target as HTMLInputElement).value))}/>
