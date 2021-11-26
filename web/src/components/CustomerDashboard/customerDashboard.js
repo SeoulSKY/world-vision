@@ -9,6 +9,8 @@ import CustomerDonatePost from "./customerDonatePost";
 import CustomerDonatePut from "./customerDonatePut";
 import CustomerMonthlyDonationDelete from "./customerMonthlyDonationDelete";
 import CustomerDonationGet from "./customerDonationGet";
+import CustomerTransactionPost from "./customerTransactionPost";
+import CustomerTransactionDelete from "./customerTransactionDelete";
 
 
 const CustomerDashboard = () => {
@@ -27,6 +29,9 @@ const CustomerDashboard = () => {
 
 
             <CustomerTransactionGet/>
+            <CustomerTransactionPost/>
+            <CustomerTransactionDelete/>
+
             <CustomerDonatePost/>
             <CustomerDonatePut/>
             <CustomerMonthlyDonationDelete/>
