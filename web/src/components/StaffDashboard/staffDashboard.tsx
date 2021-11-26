@@ -5,6 +5,7 @@ import RecipientDelete from "./recipientDelete";
 import RecipientGet from "./recipientGet";
 import CustomerRecipientGet from "./customerRecipientGet";
 import CustomerTransactionGet from "./customerTransactionGet";
+import CustomerGet from "../CustomerDashboard/customerGet";
 
 
 const StaffDashboard = () => {
@@ -20,6 +21,7 @@ const StaffDashboard = () => {
             <RecipientPut/>
             <RecipientDelete/>
             <RecipientGet/>
+            <CustomerGet/>
             <CustomerRecipientGet/>
             <CustomerTransactionGet/>
 
