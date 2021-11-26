@@ -74,7 +74,7 @@ const CustomerGet = () => {
     }
 
     function display_info(data: any) {
-        data = JSON.stringify(data)
+        data = JSON.stringify(data, null, 2)
         console.log(data)
         reset({
             customerUserDisplay: data
