@@ -18,6 +18,8 @@ import ContactUsPage from "../Pages/contactUs/contactUsPage";
 import EditProfileStaff from "../Pages/editProfile/editProfileStaff";
 import EditProfileCustomer from "../Pages/editProfile/editProfileCustomer";
 import NavWrapper from "./navWrapper";
+import ShowBillingHistory from "../Pages/showBillingHistory/showBillingHistory";
+import DeleteAccount from "../Pages/deleteAccount/deleteAccount";
 
 
 const NavBar = () => {
@@ -46,6 +48,10 @@ const NavBar = () => {
 
                         <Route path="/editProfileStaff" element={<EditProfileStaff/>}/>
                         <Route path="/editProfileCustomer" element={<EditProfileCustomer/>}/>
+                        <Route path="/viewBillingHistory" element={<ShowBillingHistory/>}/>
+                        <Route path="/deleteAccount" element={<DeleteAccount/>}/>
+
+
 
                     </Routes>
                 </div>

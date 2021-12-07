@@ -1,14 +1,17 @@
 import React, {useState} from "react"
 import {Card, Button, Alert, Container, Form} from "react-bootstrap"
 
-import { useNavigate} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 import {useAuth} from "../../../contexts/AuthContext ";
+import TransactionsButton from "./transactionsButton";
+import DeleteAccountButton from "./deleteAccountButton";
 
 
 export default function Profile() {
     const [error, setError] = useState("")
     const {currentUser, currentUserAccountType, logout} = useAuth()
     const navigate = useNavigate()
+
 
     async function handleLogout() {
         setError("")
@@ -54,10 +57,6 @@ export default function Profile() {
                         <strong>Email:</strong> {currentUser && currentUser.email}
                         <br/>
                         <strong>Account Type:</strong> {currentUserAccountType}
-                        {/*<Link to="/updateProfile" style={{background: "#212529"}}*/}
-                        {/*      className="btn btn-primary w-100 mt-3">*/}
-                        {/*    Update Profile*/}
-                        {/*</Link>*/}
 
                         <br/>
                         <br/>
@@ -66,6 +65,16 @@ export default function Profile() {
                                 type="submit"> {"Update Profile"}</Button>
 
                         </Form>
+
+
+                        {currentUser !== null && <DeleteAccountButton/>}
+
+
+                        {currentUserAccountType === "Customer" && <TransactionsButton/>}
+
+
+
+
 
                     </Card.Body>
                 </Card>

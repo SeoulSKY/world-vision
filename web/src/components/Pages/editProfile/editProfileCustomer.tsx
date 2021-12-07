@@ -5,13 +5,28 @@ import { Link, useNavigate } from "react-router-dom"
 import {useAuth} from "../../../contexts/AuthContext ";
 
 export default function EditProfileCustomer() {
-    const emailRef = React.useRef() as React.MutableRefObject<HTMLInputElement>
-    const passwordRef = React.useRef() as React.MutableRefObject<HTMLInputElement>
-    const passwordConfirmRef = React.useRef() as React.MutableRefObject<HTMLInputElement>
-    const { currentUser, updatePasswordCurrentUser, updateEmailCurrentUser } = useAuth()
+    const { currentUser, updatePasswordCurrentUser, updateEmailCurrentUser, updateCustomerInfo } = useAuth()
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+
+    const emailRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        passwordRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        passwordConfirmRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        firstNameRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        middleNameRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        lastNameRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        buildingNumberRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        streetNumberRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        postalCodeRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        countryRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        cityRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        provinceRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        expirationDateRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        creditCardNumberRef = React.useRef() as React.MutableRefObject<HTMLInputElement>,
+        cvvRef = React.useRef() as React.MutableRefObject<HTMLInputElement>
+
+
 
     function handleSubmit(e:any) {
         e.preventDefault()
@@ -29,6 +44,20 @@ export default function EditProfileCustomer() {
         if (passwordRef.current.value) {
             promises.push(updatePasswordCurrentUser(passwordRef.current.value))
         }
+
+        promises.push(updateCustomerInfo(firstNameRef.current.value,
+            middleNameRef.current.value,
+            lastNameRef.current.value,
+            buildingNumberRef.current.value,
+            streetNumberRef.current.value,
+            postalCodeRef.current.value,
+            countryRef.current.value,
+            cityRef.current.value,
+            provinceRef.current.value,
+            expirationDateRef.current.value,
+            creditCardNumberRef.current.value,
+            cvvRef.current.value))
+
 
         Promise.all(promises)
             .then(() => {
@@ -59,25 +88,137 @@ export default function EditProfileCustomer() {
                                 ref={emailRef}
                                 required
                                 defaultValue={currentUser.email}
+                                style={{textAlign: "center"}}
                             />
                         </Form.Group>
+                        <br/>
                         <Form.Group id="password">
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"
                                 ref={passwordRef}
                                 placeholder="Leave blank to keep the same"
+                                style={{textAlign: "center"}}
                             />
                         </Form.Group>
+
+                        <br/>
+
                         <Form.Group id="password-confirm">
                             <Form.Label>Password Confirmation</Form.Label>
                             <Form.Control
                                 type="password"
                                 ref={passwordConfirmRef}
                                 placeholder="Leave blank to keep the same"
+                                style={{textAlign: "center"}}
                             />
                         </Form.Group>
+
+
                         <br/>
+
+                        <Form.Group id="firstName">
+                            <Form.Label> First Name</Form.Label>
+                            <Form.Control type="text" style={{textAlign: "center"}} ref={firstNameRef}
+                                          required/>
+                        </Form.Group>
+
+                        <br/>
+
+                        <Form.Group id="middleName">
+                            <Form.Label> Middle Name</Form.Label>
+                            <Form.Control type="text" placeholder="Middle name is optional"
+                                          style={{textAlign: "center"}} ref={middleNameRef}/>
+                        </Form.Group>
+
+                        <br/>
+
+
+                        <Form.Group id="lastName">
+                            <Form.Label> Last Name</Form.Label>
+                            <Form.Control type="text" style={{textAlign: "center"}} ref={lastNameRef}
+                                          required/>
+                        </Form.Group>
+
+                        <br/>
+                        <br/>
+
+                        <h3>Edit Credit Card Information </h3>
+                        <br/>
+
+                        <Form.Group id="creditCardNumber">
+                            <Form.Control type="text" placeholder="Credit Card Number"
+                                          style={{textAlign: "center"}} ref={creditCardNumberRef} required/>
+                        </Form.Group>
+
+                        <br/>
+                        <br/>
+
+                        <Form.Group id="expirationDate">
+                            <p>Enter card expiration date</p>
+                            <Form.Control type="Date" placeholder="Expiration Date"
+                                          style={{textAlign: "center"}} ref={expirationDateRef} required/>
+                        </Form.Group>
+
+                        <br/>
+                        <br/>
+
+
+                        <Form.Group id="cvv">
+                            <Form.Control type="text" placeholder="CVV"
+                                          style={{textAlign: "center"}} ref={cvvRef} required/>
+                        </Form.Group>
+
+                        <br/>
+                        <br/>
+
+                        <h3>Edit Billing Address</h3>
+                        <br/>
+
+                        <Form.Group id="buildingNumber">
+                            <Form.Control type="text" placeholder="Building number"
+                                          style={{textAlign: "center"}} ref={buildingNumberRef} required/>
+                        </Form.Group>
+
+                        <br/>
+
+                        <br/>
+
+                        <Form.Group id="street">
+                            <Form.Control type="text" placeholder="Street" style={{textAlign: "center"}}
+                                          ref={streetNumberRef} required/>
+                        </Form.Group>
+
+                        <br/>
+
+                        <Form.Group id="city">
+                            <Form.Control type="text" placeholder="City" style={{textAlign: "center"}}
+                                          ref={cityRef} required/>
+                        </Form.Group>
+
+                        <br/>
+
+                        <Form.Group id="province">
+                            <Form.Control type="text" placeholder="Province" style={{textAlign: "center"}}
+                                          ref={provinceRef} required/>
+                        </Form.Group>
+
+                        <br/>
+
+                        <Form.Group id="postalCode">
+                            <Form.Control type="text" placeholder="Postal Code" style={{textAlign: "center"}}
+                                          ref={postalCodeRef} required/>
+                        </Form.Group>
+
+                        <br/>
+
+                        <Form.Group id="country">
+                            <Form.Control type="text" placeholder="Country" style={{textAlign: "center"}}
+                                          ref={countryRef} required/>
+                        </Form.Group>
+
+                        <br/>
+
                         <Button disabled={loading} style={{background: "#212529"}} className="w-100" type="submit" >
                             Update
                         </Button>

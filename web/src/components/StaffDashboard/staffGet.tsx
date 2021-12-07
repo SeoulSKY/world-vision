@@ -95,7 +95,7 @@ const StaffGet = () => {
     return (
 
         <div>
-
+            <br/>
             <h2>Get Staff Account</h2>
             <p>Enter ID of Staff Account to get Staff with Id. If no Id is given all staff are shown
             </p>
