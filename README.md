@@ -5,11 +5,7 @@ To run the app, use the following command:
 ```
 docker-compose up --build
 ```
-When it is ready, `web` container will print the ip address, for example:
-
-`web       |   Local:            http://localhost:8080`
-
-Visit the address in a browser to enjoy!
+When it is ready, visit [here](http://localhost:8080)
 
 ---
 
