@@ -8,7 +8,7 @@ import icon_childProtection from "../../../images/icon-childProtection-white-01.
 import icon_finance from "../../../images/icon-finance-white-01.svg"
 import community_development from "../../../images/community-development-orange.svg"
 
-class HomePage extends Component {
+class AboutPage extends Component {
     render() {
         return (
             <div className="container-1">
@@ -91,4 +91,4 @@ class HomePage extends Component {
     }
 }
 
-export default HomePage;
+export default AboutPage;

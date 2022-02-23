@@ -11,7 +11,7 @@ export default function NavWrapper() {
 
     return (
         <div>
-            <Navbar bg="dark" variant="dark">
+            <Navbar bg="dark" variant="dark" fixed="top">
                 <Container>
                     <Navbar.Brand as={Link} to={"/home"}>World Vision</Navbar.Brand>
                     <Nav className="me-auto">

@@ -7,6 +7,7 @@ import CustomerDonatePost from "./customerDonatePost";
 import CustomerMonthlyDonationDelete from "./customerMonthlyDonationDelete";
 import CustomerDonatePut from "./customerDonatePut";
 import CustomerDonationGet from "./customerDonationGet";
+import {Container} from "react-bootstrap";
 
 
 const CustomerDashboard = () => {
@@ -15,7 +16,8 @@ const CustomerDashboard = () => {
     return (
 
 
-        <div>
+        <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "300vh"}}>
+        <div className="w-100" style={{maxWidth: '1000px'}}>
 
             <RecipientGet/>
 
@@ -33,6 +35,7 @@ const CustomerDashboard = () => {
 
 
         </div>
+        </Container>
     )
 
 
