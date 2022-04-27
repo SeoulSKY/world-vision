@@ -30,7 +30,7 @@ export default function Login() {
     }
 
     return (
-        <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "60vh"}}>
+        <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "70vh"}}>
         <div className="w-100" style={{maxWidth: '1000px'}}>
         <>
             <Card style={{minHeight: 300}}>

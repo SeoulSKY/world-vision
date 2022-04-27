@@ -6,16 +6,16 @@ import RecipientGet from "./recipientGet";
 import CustomerRecipientGet from "./customerRecipientGet";
 import CustomerTransactionGet from "./customerTransactionGet";
 import CustomerGet from "../CustomerDashboard/customerGet";
-
+import {Container} from "react-bootstrap";
 
 const StaffDashboard = () => {
 
 
+    // @ts-ignore
     return (
 
-
-        <div>
-
+        <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "590vh"}}>
+        <div className="w-100" style={{maxWidth: '1000px'}}>
             <StaffGet/>
             <RecipientPost/>
             <RecipientPut/>
@@ -24,9 +24,8 @@ const StaffDashboard = () => {
             <CustomerGet/>
             <CustomerRecipientGet/>
             <CustomerTransactionGet/>
-
-
         </div>
+        </Container>
     )
 
 

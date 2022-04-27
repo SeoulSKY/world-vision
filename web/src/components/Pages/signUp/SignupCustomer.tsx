@@ -69,7 +69,7 @@ export default function SignupCustomer() {
 
     return (
         <AuthProvider>
-            <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "80vh"}}>
+            <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "250vh"}}>
                 <div className="w-100" style={{maxWidth: '1000px'}}>
                     <>
                         <Card style={{minHeight: 1100}}>

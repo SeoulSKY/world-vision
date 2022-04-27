@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 
 import StaffDashboard from "../StaffDashboard/staffDashboard";
-import HomePage from "../Pages/homePage/homePage";
+import AboutPage from "../Pages/aboutPage/aboutPage";
 import SignupStaff from "../Pages/signUp/SignupStaff";
 import {AuthProvider} from "../../contexts/AuthContext ";
 import SignUpSelect from "../Pages/signUp/SignUpSelect";
@@ -20,6 +20,8 @@ import EditProfileCustomer from "../Pages/editProfile/editProfileCustomer";
 import NavWrapper from "./navWrapper";
 import ShowBillingHistory from "../Pages/showBillingHistory/showBillingHistory";
 import DeleteAccount from "../Pages/deleteAccount/deleteAccount";
+import HeroSection from "../Pages/homePage/HeroSection";
+import HomePage from "../Pages/homePage/HomePage";
 
 
 const NavBar = () => {
@@ -31,6 +33,7 @@ const NavBar = () => {
 
                 <div>
                     <Routes>
+                        <Route path='/about' element={<AboutPage/>}/>
                         <Route path='/home' element={<HomePage/>}/>
                         <Route path='/' element={<HomePage/>}/>
                         <Route path='/staffDashboard' element={<StaffDashboard/>}/>

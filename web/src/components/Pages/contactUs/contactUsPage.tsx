@@ -63,9 +63,9 @@ export default function ContactUsPage() {
     }
 
     return (
-        <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "100vh"}}>
+        <Container className="d-flex align-items-center justify-content-center " style={{minHeight: "140vh"}}>
             <div className="w-100" style={{maxWidth: '1000px'}}>
-                <Card style={{minHeight: 100}}>
+                <Card style={{minHeight: 80}}>
                     <Card.Body>
 
                         <h1>Contact Us</h1>
